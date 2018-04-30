@@ -1,0 +1,25 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="H3MMDBModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+  <EntityType Name="Alias">
+    <Key>
+      <PropertyRef Name="Player" />
+    </Key>
+    <Property Name="Player" Type="String" MaxLength="30" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="GT_One" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
+    <Property Name="GT_Two" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
+    <Property Name="GT_Three" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
+    <Property Name="GT_Four" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
+  </EntityType>
+  <EntityType Name="GameID">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Player" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
+    <Property Name="GameID1" Type="Int32" Nullable="false" />
+  </EntityType>
+  <EntityContainer Name="H3MMDBEntities" annotation:LazyLoadingEnabled="true">
+    <EntitySet Name="Aliases" EntityType="Self.Alias" />
+    <EntitySet Name="GameIDs" EntityType="Self.GameID" />
+  </EntityContainer>
+</Schema>

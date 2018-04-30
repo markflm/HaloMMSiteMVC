@@ -1,0 +1,25 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="H3MMDBModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <EntityType Name="Aliases">
+    <Key>
+      <PropertyRef Name="Player" />
+    </Key>
+    <Property Name="Player" Type="varchar" MaxLength="30" Nullable="false" />
+    <Property Name="GT_One" Type="varchar" MaxLength="30" />
+    <Property Name="GT_Two" Type="varchar" MaxLength="30" />
+    <Property Name="GT_Three" Type="varchar" MaxLength="30" />
+    <Property Name="GT_Four" Type="varchar" MaxLength="30" />
+  </EntityType>
+  <EntityType Name="GameIDs">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Player" Type="varchar" MaxLength="30" />
+    <Property Name="GameID" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityContainer Name="H3MMDBModelStoreContainer">
+    <EntitySet Name="Aliases" EntityType="Self.Aliases" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="GameIDs" EntityType="Self.GameIDs" Schema="dbo" store:Type="Tables" />
+  </EntityContainer>
+</Schema>
