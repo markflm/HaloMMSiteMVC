@@ -6,6 +6,7 @@ using System.Data.SqlClient;
 using System.Configuration;
 using System.Data.Common;
 using System.Web.Configuration;
+using System.Data.SqlTypes;
 
 
 
@@ -83,12 +84,16 @@ namespace HaloMMSiteMVC.Models
             using (SqlCommand command = new SqlCommand("", conn))
             {
                 conn.Open();
+                command.Parameters.AddWithValue("@Name", "pholder");
+                command.Parameters.AddWithValue("@GameID", 123);
                 foreach (int gid in GameIDs)
                 {
                     command.CommandText = "INSERT INTO dbo.GameIDs (Player, GameID) " +
                             "VALUES (@Name, @GameID)";
-                    command.Parameters.AddWithValue("@Name", PlayerName);
-                    command.Parameters.AddWithValue("@GameID", gid);
+                    //command.Parameters.Clear();  //need to clear parameters because I already used @Name earlier?
+                    command.Parameters["@Name"].Value = PlayerName;
+                    command.Parameters["@GameID"].Value = gid;
+
 
                     command.ExecuteNonQuery();
                 }

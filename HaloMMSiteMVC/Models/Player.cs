@@ -9,13 +9,10 @@ namespace HaloMMSiteMVC.Models
 {
     public class Player
     {
-        public Player(string name, List<int>gameIDs) //constructor if player is found in DB
-        {
-            Name = name; GameIDs = gameIDs; //assigning to props
-        }
         public Player(string name) //constructor if player is not in DB 
         {
             Name = name;
+            
         }
 
         
@@ -24,7 +21,7 @@ namespace HaloMMSiteMVC.Models
 
         public List<Game> GameList { get; set; }
 
-        public string test { get; set; }
+        
 
         public void PopulateGameIDList(string GT, List<int> GameIDList)
         {
@@ -70,7 +67,7 @@ namespace HaloMMSiteMVC.Models
 
 
                 sigMidGameID = sigEndGameID + 1;
-                //MessageBox.Show(gameID.ToString());
+               
                 GameIDs.Add(gameID);
                 gamesThisPage--; //increment count of games left on page
                 if (gamesThisPage == 0) //once gamesThisPage == 0 we've got all the gameIDs from this page
@@ -85,7 +82,7 @@ namespace HaloMMSiteMVC.Models
 
             }
 
-            //MessageBox.Show(GameIDList.Count.ToString());
+            
             bungie.Dispose(); //releases webclient
 
         }
@@ -129,15 +126,14 @@ namespace HaloMMSiteMVC.Models
 
                 playlist = fullhtml.Substring(sigStartPos, sigEndPos - sigStartPos); //works
 
-                test = playlist;
-
+                
                 //get dateText
                 sigStartPos = fullhtml.IndexOf("<li>", sigEndPos + ("&nbsp;</ li >").Length) + ("<li>").Length;
                 sigEndPos = fullhtml.IndexOf(",", sigStartPos);
 
                 dateText = fullhtml.Substring(sigStartPos, sigEndPos - sigStartPos);
 
-                test = dateText;
+               
 
                 GameList.Add(new Game(id, dateText, map, gameType, playlist));
 
