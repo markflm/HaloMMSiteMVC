@@ -13,6 +13,7 @@ namespace HaloMMSiteMVC.Controllers
         //TODO: Handling if GT doesn't exist on bungie
             //  Check what happens if button is clicked during a bungie scrape
             //  Handling same GT twice
+                //add script for error message popup
             //  Mouse-hover-over-icon 
             // Gamescrape progress bar
         // GET: Player
@@ -38,42 +39,61 @@ namespace HaloMMSiteMVC.Controllers
             Player playerOne = new Player(gt1);
             Player playerTwo = new Player(gt2);
             //Grab GTs from textboxes
-            //Check DB to see if players exist
 
-            if (db.IsInDB(gt1)) //if they do exist
+            //check the same GT isn't entered twice
+            if (playerOne.Name == playerTwo.Name)
             {
-
-                intGameIDs1 = (db.ImportGamesFromDB(gt1, intGameIDs1));
-                playerOne.GameIDs = intGameIDs1;
-               
-
-            }
-            else //run bungie scraper to get games
-            {
-                playerOne.GameIDs = intGameIDs1;
-                playerOne.PopulateGameIDList(gt1, intGameIDs1);
-                db.AddPlayerToDB(gt1, intGameIDs1); //
-            }
-           
-            //create player object, run the bungie scraper
-            if (db.IsInDB(gt2))
-            {
-                intGameIDs2 = (db.ImportGamesFromDB(gt2, intGameIDs2));
-                playerTwo.GameIDs = intGameIDs2;
-
-            }
-            else
-            {
-                playerTwo.GameIDs = intGameIDs2;
-                playerTwo.PopulateGameIDList(gt2, intGameIDs2);
-                db.AddPlayerToDB(gt2, intGameIDs2);
+                return View("Player"); //if same name entered twice return empty view for now, add error popup later
+                                       //with return Content("<script></script>")
+                             
             }
 
-           
-          
+            //check GT exists on Bungie
+
+
+            ////Check DB to see if players exist
+
+            //if (db.IsInDB(gt1)) //if they do exist
+            //{
+
+            //    intGameIDs1 = (db.ImportGamesFromDB(gt1, intGameIDs1));
+            //    playerOne.GameIDs = intGameIDs1;
+
+
+            //}
+            //else //run bungie scraper to get games
+            //{
+            //    playerOne.GameIDs = intGameIDs1;
+            //    playerOne.PopulateGameIDListMM(gt1, intGameIDs1);
+            //    db.AddPlayerToDB(gt1, intGameIDs1); //
+            //}
+
+            ////create player object, run the bungie scraper
+            //if (db.IsInDB(gt2))
+            //{
+            //    intGameIDs2 = (db.ImportGamesFromDB(gt2, intGameIDs2));
+            //    playerTwo.GameIDs = intGameIDs2;
+
+            //}
+            //else
+            //{
+            //    playerTwo.GameIDs = intGameIDs2;
+            //    playerTwo.PopulateGameIDListMM(gt2, intGameIDs2);
+            //    db.AddPlayerToDB(gt2, intGameIDs2);
+            //}
+
+
+
             //Once both Player objects are populated, do list.intersect in controller to find matched games
 
             //run get game details
+            //testing
+            playerOne.GameIDs = intGameIDs1;
+            playerOne.PopulateGameIDList(gt1, intGameIDs1);
+
+            playerTwo.GameIDs = intGameIDs2;
+            playerTwo.PopulateGameIDList(gt2, intGameIDs2);
+
             matchedIDs = (intGameIDs1.Intersect(intGameIDs2)).ToList();
             playerOne.GetMatchedGameDetails(matchedIDs);
             return View(playerOne);

@@ -23,7 +23,7 @@ namespace HaloMMSiteMVC.Models
 
         
 
-        public void PopulateGameIDList(string GT, List<int> GameIDList)
+        public void PopulateGameIDList(string GT, List<int> GameIDList, bool customsFlag)
         {
             int numofGames;
             string fullhtml;
@@ -35,15 +35,16 @@ namespace HaloMMSiteMVC.Models
             int gameID;
 
             WebClient bungie = new WebClient(); //accesses bungie.net
+            
 
             string matchHistoryP1 = "http://halo.bungie.net/stats/playerstatshalo3.aspx?player="; //first part of match history page string
             string matchHistoryP2 = "&ctl00_mainContent_bnetpgl_recentgamesChangePage="; //2nd part of match history page string. concatted to current page
 
 
             fullhtml = bungie.DownloadString(matchHistoryP1 + GT + matchHistoryP2 + 1); //first page of GT1s game history
-            sigStartGameCount = fullhtml.IndexOf("&nbsp;<strong>"); //index of first char in HTML line that gives you total MM games
+            sigStartGameCount = fullhtml.IndexOf("&nbsp;<strong>",48000); //index of first char in HTML line that gives you total MM games --49242 is first char location on first page (varies)
 
-            sigEndGameCount = fullhtml.IndexOf("</strong>", sigStartGameCount); //index of next char after final digit of total MM games
+            sigEndGameCount = fullhtml.IndexOf("</strong>", sigStartGameCount); //index of next char after final digit of total MM games --49260
             //fist char + length of that substring as start index, length of characters in number of MM games as endingChar - startingChar - length of "Intro" substring = number of MM games as string
             numofGames = int.Parse(fullhtml.Substring(sigStartGameCount + "&nbsp;<strong>".Length, (sigEndGameCount - sigStartGameCount - "&nbsp;<strong>".Length)));
 
@@ -51,9 +52,12 @@ namespace HaloMMSiteMVC.Models
             int historyPage = 1;
             int gamesThisPage = 25; //25 games on a full page
             fullhtml = bungie.DownloadString(matchHistoryP1 + GT + matchHistoryP2 + historyPage); //point webclient to first page of GT1s match history
+            
             for (int i = 0; i < numofGames; i++)
             {
-                sigStartGameID = fullhtml.IndexOf("GameStatsHalo3", sigMidGameID); //find gameID
+                
+
+                sigStartGameID = fullhtml.IndexOf("GameStatsHalo3", sigMidGameID); //find gameID -- 55183 is first char location (varies)
                 sigEndGameID = fullhtml.IndexOf("&amp;player", sigMidGameID);
                 //MessageBox.Show(fullhtml.Substring(sigStartGameID + "GameStatsHalo3.aspx?gameid=".Length, sigEndGameID - "GameStatsHalo3.aspx?gameid=".Length - sigStartGameID));
                 try
@@ -78,6 +82,7 @@ namespace HaloMMSiteMVC.Models
                     fullhtml = bungie.DownloadString(matchHistoryP1 + GT + matchHistoryP2 + historyPage); //iterate to next gamehistory page
                     gamesThisPage = 25;
                     sigMidGameID = 0;
+                   
                 }
 
             }
