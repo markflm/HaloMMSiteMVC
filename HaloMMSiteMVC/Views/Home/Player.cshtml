@@ -3,11 +3,14 @@
 @{
     ViewBag.Title = "Search";
     Layout = "~/Views/Shared/_Layout.cshtml";
-    
+
 }
 
 <h2>Matched Games</h2>
 
+
+@using (@Html.BeginForm("SearchResults", "Home", FormMethod.Post))
+{
 <form action="SearchResults" method="post">
     Gamertag 1<br>
     <input type="text" name="gt1"><br><br>
@@ -16,4 +19,6 @@
 
     <input type="submit" value="Search">
 </form>
+
+}
 
