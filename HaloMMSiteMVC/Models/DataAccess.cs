@@ -90,7 +90,7 @@ namespace HaloMMSiteMVC.Models
                 {
                     command.CommandText = "INSERT INTO dbo.GameIDs (Player, GameID) " +
                             "VALUES (@Name, @GameID)";
-                    //command.Parameters.Clear();  //need to clear parameters because I already used @Name earlier?
+                    
                     command.Parameters["@Name"].Value = PlayerName;
                     command.Parameters["@GameID"].Value = gid;
 
