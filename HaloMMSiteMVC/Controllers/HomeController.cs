@@ -11,8 +11,10 @@ namespace HaloMMSiteMVC.Controllers
     {
 
         //TODO: Handling if GT doesn't exist on bungie
-            //  CSS Background
             //  Check what happens if button is clicked during a bungie scrape
+            //  Handling same GT twice
+            //  Mouse-hover-over-icon 
+            // Gamescrape progress bar
         // GET: Player
         //calls when url is site/player/player
         /*a view is an ActionResult, but ViewResult is more specific*/

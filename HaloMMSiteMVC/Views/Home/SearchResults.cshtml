@@ -1,6 +1,6 @@
 ﻿@model HaloMMSiteMVC.Models.Player
 @{
-    ViewBag.Title = "SearchResults";
+    ViewBag.Title = "Search Results";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
@@ -15,47 +15,47 @@
     <input type="submit" value="Search">
 </form>
 
-<table>
-    <tr>
-
-
-        <th>
-            Date
-        </th>
-        <th>
-            Link
-        </th>
-        <th>
-            Map
-        </th>
-        <th>
-            Gametype
-        </th>
-        <th>
-            Playlist
-        </th>
-    </tr>
-
-    @foreach (var item in Model.GameList)
-    {
-        string gID = item.GameID.ToString();
+    <table>
         <tr>
-            <td>
-                @Html.DisplayFor(Model => item.Date)
-            </td>
-            <td>
-                <a href='https://halo.bungie.net/Stats/GameStatsHalo3.aspx?gameid=@gID'>Link</a>
-            </td>
-            <td>
-                @Html.DisplayFor(Model => item.Map)
-            </td>
-            <td>
-                @Html.DisplayFor(Model => item.Gametype)
-            </td>
-            <td>
-                @Html.DisplayFor(Model => item.Playlist)
-            </td>
-        </tr>
-    }
 
-</table>
+
+            <th>
+                Date
+            </th>
+            <th>
+                Link
+            </th>
+            <th>
+                Map
+            </th>
+            <th>
+                Gametype
+            </th>
+            <th>
+                Playlist
+            </th>
+        </tr>
+
+
+        @foreach (var item in Model.GameList)
+        {
+            string gID = item.GameID.ToString();
+            <tr>
+                <td>
+                    @Html.DisplayFor(Model => item.Date)
+                </td>
+                <td>
+                    <a href='https://halo.bungie.net/Stats/GameStatsHalo3.aspx?gameid=@gID'>Link</a>
+                </td>
+                <td>
+                    @Html.DisplayFor(Model => item.Map)
+                </td>
+                <td>
+                    @Html.DisplayFor(Model => item.Gametype)
+                </td>
+                <td>
+                    @Html.DisplayFor(Model => item.Playlist)
+                </td>
+            </tr>
+        }
+    </table>
