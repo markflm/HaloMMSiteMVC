@@ -42,7 +42,7 @@ namespace HaloMMSiteMVC.Models
             string matchHistoryP1 = "http://halo.bungie.net/stats/playerstatshalo3.aspx?player="; //first part of match history page string
 
             if (customsFlag)
-                matchHistoryP2 = "&cus=1"; //if customs selected, direct to custom game page
+                matchHistoryP2 = "&cus=1&ctl00_mainContent_bnetpgl_recentgamesChangePage="; //if customs selected, direct to custom game page
             else
                 matchHistoryP2 = "&ctl00_mainContent_bnetpgl_recentgamesChangePage="; //2nd part of match history page string. concatted to current page
 
