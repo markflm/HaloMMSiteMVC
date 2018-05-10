@@ -53,34 +53,38 @@ namespace HaloMMSiteMVC.Controllers
 
             ////Check DB to see if players exist
 
-            //if (db.IsInDB(gt1)) //if they do exist
-            //{
+            if (db.IsInDB(gt1)) //if they do exist
+            {
 
-            //    intGameIDs1 = (db.ImportGamesFromDB(gt1, intGameIDs1));
-            //    playerOne.GameIDs = intGameIDs1;
+                intGameIDs1 = (db.ImportGamesFromDB(gt1, intGameIDs1));
+                playerOne.GameIDs = intGameIDs1;
 
 
-            //}
-            //else //run bungie scraper to get games
-            //{
-            //    playerOne.GameIDs = intGameIDs1;
-            //    playerOne.PopulateGameIDListMM(gt1, intGameIDs1);
-            //    db.AddPlayerToDB(gt1, intGameIDs1); //
-            //}
+            }
+            else //run bungie scraper to get games
+            {
+                playerOne.GameIDs = intGameIDs1;
+                playerOne.PopulateGameIDList(gt1, intGameIDs1, false); //get MM games
+                playerOne.PopulateGameIDList(gt1, intGameIDs1, true); //get custom games
 
-            ////create player object, run the bungie scraper
-            //if (db.IsInDB(gt2))
-            //{
-            //    intGameIDs2 = (db.ImportGamesFromDB(gt2, intGameIDs2));
-            //    playerTwo.GameIDs = intGameIDs2;
+                db.AddPlayerToDB(gt1, intGameIDs1); //
+            }
 
-            //}
-            //else
-            //{
-            //    playerTwo.GameIDs = intGameIDs2;
-            //    playerTwo.PopulateGameIDListMM(gt2, intGameIDs2);
-            //    db.AddPlayerToDB(gt2, intGameIDs2);
-            //}
+            //create player object, run the bungie scraper
+            if (db.IsInDB(gt2))
+            {
+                intGameIDs2 = (db.ImportGamesFromDB(gt2, intGameIDs2));
+                playerTwo.GameIDs = intGameIDs2;
+
+            }
+            else
+            {
+                playerTwo.GameIDs = intGameIDs2;
+                playerTwo.PopulateGameIDList(gt2, intGameIDs2, false); //get MM games
+                playerTwo.PopulateGameIDList(gt2, intGameIDs2, true); //get custom games
+
+                db.AddPlayerToDB(gt2, intGameIDs2);
+            }
 
 
 
@@ -88,11 +92,7 @@ namespace HaloMMSiteMVC.Controllers
 
             //run get game details
             //testing
-            playerOne.GameIDs = intGameIDs1;
-            playerOne.PopulateGameIDList(gt1, intGameIDs1);
-
-            playerTwo.GameIDs = intGameIDs2;
-            playerTwo.PopulateGameIDList(gt2, intGameIDs2);
+            
 
             matchedIDs = (intGameIDs1.Intersect(intGameIDs2)).ToList();
             playerOne.GetMatchedGameDetails(matchedIDs);
