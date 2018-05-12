@@ -23,7 +23,7 @@ namespace HaloMMSiteMVC.Models
 
         
 
-        public void PopulateGameIDList(string GT, List<int> GameIDList)
+        public void PopulateGameIDList(string GT, List<int> GameIDList) //customs flag
         {
             int numofGames;
             string fullhtml;
