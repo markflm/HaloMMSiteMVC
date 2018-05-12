@@ -58,3 +58,28 @@ th, td {
 	padding: 15px;
 	white-space: nowrap;
 }
+
+/*information icon*/
+#info {
+    height: 20px;
+    width: 20px;
+    position: relative;
+    top: -80px;
+    -webkit-filter: invert(100%);
+}
+
+/*information text
+#infotxt {
+    display: inline-block;
+    position: absolute;
+    left: 0px;
+    top: 0px;
+    background-color: #43474c;
+    height: 260px;
+    width: 232px;
+    z-index: 10;
+    border: 1px solid white;
+    white-space: normal;
+    overflow: hidden;
+}
+    */

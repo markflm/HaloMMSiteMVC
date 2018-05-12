@@ -6,19 +6,31 @@
 
 }
 
-<h2>Homepage</h2>
-
-
 @using (@Html.BeginForm("SearchResults", "Home", FormMethod.Post))
 {
-<form action="SearchResults" method="post">
-    Gamertag 1<br>
-    <input type="text" name="gt1"><br><br>
-    Gamertag 2<br>
-    <input type="text" name="gt2"><br><br>
+    /* info icon */
+    <div>
+        <img id="info" src="../Content/information.png" alt="info">
+    </div>
 
-    <input type="submit" value="Search">
-</form>
+    /* info text 
+    <div id="infotxt">
+        Folks,,,, you simply gotta wait <br />
+        about 10 minutes the first time you use this damn thing<br />
+        but after that???? why of course, a humble 15-30 seconds should do<br />
+        just fine.
+    </div>
+    */
 
+    <div>
+        <form action="SearchResults" method="post">
+            Gamertag 1<br>
+            <input type="text" name="gt1"><br><br>
+            Gamertag 2<br>
+            <input type="text" name="gt2"><br><br>
+
+            <input type="submit" value="Search">
+        </form>
+    </div>
 }
 
