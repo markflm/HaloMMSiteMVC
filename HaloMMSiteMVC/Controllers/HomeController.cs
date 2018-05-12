@@ -37,7 +37,7 @@ namespace HaloMMSiteMVC.Controllers
             List<int> matchedIDs = new List<int>();
 
             Player playerOne = new Player(gt1);
-            Player playerTwo = new Player(gt2);
+            Player playerTwo = new Player(gt2); //fuck github
             //Grab GTs from textboxes
 
             //check the same GT isn't entered twice
