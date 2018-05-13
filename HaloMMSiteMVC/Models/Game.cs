@@ -27,5 +27,7 @@ namespace HaloMMSiteMVC.Models
         public string Playlist { get; set; }
 
         public string Gametype { get; }
+
+        public bool IsCustom { get; }
     }
 }

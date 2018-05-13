@@ -49,14 +49,19 @@ namespace HaloMMSiteMVC.Models
             }
         }
 
-        public List<int> ImportGamesFromDB(string PlayerName, List<int> GameIDs)
+        public List<int> ImportGamesFromDB(string PlayerName, List<int> GameIDs, bool getMM, bool getCus)
         {
             using (SqlConnection conn = new SqlConnection(cs))
             using (SqlCommand command = new SqlCommand("", conn))
             {
-                command.CommandText = "SELECT GameID FROM GameIDs WHERE Player = (@Name)";
+                if (getMM && getCus) //if both MM and custom boxes are checked
+                    command.CommandText = "SELECT GameID FROM GameIDs WHERE Player = (@Name)"; //query with no condition for IsCustom
+                else if (getMM) //only MM box checked
+                    command.CommandText = "SELECT GameID FROM GameIDs WHERE Player = (@Name) AND IsCustom = 0";
+                else  //only custom box checked
+                    command.CommandText = "SELECT GameID FROM GameIDs WHERE Player = (@Name) AND IsCustom = 1";
+
                 command.Parameters.AddWithValue("@Name", PlayerName);
-                
 
                 int d;
                 conn.Open();
@@ -78,7 +83,7 @@ namespace HaloMMSiteMVC.Models
 
         //pre: Player not already present in SQL DB and list of GameIDs has been scraped from Bungie
         //post: Player and their gameIDs added to DB for future access 
-        public void AddPlayerToDB(string PlayerName, List<int> GameIDs)
+        public void AddPlayerToDB(string PlayerName, List<int> GameIDs, bool IsCustomsList)
         {
             using (SqlConnection conn = new SqlConnection(cs))
             using (SqlCommand command = new SqlCommand("", conn))
@@ -86,10 +91,14 @@ namespace HaloMMSiteMVC.Models
                 conn.Open();
                 command.Parameters.AddWithValue("@Name", "pholder");
                 command.Parameters.AddWithValue("@GameID", 123);
+                if (IsCustomsList)
+                    command.Parameters.AddWithValue("@IsCustom", 1);
+                else
+                    command.Parameters.AddWithValue("@IsCustom", 0);
                 foreach (int gid in GameIDs)
                 {
-                    command.CommandText = "INSERT INTO dbo.GameIDs (Player, GameID) " +
-                            "VALUES (@Name, @GameID)";
+                    command.CommandText = "INSERT INTO dbo.GameIDs (Player, GameID, IsCustom) " +
+                            "VALUES (@Name, @GameID, @IsCustom)";
                     
                     command.Parameters["@Name"].Value = PlayerName;
                     command.Parameters["@GameID"].Value = gid;
