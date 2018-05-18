@@ -154,29 +154,8 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Models\Alias.cs">
-      <DependentUpon>H3MMdb.tt</DependentUpon>
-    </Compile>
     <Compile Include="Models\DataAccess.cs" />
     <Compile Include="Models\Game.cs" />
-    <Compile Include="Models\GameID.cs">
-      <DependentUpon>H3MMdb.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\H3MMdb.Context.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>H3MMdb.Context.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\H3MMdb.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>H3MMdb.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\H3MMdb.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>H3MMdb.edmx</DependentUpon>
-    </Compile>
     <Compile Include="Models\Player.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -191,27 +170,10 @@
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
-    <Content Include="Models\H3MMdb.Context.tt">
-      <Generator>TextTemplatingFileGenerator</Generator>
-      <DependentUpon>H3MMdb.edmx</DependentUpon>
-      <LastGenOutput>H3MMdb.Context.cs</LastGenOutput>
-    </Content>
-    <Content Include="Models\H3MMdb.tt">
-      <Generator>TextTemplatingFileGenerator</Generator>
-      <DependentUpon>H3MMdb.edmx</DependentUpon>
-      <LastGenOutput>H3MMdb.cs</LastGenOutput>
-    </Content>
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
     <Content Include="ApplicationInsights.config">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <EntityDeploy Include="Models\H3MMdb.edmx">
-      <Generator>EntityModelCodeGenerator</Generator>
-      <LastGenOutput>H3MMdb.Designer.cs</LastGenOutput>
-    </EntityDeploy>
-    <Content Include="Models\H3MMdb.edmx.diagram">
-      <DependentUpon>H3MMdb.edmx</DependentUpon>
     </Content>
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
@@ -224,7 +186,9 @@
     <Content Include="Scripts\modernizr-2.6.2.js" />
     <Content Include="Scripts\respond.js" />
     <Content Include="Scripts\respond.min.js" />
-    <Content Include="Web.config" />
+    <Content Include="Web.config">
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </Content>
@@ -237,6 +201,7 @@
     <Content Include="Views\Shared\_Layout.cshtml" />
     <Content Include="Views\Home\Player.cshtml" />
     <Content Include="Views\Home\SearchResults.cshtml" />
+    <Content Include="Views\Home\Alias.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
