@@ -7,8 +7,9 @@ using System.Diagnostics;
 
 namespace HaloMMSiteMVC.Models
 {
-    public class Player
+    public class Player 
     {
+
         public Player(string name) //constructor if player is not in DB 
         {
             Name = name;
@@ -23,7 +24,7 @@ namespace HaloMMSiteMVC.Models
 
         
 
-        public void PopulateGameIDList(string GT, List<int> GameIDList) //customs flag
+        public void PopulateGameIDList(string GT, bool customsFlag)
         {
             int numofGames;
             string fullhtml;
@@ -33,11 +34,18 @@ namespace HaloMMSiteMVC.Models
             int sigEndGameID;
             int sigMidGameID = 0;
             int gameID;
+            string matchHistoryP2;
 
             WebClient bungie = new WebClient(); //accesses bungie.net
 
+            if (customsFlag)
+                matchHistoryP2 = "&cus=1&ctl00_mainContent_bnetpgl_recentgamesChangePage="; //the URL for customs
+            else
+                matchHistoryP2 = "&ctl00_mainContent_bnetpgl_recentgamesChangePage="; //URL for MM games
+
+
             string matchHistoryP1 = "http://halo.bungie.net/stats/playerstatshalo3.aspx?player="; //first part of match history page string
-            string matchHistoryP2 = "&ctl00_mainContent_bnetpgl_recentgamesChangePage="; //2nd part of match history page string. concatted to current page
+             //2nd part of match history page string. concatted to current page
 
 
             fullhtml = bungie.DownloadString(matchHistoryP1 + GT + matchHistoryP2 + 1); //first page of GT1s game history
@@ -62,7 +70,20 @@ namespace HaloMMSiteMVC.Models
                 }
                 catch
                 {
-                    break;
+                    if (i <= numofGames * .95) //if the parse fails and <= 95% of the games haven't been collected, it's probably a corrupted bungie page, so:
+                    {
+                        bungie.Dispose();
+
+                        historyPage++;
+                        fullhtml = bungie.DownloadString(matchHistoryP1 + GT + matchHistoryP2 + historyPage); //iterate to next gamehistory page
+                        gamesThisPage = 25;
+                        sigMidGameID = 0;
+
+                        numofGames = numofGames - gamesThisPage; //25 games aren't acccessible because the page is dead. take them off the total
+                        continue; //next page
+                    }
+                    else //if numofGames > 95%, probably at the end of the game list. exit.
+                        break;
                 }
 
 
@@ -105,38 +126,50 @@ namespace HaloMMSiteMVC.Models
                 
                 fullhtml = bungie.DownloadString(gameURL); //url of a matched game
                 //get gametype
-                sigStartPos = fullhtml.IndexOf("\"first styled\">") + ("\"first styled\">").Length; //index of first substring in HTML line that gives you gametype
-
-                sigEndPos = fullhtml.IndexOf(" on ", sigStartPos); //index of next char after gametype
-
-                gameType = fullhtml.Substring(sigStartPos, sigEndPos - sigStartPos); //works
+                try
+                {
 
 
-                //get map
+                    sigStartPos = fullhtml.IndexOf("\"first styled\">") + ("\"first styled\">").Length; //index of first substring in HTML line that gives you gametype
 
-                //sigEndPos + 4 for " on "
-                map = fullhtml.Substring(sigEndPos + 4,fullhtml.IndexOf("</li>",sigEndPos) - (sigEndPos + 4)); //works
+                    sigEndPos = fullhtml.IndexOf(" on ", sigStartPos); //index of next char after gametype
 
-                
+                    gameType = fullhtml.Substring(sigStartPos, sigEndPos - sigStartPos); //works
 
-                //get playlist
-                sigStartPos = fullhtml.IndexOf("Playlist - ", sigEndPos) + ("Playlist - ").Length;
 
-                sigEndPos = fullhtml.IndexOf("&nbsp;</li>", sigStartPos);
+                    //get map
 
-                playlist = fullhtml.Substring(sigStartPos, sigEndPos - sigStartPos); //works
+                    //sigEndPos + 4 for " on "
+                    map = fullhtml.Substring(sigEndPos + 4, fullhtml.IndexOf("</li>", sigEndPos) - (sigEndPos + 4)); //works
 
-                
-                //get dateText
-                sigStartPos = fullhtml.IndexOf("<li>", sigEndPos + ("&nbsp;</ li >").Length) + ("<li>").Length;
-                sigEndPos = fullhtml.IndexOf(",", sigStartPos);
 
-                dateText = fullhtml.Substring(sigStartPos, sigEndPos - sigStartPos);
 
-               
+                    //get playlist
+                    sigStartPos = fullhtml.IndexOf("Playlist - ", sigEndPos) + ("Playlist - ").Length;
+
+                    sigEndPos = fullhtml.IndexOf("&nbsp;</li>", sigStartPos);
+
+                    playlist = fullhtml.Substring(sigStartPos, sigEndPos - sigStartPos); //works
+
+
+                    //get dateText
+                    sigStartPos = fullhtml.IndexOf("<li>", sigEndPos + ("&nbsp;</ li >").Length) + ("<li>").Length;
+                    sigEndPos = fullhtml.IndexOf(",", sigStartPos);
+
+                    dateText = fullhtml.Substring(sigStartPos, sigEndPos - sigStartPos);
+
+                }
+
+                catch //gameID wasn't found, dispose the webClient and go to next item in list
+                {
+                    bungie.Dispose();
+                    continue;
+
+                }
 
                 GameList.Add(new Game(id, dateText, map, gameType, playlist));
 
+                bungie.Dispose();
                 sigStartPos = 0;
                 sigEndPos = 0;
                 gameURL = "";

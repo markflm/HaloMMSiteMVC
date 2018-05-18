@@ -1,7 +1,7 @@
 ﻿
 @model HaloMMSiteMVC.Models.Player
 @{
-    ViewBag.Title = "Search";
+    ViewBag.Title = "Point Check";
     Layout = "~/Views/Shared/_Layout.cshtml";
 
 }
@@ -13,21 +13,29 @@
         <img id="info" src="../Content/information.png" alt="info">
     </div>
 
-    /* info text 
-    <div id="infotxt">
-        Folks,,,, you simply gotta wait <br />
-        about 10 minutes the first time you use this damn thing<br />
-        but after that???? why of course, a humble 15-30 seconds should do<br />
-        just fine.
-    </div>
-    */
+    //info text
+   @*<div id= "infotxt" >
+                   Folks,,,, you simply gotta wait < br />
+                   about 10 minutes the first time you use this damn thing<br />
+                   but after that???? why of course, a humble 15 - 30 seconds should do< br />
+                     just fine.
 
-    <div>
+
+
+                 </div>*@
+
+
+<div>
         <form action="SearchResults" method="post">
             Gamertag 1<br>
             <input type="text" name="gt1"><br><br>
             Gamertag 2<br>
             <input type="text" name="gt2"><br><br>
+
+            <label>Matchmaking</label>
+            @Html.CheckBox("mmCheckBox") <br />
+            <label>Custom Games</label>
+            @Html.CheckBox("cusCheckBox") <br />
 
             <input type="submit" value="Search">
         </form>
