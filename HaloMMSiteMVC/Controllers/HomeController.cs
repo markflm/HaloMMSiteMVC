@@ -37,15 +37,39 @@ namespace HaloMMSiteMVC.Controllers
             List<int> matchedIDs = new List<int>();
 
             
-            Player playerOne = new Player(gt1);
-            Player playerTwo = new Player(gt2);
+            Player playerOne = new Player((gt1.Trim()).ToUpper()); //trim any leading/trailing spaces since these would produce valid URLs
+            Player playerTwo = new Player((gt2.Trim()).ToUpper());  //toUpper so string comparison below works
+
+
+            if (playerOne.Name == playerTwo.Name)
+            {
+                ViewBag.Error = "Please enter two different Gamertags";
+                playerOne.Name = null;
+                return View(playerOne);
+                
+            }
+            else if (!(playerOne.CheckIfGTExists(playerOne.Name)))
+            {
+                ViewBag.Error = playerOne.Name + " has no Bungie.net profile. Make sure this is the correct spelling";
+                playerOne.Name = null;
+                return View(playerOne);
+            }
+            else if (!(playerTwo.CheckIfGTExists(playerTwo.Name)))
+            {
+                ViewBag.Error = playerTwo.Name + " has no Bungie.net profile. Make sure this is the correct spelling";
+                playerOne.Name = null;
+                return View(playerOne);
+            }
+
+
+
             //Grab GTs from textboxes
             //Check DB to see if players exist
 
-            if (db.IsInDB(gt1)) //if they do exist
+            if (db.IsInDB(playerOne.Name)) //if they do exist
             {
 
-                intGameIDs1 = (db.ImportGamesFromDB(gt1, intGameIDs1, mmCheckBox, cusCheckBox));
+                intGameIDs1 = (db.ImportGamesFromDB(playerOne.Name, intGameIDs1, mmCheckBox, cusCheckBox));
                 playerOne.GameIDs = intGameIDs1;
                
 
@@ -55,33 +79,33 @@ namespace HaloMMSiteMVC.Controllers
                 playerOne.GameIDs = intGameIDs1;
                 if (mmCheckBox && cusCheckBox) //both true, wants both types of game
                 {
-                    playerOne.PopulateGameIDList(gt1, false);
-                    db.AddPlayerToDB(gt1, playerOne.GameIDs, false); //runs "store MM games" proc
+                    playerOne.PopulateGameIDList(playerOne.Name, false);
+                    db.AddPlayerToDB(playerOne.Name, playerOne.GameIDs, false); //runs "store MM games" proc
 
                     playerOne.GameIDs.Clear(); //clear MM games from list
 
-                    playerOne.PopulateGameIDList(gt1, true); //get customs
-                    db.AddPlayerToDB(gt1, playerOne.GameIDs, true); //store customs
+                    playerOne.PopulateGameIDList(playerOne.Name, true); //get customs
+                    db.AddPlayerToDB(playerOne.Name, playerOne.GameIDs, true); //store customs
 
-                    db.ImportGamesFromDB(gt1, playerOne.GameIDs, true, false); //get MM games and add them back to list
+                    db.ImportGamesFromDB(playerOne.Name, playerOne.GameIDs, true, false); //get MM games and add them back to list
                 }
                 else if (mmCheckBox && !cusCheckBox)
                 {
-                    playerOne.PopulateGameIDList(gt1, false);
-                    db.AddPlayerToDB(gt1, playerOne.GameIDs, false); //runs "store MM games" proc
+                    playerOne.PopulateGameIDList(playerOne.Name, false);
+                    db.AddPlayerToDB(playerOne.Name, playerOne.GameIDs, false); //runs "store MM games" proc
 
                 }
                 else
                 {
-                    playerOne.PopulateGameIDList(gt1, true);
-                    db.AddPlayerToDB(gt1, playerOne.GameIDs, true); //runs "store custom games" proc
+                    playerOne.PopulateGameIDList(playerOne.Name, true);
+                    db.AddPlayerToDB(playerOne.Name, playerOne.GameIDs, true); //runs "store custom games" proc
                 }
             }
            
             //create player object, run the bungie scraper
-            if (db.IsInDB(gt2))
+            if (db.IsInDB(playerTwo.Name))
             {
-                intGameIDs2 = (db.ImportGamesFromDB(gt2, intGameIDs2, mmCheckBox, cusCheckBox));
+                intGameIDs2 = (db.ImportGamesFromDB(playerTwo.Name, intGameIDs2, mmCheckBox, cusCheckBox));
                 playerTwo.GameIDs = intGameIDs2;
 
             }
@@ -90,26 +114,26 @@ namespace HaloMMSiteMVC.Controllers
                 playerTwo.GameIDs = intGameIDs2;
                 if (mmCheckBox && cusCheckBox) //both true, wants both types of game
                 {
-                    playerTwo.PopulateGameIDList(gt2, false);
-                    db.AddPlayerToDB(gt2, playerTwo.GameIDs, false); //runs "store MM games" proc
+                    playerTwo.PopulateGameIDList(playerTwo.Name, false);
+                    db.AddPlayerToDB(playerTwo.Name, playerTwo.GameIDs, false); //runs "store MM games" proc
 
                     playerTwo.GameIDs.Clear(); //clear MM games from list
 
-                    playerTwo.PopulateGameIDList(gt2, true); //get customs
-                    db.AddPlayerToDB(gt2, playerTwo.GameIDs, true); //store customs
+                    playerTwo.PopulateGameIDList(playerTwo.Name, true); //get customs
+                    db.AddPlayerToDB(playerTwo.Name, playerTwo.GameIDs, true); //store customs
 
-                    db.ImportGamesFromDB(gt2, playerTwo.GameIDs, true, false); //get MM games and add them back to list
+                    db.ImportGamesFromDB(playerTwo.Name, playerTwo.GameIDs, true, false); //get MM games and add them back to list
                 }
                 else if (mmCheckBox && !cusCheckBox)
                 {
-                    playerTwo.PopulateGameIDList(gt2, false);
-                    db.AddPlayerToDB(gt2, playerTwo.GameIDs, false); //runs "store MM games" proc
+                    playerTwo.PopulateGameIDList(playerTwo.Name, false);
+                    db.AddPlayerToDB(playerTwo.Name, playerTwo.GameIDs, false); //runs "store MM games" proc
 
                 }
                 else
                 {
-                    playerOne.PopulateGameIDList(gt2, true);
-                    db.AddPlayerToDB(gt2, playerTwo.GameIDs, true); //runs "store custom games" proc
+                    playerOne.PopulateGameIDList(playerTwo.Name, true);
+                    db.AddPlayerToDB(playerTwo.Name, playerTwo.GameIDs, true); //runs "store custom games" proc
                 }
             }
 
@@ -125,9 +149,16 @@ namespace HaloMMSiteMVC.Controllers
             playerOne.GameList.Sort((x, y) => DateTime.Compare(DateTime.Parse(x.Date), DateTime.Parse(y.Date))); //orders GameList by date of game ascending
             playerOne.GameList.Reverse(); //reverses the list (descending)
 
+            ViewBag.Error = "";
             return View(playerOne);
         }
 
-       
+  
+
+        public ActionResult SearchInfo()
+        {
+
+            return View();
+        }
     }
 }

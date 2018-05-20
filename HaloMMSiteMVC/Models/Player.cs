@@ -23,7 +23,21 @@ namespace HaloMMSiteMVC.Models
         public List<Game> GameList { get; set; }
 
         
+        public bool CheckIfGTExists(string GT)
+        {
+            string matchHistoryP1 = "http://halo.bungie.net/stats/playerstatshalo3.aspx?player="; //first part of match history page string
+            string matchHistoryP2 = "&ctl00_mainContent_bnetpgl_recentgamesChangePage="; //URL for MM games
+            string wholeurl = matchHistoryP1 + GT + matchHistoryP2 + 1;
+            WebClient bungie = new WebClient(); //accesses bungie.net
+            string fullhtml;
+            fullhtml = bungie.DownloadString(wholeurl);
+            //bungie.Dispose();
+            if (fullhtml.IndexOf("No Games Played") != -1) //if "no games played" exists then GT doesn't exist, if "no games played" doesn't exist indexof returns -1           
+                return false;
+            else
+                return true;
 
+        }
         public void PopulateGameIDList(string GT, bool customsFlag)
         {
             int numofGames;
