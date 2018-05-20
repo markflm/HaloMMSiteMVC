@@ -8,13 +8,25 @@
 
 @using (@Html.BeginForm("SearchResults", "Home", FormMethod.Post))
 {
-   
 
-    <div>
+<div class="info-text">
+    <h4>Warning</h4>
+    If the Gamertag you enter has never been searched on our site,
+    it could take 10-15 minutes to add your games to our Database. Once a Gamertag has been searched once, all subsequent searches for it should only take a few seconds.
+    <br />
+    <h4>Requirements</h4>
+    You must enter the <b>current</b> Gamertag of the Xbox Live accounts you are trying to search. 
+</div>
+
+    //AppLE Joose 6 MLG Pro Circuit pts Meadows 09, Kifflom 0 points
+
+    <div class="Icon">
+        <img src="~/Content/information.png" width="20" height="20" />
+    </div>
+
+    <div class="daForm">
         <form action="SearchResults" method="post">
-            <div id="infoIcon">
-                <img src="~/Content/information.png" width="20" height="20" />  
-            </div>
+
             Gamertag 1<br>
 
             <input type="text" name="gt1"><br><br>
