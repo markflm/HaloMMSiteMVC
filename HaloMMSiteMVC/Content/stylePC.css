@@ -162,7 +162,7 @@ width: 20px;
 	background-color: rgba(0, 0, 0, 0);
 	height: 100%;
 	width: 100%;
-	border-top: 1px solid white;
+	border-top: 1px solid #fff;
 	border-left: 1px solid white;
 	border-right: 1px solid white;
 	white-space: normal;
@@ -170,6 +170,8 @@ width: 20px;
 	z-index: -1;
 	opacity: 0;
 	transition: .3s ease-in-out;
+	text-align: left;
+	font-size: smaller;
 }
 
 .active {
@@ -181,10 +183,12 @@ width: 20px;
 	background-color: rgba(255, 255, 255, .5);
 	height: 100%;
 	width: 100%;
-	border: 1px solid white;
+	border: 1px solid black;
 	white-space: normal;
 	overflow: hidden;
 	z-index: 100;
 	opacity: 1;
 	transition: .3s ease-in-out;
+	text-align: left;
+	font-size: smaller;
 }	
