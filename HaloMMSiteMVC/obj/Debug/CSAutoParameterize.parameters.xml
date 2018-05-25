@@ -1,6 +1,0 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<parameters>
-  <parameter name="H3MMDBEntities-Web.config Connection String" description="H3MMDBEntities Connection String used in web.config by the application to access the database." defaultValue="Server=pointcheckdb.cern8pxryp2p.us-east-2.rds.amazonaws.com;Database=pointcheckDB;User Id=h3mmDB;password=Lolwut77!" tags="SqlConnectionString">
-    <parameterEntry kind="XmlFile" scope="C:\\Users\\markf\\source\\repos\\HaloMMSiteMVC\\HaloMMSiteMVC\\obj\\Debug\\Package\\PackageTmp\\Web\.config$" match="/configuration/connectionStrings/add[@name='H3MMDBEntities']/@connectionString" />
-  </parameter>
-</parameters>

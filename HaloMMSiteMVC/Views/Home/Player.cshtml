@@ -8,13 +8,29 @@
 
 @using (@Html.BeginForm("SearchResults", "Home", FormMethod.Post))
 {
-   
 
-    <div>
+<div class="info-text">
+    <div class="info-text">
+        <h4><u>Search Times</u></h4>
+        The first time searching a particular Gamertag can take up to 15 minutes. After the first search the Gamertag will be added to the database
+        and subsequent searches with be much faster (10-30 seconds).
+
+        <br />
+        <h4><u>Requirements</u></h4>
+        - You must enter the <b>current</b> Gamertag of the Xbox Live accounts you are trying to search.
+        - Search is not case sensitive.
+    </div>
+</div>
+
+    //AppLE Joose 6 MLG Pro Circuit pts Meadows 09, Kifflom 0 points
+
+    <div class="Icon">
+        <img src="~/Content/information.png" width="20" height="20" />
+    </div>
+
+    <div class="daForm">
         <form action="SearchResults" method="post">
-            <div id="infoIcon">
-                <img src="~/Content/information.png" width="20" height="20" />  
-            </div>
+
             Gamertag 1<br>
 
             <input type="text" name="gt1"><br><br>
@@ -33,5 +49,6 @@
 
             <input type="submit" value="Search">
         </form>
+        
     </div>
 }

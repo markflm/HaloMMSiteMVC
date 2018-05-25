@@ -1,5 +1,0 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<parameters>
-  <setParameter name="IIS Web Application Name" value="Default Web Site/" />
-  <setParameter name="H3MMDBEntities-Web.config Connection String" value="Server=pointcheckdb.cern8pxryp2p.us-east-2.rds.amazonaws.com;Database=pointcheckDB;User Id=h3mmDB;password=Lolwut77!" />
-</parameters>

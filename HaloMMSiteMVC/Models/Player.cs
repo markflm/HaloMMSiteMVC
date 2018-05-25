@@ -4,6 +4,8 @@ using System.Linq;
 using System.Web;
 using System.Net;
 using System.Diagnostics;
+using System.Threading.Tasks;
+using System.Net.Http;
 
 namespace HaloMMSiteMVC.Models
 {
@@ -21,6 +23,11 @@ namespace HaloMMSiteMVC.Models
         public List<int> GameIDs { get; set; }
 
         public List<Game> GameList { get; set; }
+
+        public string EmblemURL
+        {
+            get; set;
+        }
 
         
         public bool CheckIfGTExists(string GT)
@@ -122,23 +129,31 @@ namespace HaloMMSiteMVC.Models
 
         }
 
+        
 
         public void GetMatchedGameDetails(List<int> matchedGamesList)
         {
             WebClient bungie = new WebClient(); //accesses bungie.net
+            //bungie.download
             string fullhtml; //stores the html from the game page for searching
             int sigStartPos; //beginning of desired substring
             int sigEndPos; //end of desired substring
             
             
             string gameType, map, playlist, dateText;
-
+            string gameURL = "https://halo.bungie.net/Stats/GameStatsHalo3.aspx?gameid=";
             GameList = new List<Game>();
             foreach (int id in matchedGamesList)
             {
-                string gameURL = "https://halo.bungie.net/Stats/GameStatsHalo3.aspx?gameid=" + id.ToString();
-                
+                gameURL = "https://halo.bungie.net/Stats/GameStatsHalo3.aspx?gameid=" + id.ToString();
+
                 fullhtml = bungie.DownloadString(gameURL); //url of a matched game
+
+                //bungie.DownloadStringAsync(new Uri(gameURL));
+
+                //bungie.DownloadStringCompleted += Bungie_DownloadStringCompleted; //this actually needed to call the event handler
+
+
                 //get gametype
                 try
                 {
@@ -183,6 +198,8 @@ namespace HaloMMSiteMVC.Models
 
                 GameList.Add(new Game(id, dateText, map, gameType, playlist));
 
+
+
                 bungie.Dispose();
                 sigStartPos = 0;
                 sigEndPos = 0;
@@ -191,6 +208,121 @@ namespace HaloMMSiteMVC.Models
 
         }
 
+        private void Bungie_DownloadStringCompleted(object sender, DownloadStringCompletedEventArgs e)
+        {
+            string fullhtml; //stores the html from the game page for searching
+            int sigStartPos; //beginning of desired substring
+            int sigEndPos; //end of desired substring
+
+            //List<Task<string>> to store HTML?
+            string gameType, map, playlist, dateText;
+            string gameURL = "https://halo.bungie.net/Stats/GameStatsHalo3.aspx?gameid=";
+        }
+
+        public async Task GetMatchedGameDetailsAsync(List<int> matchedGamesList)
+        {
+            HttpClient bungie = new HttpClient();
+
+            
+            int sigStartPos; //beginning of desired substring
+            int sigEndPos; //end of desired substring
+            string gameType, map, playlist, dateText;
+            GameList = new List<Game>();
+            List<string> matchedURLs = new List<string>();
+            foreach (int id in matchedGamesList)
+            {
+                matchedURLs.Add("https://halo.bungie.net/Stats/GameStatsHalo3.aspx?gameid=" + id.ToString());
+            }
+
+            List<Task<string>> matchedPages = new List<Task<string>>();
+
+            foreach (string url in matchedURLs)
+            {
+                matchedPages.Add(Task.Run(() => bungie.GetStringAsync(url)));
+
+               
+                
+
+            }
+            
+            
+            var results = await Task.WhenAll(matchedPages);
+            //bungie.Dispose();
+
+            int i = 0;
+            foreach(string fullhtml in results)
+            {
+                try
+                {
+
+
+                    sigStartPos = fullhtml.IndexOf("\"first styled\">") + ("\"first styled\">").Length; //index of first substring in HTML line that gives you gametype
+
+                    sigEndPos = fullhtml.IndexOf(" on ", sigStartPos); //index of next char after gametype
+
+                    gameType = fullhtml.Substring(sigStartPos, sigEndPos - sigStartPos); //works
+
+
+                    //get map
+
+                    //sigEndPos + 4 for " on "
+                    map = fullhtml.Substring(sigEndPos + 4, fullhtml.IndexOf("</li>", sigEndPos) - (sigEndPos + 4)); //works
+
+
+
+                    //get playlist
+                    sigStartPos = fullhtml.IndexOf("Playlist - ", sigEndPos) + ("Playlist - ").Length;
+
+                    sigEndPos = fullhtml.IndexOf("&nbsp;</li>", sigStartPos);
+
+                    playlist = fullhtml.Substring(sigStartPos, sigEndPos - sigStartPos); //works
+
+
+                    //get dateText
+                    sigStartPos = fullhtml.IndexOf("<li>", sigEndPos + ("&nbsp;</ li >").Length) + ("<li>").Length;
+                    sigEndPos = fullhtml.IndexOf(",", sigStartPos);
+
+                    dateText = fullhtml.Substring(sigStartPos, sigEndPos - sigStartPos);
+
+                }
+
+                catch //gameID wasn't found, dispose the webClient and go to next item in list
+                {
+                    bungie.Dispose();
+                    continue;
+
+                }
+
+                GameList.Add(new Game(matchedGamesList[i], dateText, map, gameType, playlist));
+                i++;
+
+
+                bungie.Dispose();
+                sigStartPos = 0;
+                sigEndPos = 0;
+                //gameURL = "";
+            }
+        }
+
+        public void GetPlayerEmblem()
+        {
+            
+            WebClient bungie = new WebClient();
+
+            string playerProfile = "http://halo.bungie.net/stats/playerstatshalo3.aspx?player=";
+            string emblemURLLeadUp = "identityStrip_EmblemCtrl_imgEmblem\" src=\"/";
+            
+            string fullhtml;
+            string emblemURL;
+            fullhtml = bungie.DownloadString(playerProfile + this.Name);
+            
+            emblemURL = fullhtml.Substring(fullhtml.IndexOf(emblemURLLeadUp) + emblemURLLeadUp.Length, //start substring at shortest unique lead of characters before image + length of lead
+                //length of substring = index of first space after emblem url,
+                //minus index of start of url, minus 1 because url ends with "
+                (fullhtml.IndexOf(" ", fullhtml.IndexOf(emblemURLLeadUp) + emblemURLLeadUp.Length)) - (fullhtml.IndexOf(emblemURLLeadUp) + emblemURLLeadUp.Length) - 1);
+
+            this.EmblemURL = emblemURL.Replace("&amp;", "&");
+        }
     }
 
     //if the url was [...]/movies/random need a MoviesController with an action named Random

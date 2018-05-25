@@ -3,11 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
-using HaloMMSiteMVC.Models; 
+using HaloMMSiteMVC.Models;
+using System.Threading.Tasks;
 
 namespace HaloMMSiteMVC.Controllers
 {
-    public class HomeController : Controller
+    public class HomeController : AsyncController
     {
 
         //TODO: Handling if GT doesn't exist on bungie
@@ -30,7 +31,7 @@ namespace HaloMMSiteMVC.Controllers
         }
 
 
-        public ActionResult SearchResults(string gt1, string gt2, bool mmCheckBox, bool cusCheckBox)
+        public async Task<ActionResult> SearchResults(string gt1, string gt2, bool mmCheckBox, bool cusCheckBox)
         {
             List<int> intGameIDs1 = new List<int>();
             List<int> intGameIDs2 = new List<int>();
@@ -143,6 +144,7 @@ namespace HaloMMSiteMVC.Controllers
 
             //run get game details
             matchedIDs = (playerOne.GameIDs.Intersect(playerTwo.GameIDs)).ToList();
+            //await playerOne.GetMatchedGameDetailsAsync(matchedIDs);
             playerOne.GetMatchedGameDetails(matchedIDs);
 
 
@@ -150,9 +152,14 @@ namespace HaloMMSiteMVC.Controllers
             playerOne.GameList.Reverse(); //reverses the list (descending)
 
             ViewBag.Error = "";
+            playerOne.GetPlayerEmblem();
             return View(playerOne);
         }
 
+        public async Task BungieAccessAsync(List<int> matchedIDs)
+        {
+
+        }
   
 
         public ActionResult SearchInfo()

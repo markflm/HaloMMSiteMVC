@@ -13,70 +13,95 @@
     <br />
 }
 
+@using (@Html.BeginForm("SearchResults", "Home", FormMethod.Post))
+{
+    <div class="info-text">
+        <h4><u>Search Times</u></h4>
+        The first time searching a particular Gamertag can take up to 15 minutes. After the first search the Gamertag will be added to the database
+        and subsequent searches with be much faster (10-30 seconds).
 
-    
+        <br />
+        <h4><u>Requirements</u></h4>
+       - You must enter the <b>current</b> Gamertag of the Xbox Live accounts you are trying to search.
+       - Search is not case sensitive.
+    </div>
 
+<div class="Icon">
+    <img src="~/Content/information.png" width="20" height="20" />
+</div>
+<div class="daForm">
     <form action="SearchResults" method="post">
-        <div>
-            <img id="infoIcon" src="~/Content/information.png" />
-        </div>
+
         Gamertag 1<br>
+
         <input type="text" name="gt1"><br><br>
+
         Gamertag 2<br>
+
         <input type="text" name="gt2"><br><br>
 
         <label>Matchmaking</label>
+
         @Html.CheckBox("mmCheckBox") <br />
+
         <label>Custom Games</label>
+
         @Html.CheckBox("cusCheckBox") <br />
 
         <input type="submit" value="Search">
     </form>
+</div>
+}
 
 @if (Model.Name != null)
 {
-    <table>
+<table>
+    <div>
+
+        <img src="@String.Join("https://halo.bungie.net/", Model.EmblemURL)"/>
+    </div>
+    
+    <tr>
+
+
+        <th>
+            Date
+        </th>
+        <th>
+            Link
+        </th>
+        <th>
+            Map
+        </th>
+        <th>
+            Gametype
+        </th>
+        <th>
+            Playlist
+        </th>
+    </tr>
+
+
+    @foreach (var item in Model.GameList)
+    {
+        string gID = item.GameID.ToString();
         <tr>
-
-
-            <th>
-                Date
-            </th>
-            <th>
-                Link
-            </th>
-            <th>
-                Map
-            </th>
-            <th>
-                Gametype
-            </th>
-            <th>
-                Playlist
-            </th>
+            <td>
+                @Html.DisplayFor(Model => item.Date)
+            </td>
+            <td>
+                <a href='https://halo.bungie.net/Stats/GameStatsHalo3.aspx?gameid=@gID' target="_blank">Link</a>
+            </td>
+            <td>
+                @Html.DisplayFor(Model => item.Map)
+            </td>
+            <td>
+                @Html.DisplayFor(Model => item.Gametype)
+            </td>
+            <td>
+                @Html.DisplayFor(Model => item.Playlist)
+            </td>
         </tr>
-
-
-        @foreach (var item in Model.GameList)
-        {
-            string gID = item.GameID.ToString();
-            <tr>
-                <td>
-                    @Html.DisplayFor(Model => item.Date)
-                </td>
-                <td>
-                    <a href='https://halo.bungie.net/Stats/GameStatsHalo3.aspx?gameid=@gID' target="_blank">Link</a>
-                </td>
-                <td>
-                    @Html.DisplayFor(Model => item.Map)
-                </td>
-                <td>
-                    @Html.DisplayFor(Model => item.Gametype)
-                </td>
-                <td>
-                    @Html.DisplayFor(Model => item.Playlist)
-                </td>
-            </tr>
-        }
-    </table>
+    }
+</table>
 }

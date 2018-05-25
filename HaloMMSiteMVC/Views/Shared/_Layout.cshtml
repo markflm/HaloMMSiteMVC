@@ -9,6 +9,29 @@
 
     <link href="https://fonts.googleapis.com/css?family=Raleway" rel="stylesheet">
 
+    <script src="https://code.jquery.com/jquery-3.3.1.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('.Icon').hover(function () {
+                $('.info-text').toggleClass('active');
+                $('.Icon').toggleClass('xIcon');
+                $('.daForm').toggleClass('xForm');
+            })
+
+        })
+    </script>
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('.xIcon').click(function () {
+                $('.info-text').toggleClass('active');
+                $('.xIcon').toggleClass('Icon');
+                $('.xForm').toggleClass('daForm');
+            })
+
+        })
+    </script>
+
 </head>
 <body>
     
