@@ -2,6 +2,8 @@
 @{
     ViewBag.Title = "Search Results";
     Layout = "~/Views/Shared/_Layout.cshtml";
+    string p1Emb = "http://halo.bungie.net/" + Model.EmblemURL;
+    string p2Emb = "http://halo.bungie.net/" + Model.EnemyEmblemURL;
 }
 
 
@@ -22,86 +24,96 @@
 
         <br />
         <h4><u>Requirements</u></h4>
-       - You must enter the <b>current</b> Gamertag of the Xbox Live accounts you are trying to search.
-       - Search is not case sensitive.
+        - You must enter the <b>current</b> Gamertag of the Xbox Live accounts you are trying to search.
+        - Search is not case sensitive.
     </div>
 
-<div class="Icon">
-    <img src="~/Content/information.png" width="20" height="20" />
-</div>
-<div class="daForm">
-    <form action="SearchResults" method="post">
+    <div class="Icon">
+        <img src="~/Content/information.png" width="20" height="20" />
+    </div>
+    <div class="daForm">
+        <form action="SearchResults" method="post">
 
-        Gamertag 1<br>
+            Gamertag 1<br>
 
-        <input type="text" name="gt1"><br><br>
+            <input type="text" name="gt1"><br><br>
 
-        Gamertag 2<br>
+            Gamertag 2<br>
 
-        <input type="text" name="gt2"><br><br>
+            <input type="text" name="gt2"><br><br>
 
-        <label>Matchmaking</label>
+            <label>Matchmaking</label>
 
-        @Html.CheckBox("mmCheckBox") <br />
+            @Html.CheckBox("mmCheckBox") <br />
 
-        <label>Custom Games</label>
+            <label>Custom Games</label>
 
-        @Html.CheckBox("cusCheckBox") <br />
+            @Html.CheckBox("cusCheckBox") <br />
 
-        <input type="submit" value="Search">
-    </form>
-</div>
+            <input type="submit" value="Search">
+        </form>
+    </div>
 }
 
 @if (Model.Name != null)
 {
-<table>
-    <div>
+    <div class="resultsTable">
+        <table>
 
-        <img src="@String.Join("https://halo.bungie.net/", Model.EmblemURL)"/>
-    </div>
-    
-    <tr>
+            <div class="p1Emb">
 
+                <img src="@p1Emb" width="50" height="50" />
+                @Model.Name
+            </div>
 
-        <th>
-            Date
-        </th>
-        <th>
-            Link
-        </th>
-        <th>
-            Map
-        </th>
-        <th>
-            Gametype
-        </th>
-        <th>
-            Playlist
-        </th>
-    </tr>
+            <div class="p2Emb">
+                @Model.EnemyName
+                <img src="@p2Emb" width="50" height="50" />
+
+            </div>
+
+            <tr>
 
 
-    @foreach (var item in Model.GameList)
-    {
-        string gID = item.GameID.ToString();
-        <tr>
-            <td>
-                @Html.DisplayFor(Model => item.Date)
-            </td>
-            <td>
-                <a href='https://halo.bungie.net/Stats/GameStatsHalo3.aspx?gameid=@gID' target="_blank">Link</a>
-            </td>
-            <td>
-                @Html.DisplayFor(Model => item.Map)
-            </td>
-            <td>
-                @Html.DisplayFor(Model => item.Gametype)
-            </td>
-            <td>
-                @Html.DisplayFor(Model => item.Playlist)
-            </td>
-        </tr>
+                <th>
+                    Date
+                </th>
+                <th>
+                    Link
+                </th>
+                <th>
+                    Map
+                </th>
+                <th>
+                    Gametype
+                </th>
+                <th>
+                    Playlist
+                </th>
+            </tr>
+
+
+            @foreach (var item in Model.GameList)
+        {
+            string gID = item.GameID.ToString();
+            <tr>
+                <td>
+                    @Html.DisplayFor(Model => item.Date)
+                </td>
+                <td>
+                    <a href='https://halo.bungie.net/Stats/GameStatsHalo3.aspx?gameid=@gID' target="_blank">Link</a>
+                </td>
+                <td>
+                    @Html.DisplayFor(Model => item.Map)
+                </td>
+                <td>
+                    @Html.DisplayFor(Model => item.Gametype)
+                </td>
+                <td>
+                    @Html.DisplayFor(Model => item.Playlist)
+                </td>
+            </tr>
     }
-</table>
+        </table>
+    </div>
 }

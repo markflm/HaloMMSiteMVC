@@ -12,7 +12,6 @@ body{
 	font-size: 1.2vw;
 	color: #fff;
 	width:100%;
-	overflow: scroll;
 	position: absolute;	
 	top: -20px;
 	left: -20px;
@@ -191,4 +190,27 @@ width: 20px;
 	transition: .3s ease-in-out;
 	text-align: left;
 	font-size: smaller;
-}	
+}
+
+.resultsTable{
+	position:relative;
+}
+.p1Emb {
+	position: absolute;
+	top: -70.5%;
+	left: 1.5%;
+	background: linear-gradient(to left, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.5));
+	font-weight: 300;
+	width: 300px;
+}
+
+.p2Emb {
+	position: absolute;
+	top: -70.5%;
+	left: 76.75%;
+	text-align: right;
+	width: 300px;
+	background-color: rgba(0, 0, 0, 0.5);
+	background: linear-gradient(to right, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.5));
+	font-weight: 300;
+}
