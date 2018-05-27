@@ -15,7 +15,9 @@ namespace HaloMMSiteMVC.Models
         public Player(string name) //constructor if player is not in DB 
         {
             Name = name;
-            
+            GameIDs = new List<int>();
+            GameList = new List<Game>();
+            GamesFromDB = new List<Game>();
         }
 
         
@@ -24,11 +26,19 @@ namespace HaloMMSiteMVC.Models
 
         public List<Game> GameList { get; set; }
 
+        public List<Game> GamesFromDB { get; set; } //stupid workaround for GameList changing variables dynamically after I assign them before the prop value changes
+
         public string EmblemURL
         {
             get; set;
         }
 
+        public string EnemyEmblemURL
+        {
+            get; set;
+        }
+
+        public string EnemyName { get; set; } //to display playerTwo's GT on search results
         
         public bool CheckIfGTExists(string GT)
         {
@@ -142,7 +152,7 @@ namespace HaloMMSiteMVC.Models
             
             string gameType, map, playlist, dateText;
             string gameURL = "https://halo.bungie.net/Stats/GameStatsHalo3.aspx?gameid=";
-            GameList = new List<Game>();
+           
             foreach (int id in matchedGamesList)
             {
                 gameURL = "https://halo.bungie.net/Stats/GameStatsHalo3.aspx?gameid=" + id.ToString();
@@ -304,7 +314,7 @@ namespace HaloMMSiteMVC.Models
             }
         }
 
-        public void GetPlayerEmblem()
+        public void GetPlayerEmblem(string enemyPlayer)
         {
             
             WebClient bungie = new WebClient();
@@ -322,6 +332,15 @@ namespace HaloMMSiteMVC.Models
                 (fullhtml.IndexOf(" ", fullhtml.IndexOf(emblemURLLeadUp) + emblemURLLeadUp.Length)) - (fullhtml.IndexOf(emblemURLLeadUp) + emblemURLLeadUp.Length) - 1);
 
             this.EmblemURL = emblemURL.Replace("&amp;", "&");
+
+            fullhtml = bungie.DownloadString(playerProfile + enemyPlayer);
+
+            emblemURL = fullhtml.Substring(fullhtml.IndexOf(emblemURLLeadUp) + emblemURLLeadUp.Length, //start substring at shortest unique lead of characters before image + length of lead
+                                                                                                       //length of substring = index of first space after emblem url,
+                                                                                                       //minus index of start of url, minus 1 because url ends with "
+                (fullhtml.IndexOf(" ", fullhtml.IndexOf(emblemURLLeadUp) + emblemURLLeadUp.Length)) - (fullhtml.IndexOf(emblemURLLeadUp) + emblemURLLeadUp.Length) - 1);
+
+            this.EnemyEmblemURL = emblemURL.Replace("&amp;", "&");
         }
     }
 

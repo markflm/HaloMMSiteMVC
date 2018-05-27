@@ -17,20 +17,44 @@ namespace HaloMMSiteMVC.Models
 
         public DataAccess()
         {
-            
+
         }
-        
+
         private string cs = WebConfigurationManager.ConnectionStrings["H3MMDBEntities"].ConnectionString;
 
 
         //pre: requires Player object to be instantiated in order to pass its name as a string
         //post: returns true if player's name (gamertag) currently exists in the database
-        public bool IsInDB(string PlayerName)
+        public bool IsInDBMM(string PlayerName)
         {
             using (SqlConnection conn = new SqlConnection(cs))
             using (SqlCommand command = new SqlCommand("", conn))
             {
-                command.CommandText = "SELECT Player FROM GameIDs WHERE Player = (@Name)";
+                command.CommandText = "SELECT Player FROM GameIDs WHERE Player = (@Name) AND IsCustom = 0"; //check if a MM game is recorded
+                command.Parameters.AddWithValue("@Name", PlayerName); //using params prevents SQL injection apparently
+
+                conn.Open();
+                using (DbDataReader reader = command.ExecuteReader())
+                {
+                    if (reader.Read())//returns true if there's a record to be read
+                        return true;
+                    else
+                    {
+                        conn.Dispose();
+                        return false;
+                    }
+
+                }
+
+            }
+        }
+
+        public bool IsInDBCustom(string PlayerName)
+        {
+            using (SqlConnection conn = new SqlConnection(cs))
+            using (SqlCommand command = new SqlCommand("", conn))
+            {
+                command.CommandText = "SELECT Player FROM GameIDs WHERE Player = (@Name) AND IsCustom = 1"; //check if a MM game is recorded
                 command.Parameters.AddWithValue("@Name", PlayerName); //using params prevents SQL injection apparently
 
                 conn.Open();
@@ -78,7 +102,7 @@ namespace HaloMMSiteMVC.Models
                 return GameIDs;
 
             }
-           
+
         }
 
         //pre: Player not already present in SQL DB and list of GameIDs has been scraped from Bungie
@@ -99,7 +123,7 @@ namespace HaloMMSiteMVC.Models
                 {
                     command.CommandText = "INSERT INTO dbo.GameIDs (Player, GameID, IsCustom) " +
                             "VALUES (@Name, @GameID, @IsCustom)";
-                    
+
                     command.Parameters["@Name"].Value = PlayerName;
                     command.Parameters["@GameID"].Value = gid;
 
@@ -107,11 +131,91 @@ namespace HaloMMSiteMVC.Models
                     command.ExecuteNonQuery();
                 }
                 conn.Dispose();
-               
-               
+
+
 
             }
 
         }
+
+        //add details of matched games to table for quick access later.
+        public void AddGameDetails(List<Game> GameList)
+        {
+            using (SqlConnection conn = new SqlConnection(cs))
+            using (SqlCommand command = new SqlCommand("", conn))
+            {
+                conn.Open();
+                command.Parameters.AddWithValue("@Playlist", "pholder");
+                command.Parameters.AddWithValue("@GameID", 123);
+                command.Parameters.AddWithValue("@Map", "pholder");
+                command.Parameters.AddWithValue("@Date", "pholder");
+                command.Parameters.AddWithValue("@Gametype", "pholder");
+
+                foreach (Game game in GameList)
+                {
+                    command.CommandText = "INSERT INTO dbo.GameDetails VALUES(@GameID, @Map, @Playlist, @Gametype, @Date)";
+
+
+                    command.Parameters["@Playlist"].Value = game.Playlist;
+                    command.Parameters["@GameID"].Value = game.GameID;
+                    command.Parameters["@Map"].Value = game.Map;
+                    command.Parameters["@Date"].Value = game.Date;
+                    command.Parameters["@Gametype"].Value = game.Gametype;
+
+
+
+                    command.ExecuteNonQuery();
+                }
+                conn.Dispose();
+
+
+
+            }
+
+
+
+        }
+
+        //pull in matched game details from database
+        public List<int> ImportGameDetails(Player playerOne, List<int> MatchedIDs)
+        {
+            
+            List<int> pulledFromDB = new List<int>();
+            using (SqlConnection conn = new SqlConnection(cs))
+            using (SqlCommand command = new SqlCommand("", conn))
+            {
+
+                command.CommandText = "SELECT * from GameDetails Where GameID = @GameID";
+
+                command.Parameters.AddWithValue("@GameID", 123);
+
+
+                conn.Open();
+                foreach (int gid in MatchedIDs)
+                {
+                    command.Parameters["@GameID"].Value = gid;
+
+
+                    using (DbDataReader reader = command.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                           
+                            Game import = new Game(gid, reader["GameDate"].ToString(), reader["Map"].ToString(), reader["Playlist"].ToString(), reader["GameType"].ToString());
+
+
+                           playerOne.GameList.Add(import); //add fully detailed game object to GameList
+                           playerOne.GamesFromDB.Add(import); //workaround
+
+                           pulledFromDB.Add(gid); //add ID to list of successfully pulled gameIDs
+                        }
+                    }
+                }
+                conn.Dispose();
+
+                return pulledFromDB;
+
+            }
+        }
     }
-   }
+}

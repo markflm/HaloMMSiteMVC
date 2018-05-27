@@ -1,0 +1,213 @@
+
+*{
+	margin: 0;
+	padding: 0;
+}
+
+
+body{
+	margin: 0;
+	padding: 0;
+	font-family: 'Raleway', sans-serif;
+	font-size: 1.2vw;
+	color: #fff;
+	width:100%;
+	overflow: scroll;
+	position: absolute;	
+	top: -20px;
+	left: -20px;
+	right: -40px;
+	bottom: -40px;
+	background-size: auto;
+	background-position: center;
+	background-attachment: fixed;
+	background-repeat: no-repeat;   
+	background-image: url(narrows.jpg);
+	/*z-index::; 0; */
+}
+
+form {
+	background-color: rgba(0, 0, 0, 0.5);
+	width: 10%;
+	padding: 50px;
+	position: relative;
+	margin-top: 17.5%;
+	margin-left: 35%;
+	margin-bottom: 20%;
+	text-align: center;
+	display: table;
+	border: 1px solid white;
+	overflow: scroll;
+	position: relative;
+}
+
+.daForm {
+	opacity: 1;
+	z-index: 1;
+}
+
+.xForm {
+	opacity: 0;
+	z-index: -1;
+}
+
+
+/* .move needs the scripts in the pointcheck folder to work*/
+/*.move{
+	margin: auto;
+	position: fixed;
+	background: url("../images/narrowsPC.jpg");
+	background-repeat: no-repeat;
+	width: 110%;
+	height: 110%;
+}*/
+
+table {
+	table-layout: fixed;
+	background-color: rgba(0, 0, 0, 0.5);
+	padding: 200px;
+	width: 100%;
+	position: relative;
+	text-align: left;
+	display: table;
+	border: 1px solid white;
+	white-space: nowrap;
+}
+
+th, td {
+	padding: 15px;
+	white-space: nowrap;
+}
+
+
+/*.info{
+height: 20px;
+width: 20px;
+-webkit-filter: invert(100%);
+}*/
+
+
+
+
+
+.errortext {
+	display: block;
+	background-color: rgba(0, 0, 0, 0.5);
+	background-position: center;
+	border: 2px solid #fff;
+	padding: 5px;
+	text-align: center;
+	position: absolute;
+	color: #fff;
+	margin-left: 16.75%;
+	margin-top: 5%;
+	font-style:oblique;
+	width:550px;
+	height:85px;
+}
+
+
+.aboutForm{
+
+   position: relative;
+   width: 900px;
+   height: 80px;
+   left: 100px;
+   top: -20px;
+   text-align: left;
+
+}
+.Icon {
+	position: absolute;
+	height: 25px;
+	width: 25px;
+	bottom: 101%;
+	left: 45.5%;
+	display: block;
+	-webkit-filter: invert(100%);
+	cursor: pointer;
+	transition: .3s ease-in-out;
+	color: red;
+}
+
+.xIcon {
+	position: absolute;
+	height: 25px;
+	width: 25px;
+	bottom: 101%;
+	left: 45.5%;
+	display: block;
+	cursor: pointer;
+	transition: .3s ease-in-out;
+	-webkit-filter: invert(0%);
+}
+
+.infoIconClicked {
+	position: absolute;
+	height: 25px;
+	width: 25px;
+	bottom: 99%;
+	left: 47.5%;
+	display: block;
+	cursor: pointer;
+	transition: .3s ease-in-out;
+}
+
+
+.info-text {
+	display: inline-block;
+	position: absolute;
+	left: 0px;
+	top: 0px;
+	background-color: rgba(0, 0, 0, 0);
+	height: 100%;
+	width: 100%;
+	border-top: 1px solid #fff;
+	border-left: 1px solid white;
+	border-right: 1px solid white;
+	white-space: normal;
+	overflow: hidden;
+	z-index: -1;
+	opacity: 0;
+	transition: .3s ease-in-out;
+	text-align: left;
+	font-size: smaller;
+}
+
+.active {
+	color: black;
+	display: inline-block;
+	position: absolute;
+	left: 0px;
+	top: 0px;
+	background-color: rgba(255, 255, 255, .5);
+	height: 100%;
+	width: 100%;
+	border: 1px solid black;
+	white-space: normal;
+	overflow: hidden;
+	z-index: 100;
+	opacity: 1;
+	transition: .3s ease-in-out;
+	text-align: left;
+	font-size: smaller;
+}
+
+.p1Emb {
+	position: absolute;
+	top: 81.75%;
+	left: 17.25%;
+	background: linear-gradient(to left, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.5));
+	font-weight:300;
+}
+
+.p2Emb {
+	position: absolute;
+	top: 81.75%;
+	left: 68.225%;
+	text-align: right;
+	width: 250px;
+	background-color: rgba(0, 0, 0, 0.5);
+	background: linear-gradient(to right, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.5));
+	font-weight: 300;
+}
