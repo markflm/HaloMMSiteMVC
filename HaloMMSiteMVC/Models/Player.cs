@@ -6,10 +6,11 @@ using System.Net;
 using System.Diagnostics;
 using System.Threading.Tasks;
 using System.Net.Http;
+using System.Data;
 
 namespace HaloMMSiteMVC.Models
 {
-    public class Player 
+    public class Player
     {
 
         public Player(string name) //constructor if player is not in DB 
@@ -20,7 +21,7 @@ namespace HaloMMSiteMVC.Models
             GamesFromDB = new List<Game>();
         }
 
-        
+
         public string Name { get; set; }
         public List<int> GameIDs { get; set; }
 
@@ -39,7 +40,7 @@ namespace HaloMMSiteMVC.Models
         }
 
         public string EnemyName { get; set; } //to display playerTwo's GT on search results
-        
+
         public bool CheckIfGTExists(string GT)
         {
             string matchHistoryP1 = "http://halo.bungie.net/stats/playerstatshalo3.aspx?player="; //first part of match history page string
@@ -76,7 +77,7 @@ namespace HaloMMSiteMVC.Models
 
 
             string matchHistoryP1 = "http://halo.bungie.net/stats/playerstatshalo3.aspx?player="; //first part of match history page string
-             //2nd part of match history page string. concatted to current page
+                                                                                                  //2nd part of match history page string. concatted to current page
 
 
             fullhtml = bungie.DownloadString(matchHistoryP1 + GT + matchHistoryP2 + 1); //first page of GT1s game history
@@ -119,7 +120,7 @@ namespace HaloMMSiteMVC.Models
 
 
                 sigMidGameID = sigEndGameID + 1;
-               
+
                 GameIDs.Add(gameID);
                 gamesThisPage--; //increment count of games left on page
                 if (gamesThisPage == 0) //once gamesThisPage == 0 we've got all the gameIDs from this page
@@ -134,185 +135,336 @@ namespace HaloMMSiteMVC.Models
 
             }
 
-            
+
             bungie.Dispose(); //releases webclient
 
         }
 
-        
 
-        public void GetMatchedGameDetails(List<int> matchedGamesList)
+
+        public async Task<DataTable> GetMatchedGameDetails(List<int> matchedGamesList)
         {
-            WebClient bungie = new WebClient(); //accesses bungie.net
-            //bungie.download
-            string fullhtml; //stores the html from the game page for searching
-            int sigStartPos; //beginning of desired substring
-            int sigEndPos; //end of desired substring
-            
-            
-            string gameType, map, playlist, dateText;
-            string gameURL = "https://halo.bungie.net/Stats/GameStatsHalo3.aspx?gameid=";
-           
-            foreach (int id in matchedGamesList)
-            {
-                gameURL = "https://halo.bungie.net/Stats/GameStatsHalo3.aspx?gameid=" + id.ToString();
-
-                fullhtml = bungie.DownloadString(gameURL); //url of a matched game
-
-                //bungie.DownloadStringAsync(new Uri(gameURL));
-
-                //bungie.DownloadStringCompleted += Bungie_DownloadStringCompleted; //this actually needed to call the event handler
-
-
-                //get gametype
-                try
-                {
-
-
-                    sigStartPos = fullhtml.IndexOf("\"first styled\">") + ("\"first styled\">").Length; //index of first substring in HTML line that gives you gametype
-
-                    sigEndPos = fullhtml.IndexOf(" on ", sigStartPos); //index of next char after gametype
-
-                    gameType = fullhtml.Substring(sigStartPos, sigEndPos - sigStartPos); //works
-
-
-                    //get map
-
-                    //sigEndPos + 4 for " on "
-                    map = fullhtml.Substring(sigEndPos + 4, fullhtml.IndexOf("</li>", sigEndPos) - (sigEndPos + 4)); //works
-
-
-
-                    //get playlist
-                    sigStartPos = fullhtml.IndexOf("Playlist - ", sigEndPos) + ("Playlist - ").Length;
-
-                    sigEndPos = fullhtml.IndexOf("&nbsp;</li>", sigStartPos);
-
-                    playlist = fullhtml.Substring(sigStartPos, sigEndPos - sigStartPos); //works
-
-
-                    //get dateText
-                    sigStartPos = fullhtml.IndexOf("<li>", sigEndPos + ("&nbsp;</ li >").Length) + ("<li>").Length;
-                    sigEndPos = fullhtml.IndexOf(",", sigStartPos);
-
-                    dateText = fullhtml.Substring(sigStartPos, sigEndPos - sigStartPos);
-
-                }
-
-                catch //gameID wasn't found, dispose the webClient and go to next item in list
-                {
-                    bungie.Dispose();
-                    continue;
-
-                }
-
-                GameList.Add(new Game(id, dateText, map, gameType, playlist));
-
-
-
-                bungie.Dispose();
-                sigStartPos = 0;
-                sigEndPos = 0;
-                gameURL = "";
-            }
-
-        }
-
-        private void Bungie_DownloadStringCompleted(object sender, DownloadStringCompletedEventArgs e)
-        {
-            string fullhtml; //stores the html from the game page for searching
-            int sigStartPos; //beginning of desired substring
-            int sigEndPos; //end of desired substring
-
-            //List<Task<string>> to store HTML?
-            string gameType, map, playlist, dateText;
-            string gameURL = "https://halo.bungie.net/Stats/GameStatsHalo3.aspx?gameid=";
-        }
-
-        public async Task GetMatchedGameDetailsAsync(List<int> matchedGamesList)
-        {
+            ServicePointManager.DefaultConnectionLimit = 12;
+            ServicePointManager.Expect100Continue = false;
+            //WebClient bungie = new WebClient(); //accesses bungie.net
             HttpClient bungie = new HttpClient();
+            DataTable detailTable = new DataTable();
 
-            
+            bungie.Timeout = new TimeSpan(0, 20, 0);
+
+            detailTable.Columns.Add("GameID");
+            detailTable.Columns.Add("Map");
+            detailTable.Columns.Add("Playlist");
+            detailTable.Columns.Add("GameType");
+            detailTable.Columns.Add("GameDate");
+
             int sigStartPos; //beginning of desired substring
             int sigEndPos; //end of desired substring
-            string gameType, map, playlist, dateText;
-            GameList = new List<Game>();
-            List<string> matchedURLs = new List<string>();
+            int failedPages = 0; //keep track of tasks that fail to download
+            int successfulPages = 0;
+            string result;
+
+            
+
+            //set Accept headers
+            //bungie.DefaultRequestHeaders.TryAddWithoutValidation("Accept", "text/html,application/xhtml+xml,application/xml,application/json");
+            //set User agent
+            //bungie.DefaultRequestHeaders.TryAddWithoutValidation("User-Agent", "Mozilla/5.0 (Windows NT 6.3; WOW64; Trident/7.0; EN; rv:11.0) like Gecko");
+            //bungie.DefaultRequestHeaders.TryAddWithoutValidation("Accept-Charset", "ISO-8859-1");
+
+            string gameType, map, playlist, dateText, gidString;
+            int gid;
+            string gameURL = "http://halo.bungie.net/Stats/GameStatsHalo3.aspx?gameid=";
+
+            List<Task<string>> tasks = new List<Task<string>>();
+
+            List<string> debugTasks = new List<string>();
+
+
+            //for (int i = 0; i < 400; i++)
+            //{
+            //    Uri siteLink = new Uri(gameURL + matchedGamesList[i]); //GT = name of player, passed to method.
+            //                                          //creates url like
+            //                                          //
+
+            //    tasks.Add(bungie.GetStringAsync(siteLink));
+            //    debugTasks.Add(tasks.Last().Id.ToString() + " " + siteLink.ToString());
+        //}
             foreach (int id in matchedGamesList)
             {
-                matchedURLs.Add("https://halo.bungie.net/Stats/GameStatsHalo3.aspx?gameid=" + id.ToString());
+                Uri siteLink = new Uri(gameURL + id); //GT = name of player, passed to method.
+                                                      //creates url like
+                                                      //
+
+                tasks.Add(bungie.GetStringAsync(siteLink));
+                debugTasks.Add(tasks.Last().Id.ToString() + " " + siteLink.ToString());
             }
 
-            List<Task<string>> matchedPages = new List<Task<string>>();
-
-            foreach (string url in matchedURLs)
-            {
-                matchedPages.Add(Task.Run(() => bungie.GetStringAsync(url)));
-
-               
-                
-
-            }
             
-            
-            var results = await Task.WhenAll(matchedPages);
-            //bungie.Dispose();
-
-            int i = 0;
-            foreach(string fullhtml in results)
+            while (tasks.Count > 0)
             {
+                var taskComplete = await Task.WhenAny(tasks);
+
+                tasks.Remove(taskComplete);
+
                 try
                 {
+                    result = taskComplete.Result;
+
+                }
+                catch
+                {
+                    failedPages++;
+                    //Task.FromException(e);
+                    taskComplete.Dispose();
+                    continue; //if try fails, means task failed to download string. skip task
+                }
+                //tasks.Remove(taskComplete);
+                successfulPages++;
+                try
+                {
+                    //get gameID
+                    sigStartPos = result.IndexOf("gameid=") + ("gameid=").Length;
+
+                    sigEndPos = result.IndexOf("\"", sigStartPos);
+
+                    gidString = result.Substring(sigStartPos, sigEndPos - sigStartPos);
+
+                    gid = int.Parse(gidString); //to match up with SQL db datatype
 
 
-                    sigStartPos = fullhtml.IndexOf("\"first styled\">") + ("\"first styled\">").Length; //index of first substring in HTML line that gives you gametype
+                    //get gametype
+                    sigStartPos = result.IndexOf("\"first styled\">") + ("\"first styled\">").Length; //index of first substring in HTML line that gives you gametype
 
-                    sigEndPos = fullhtml.IndexOf(" on ", sigStartPos); //index of next char after gametype
+                    sigEndPos = result.IndexOf(" on ", sigStartPos); //index of next char after gametype
 
-                    gameType = fullhtml.Substring(sigStartPos, sigEndPos - sigStartPos); //works
+                    gameType = result.Substring(sigStartPos, sigEndPos - sigStartPos); //works
 
 
                     //get map
 
                     //sigEndPos + 4 for " on "
-                    map = fullhtml.Substring(sigEndPos + 4, fullhtml.IndexOf("</li>", sigEndPos) - (sigEndPos + 4)); //works
+                    map = result.Substring(sigEndPos + 4, result.IndexOf("</li>", sigEndPos) - (sigEndPos + 4)); //works
 
 
 
                     //get playlist
-                    sigStartPos = fullhtml.IndexOf("Playlist - ", sigEndPos) + ("Playlist - ").Length;
+                    sigStartPos = result.IndexOf("Playlist - ", sigEndPos) + ("Playlist - ").Length;
 
-                    sigEndPos = fullhtml.IndexOf("&nbsp;</li>", sigStartPos);
+                    sigEndPos = result.IndexOf("&nbsp;</li>", sigStartPos);
 
-                    playlist = fullhtml.Substring(sigStartPos, sigEndPos - sigStartPos); //works
+                    playlist = result.Substring(sigStartPos, sigEndPos - sigStartPos); //works
 
 
                     //get dateText
-                    sigStartPos = fullhtml.IndexOf("<li>", sigEndPos + ("&nbsp;</ li >").Length) + ("<li>").Length;
-                    sigEndPos = fullhtml.IndexOf(",", sigStartPos);
+                    sigStartPos = result.IndexOf("<li>", sigEndPos + ("&nbsp;</ li >").Length) + ("<li>").Length;
+                    sigEndPos = result.IndexOf(",", sigStartPos);
 
-                    dateText = fullhtml.Substring(sigStartPos, sigEndPos - sigStartPos);
+                    dateText = result.Substring(sigStartPos, sigEndPos - sigStartPos);
 
                 }
 
                 catch //gameID wasn't found, dispose the webClient and go to next item in list
                 {
-                    bungie.Dispose();
+                    
                     continue;
 
                 }
 
-                GameList.Add(new Game(matchedGamesList[i], dateText, map, gameType, playlist));
-                i++;
+                GameList.Add(new Game(gid, dateText, map, gameType, playlist));
+
+                detailTable.Rows.Add(gid, map, playlist, gameType, dateText); //add to data table for quicker storage in DB
 
 
-                bungie.Dispose();
                 sigStartPos = 0;
                 sigEndPos = 0;
-                //gameURL = "";
+               
             }
+
+            return detailTable;
+
         }
+
+
+
+        public async Task<DataTable> PopulateGameIDListAsync(string GT, bool customsFlag)
+        {
+            WebClient bungie = new WebClient();
+            HttpClient IDDownloader = new HttpClient();
+            DataTable dataTable = new DataTable();
+
+            //model table after GameIDs table in SQL db
+            dataTable.Columns.Add("RowID");
+            dataTable.Columns.Add("Player");
+            dataTable.Columns.Add("GameID");
+            dataTable.Columns.Add("IsCustom");
+
+          
+
+            string matchHistoryP2;
+            string matchHistoryP1;
+            string fullhtml;
+            int sigStartGameCount;
+            int sigEndGameCount;
+            int numofGames;
+            int approxNumOfPages;
+            int sigStartGameID;
+            int sigEndGameID;
+            int sigMidGameID;
+            int sigStartGameType;
+            int sigEndGameType;
+            int sigStartDate;
+            int sigEndDate;
+            int sigStartMap;
+            int sigEndMap;
+            int sigStartPlaylist;
+            int sigEndPlaylist;
+            string taskResult;
+            int gameID = 0;
+            string gametype, map, playlist, date;
+
+
+
+
+            //set Accept headers
+            //IDDownloader.DefaultRequestHeaders.TryAddWithoutValidation("Accept", "text/html,application/xhtml+xml,application/xml,application/json");
+            //set User agent
+            //IDDownloader.DefaultRequestHeaders.TryAddWithoutValidation("User-Agent", "Mozilla/5.0 (Windows NT 6.3; WOW64; Trident/7.0; EN; rv:11.0) like Gecko");
+            //IDDownloader.DefaultRequestHeaders.TryAddWithoutValidation("Accept-Charset", "ISO-8859-1");
+
+            if (customsFlag)
+                matchHistoryP2 = "&cus=1&ctl00_mainContent_bnetpgl_recentgamesChangePage="; //the URL for customs
+            else
+                matchHistoryP2 = "&ctl00_mainContent_bnetpgl_recentgamesChangePage="; //URL for MM games
+
+
+            matchHistoryP1 = "http://halo.bungie.net/stats/playerstatshalo3.aspx?player="; //first part of match history page string
+                                                                                           //2nd part of match history page string. concatted to current page
+
+
+            fullhtml = bungie.DownloadString(matchHistoryP1 + GT + matchHistoryP2 + 1); //first page of GT1s game history
+            sigStartGameCount = fullhtml.IndexOf("&nbsp;<strong>"); //index of first char in HTML line that gives you total MM games
+
+            sigEndGameCount = fullhtml.IndexOf("</strong>", sigStartGameCount); //index of next char after final digit of total MM games
+            //fist char + length of that substring as start index, length of characters in number of MM games as endingChar - startingChar - length of "Intro" substring = number of MM games as string
+            numofGames = int.Parse(fullhtml.Substring(sigStartGameCount + "&nbsp;<strong>".Length, (sigEndGameCount - sigStartGameCount - "&nbsp;<strong>".Length)));
+            approxNumOfPages = (numofGames / 25) + 1; //25 games a page, +1 to make sure a page isn't missed due to integer division
+            bungie.Dispose();
+
+
+            List<Task<string>> tasks = new List<Task<string>>();
+            
+
+            List<string> taskIDandSiteLink = new List<string>();
+            for (int i = 1; i <= approxNumOfPages; i++)
+            {
+                Uri siteLink = new Uri(matchHistoryP1 + GT + matchHistoryP2 + i); //GT = name of player, passed to method.
+                                                                              //creates url like
+                                                                              //http://halo.bungie.net/stats/playerstatshalo3.aspx?player=infury&ctl00_mainContent_bnetpgl_recentgamesChangePage=1
+
+                tasks.Add(IDDownloader.GetStringAsync(siteLink));
+
+                taskIDandSiteLink.Add(tasks.Last().Id + " " + siteLink.ToString()); //list of taskIDs and what page they should download
+            }
+
+            while (tasks.Count > 0)
+            {
+
+                var taskComplete = await Task.WhenAny(tasks);
+
+                
+                tasks.Remove(taskComplete); //remove task from list
+
+                try
+                {
+                    taskResult = taskComplete.Result;
+                }
+                catch
+                {
+                    Debug.Print(taskComplete.Id.ToString());
+                    taskComplete.Dispose();
+                    taskResult = "";
+                    continue;
+                }
+
+                
+                sigMidGameID = 0;
+                sigStartGameID = 0;
+                sigEndGameID = 0;
+
+                if (taskResult.IndexOf("No games found for this player.") != -1  || 
+                    taskResult.IndexOf("It seems that you have encountered a problem with our site.") != -1)
+                    continue; //if index of above IS NOT negative one, then it's a corrupted page or a customs page that doesn't exist.
+                              //skip this task and await the next one
+
+
+                for (int x = 0; x < 25; x++) //25 GameIDs per page
+                {
+                    sigStartGameID = taskResult.IndexOf("GameStatsHalo3", sigMidGameID); //find gameID
+                    sigEndGameID = taskResult.IndexOf("&amp;player", sigMidGameID);
+
+                    try
+                    {
+                        int.TryParse(taskResult.Substring(sigStartGameID + "GameStatsHalo3.aspx?gameid=".Length, sigEndGameID - "GameStatsHalo3.aspx?gameid=".Length - sigStartGameID), out gameID);
+                        GameIDs.Add(gameID);
+                        
+                        //get gametype for this row
+                        sigStartGameType = taskResult.IndexOf("\">", sigEndGameID);
+                        sigEndGameType = taskResult.IndexOf("</", sigEndGameID);
+                        gametype = taskResult.Substring(sigStartGameType + "\">".Length, sigEndGameType - "\">".Length - sigStartGameID);
+
+                        //get date for this row
+                        sigStartDate = taskResult.IndexOf("</td><td>", sigEndGameType);
+                        sigEndDate = taskResult.IndexOf("M", sigStartDate);
+                        date = taskResult.Substring(sigStartDate + "</td><td>".Length, sigEndDate);
+
+                        //get map for this row
+
+                        //get playlist for this row
+
+
+
+
+
+
+
+
+
+
+
+
+                        dataTable.Rows.Add(x, GT, gameID, customsFlag);
+
+                    }
+                    catch
+                    {
+                        x = 0;
+                        break; //if parse fails before x = 25, taskResult page didn't have a full 25 games iterate to next Task
+                    }
+
+
+                    sigMidGameID = sigEndGameID + 1; //increment index by 1 to find next instance of a GameID in the html
+                    
+                }
+                
+               
+
+
+                //taskComplete.Dispose(); //problem exists with or without disposing the task
+
+
+
+
+
+            }
+
+            IDDownloader.Dispose();
+            return dataTable;
+        }
+
+
+    
+
 
         public void GetPlayerEmblem(string enemyPlayer)
         {
@@ -343,6 +495,6 @@ namespace HaloMMSiteMVC.Models
             this.EnemyEmblemURL = emblemURL.Replace("&amp;", "&");
         }
     }
+}
 
     //if the url was [...]/movies/random need a MoviesController with an action named Random
-}

@@ -7,6 +7,7 @@ using System.Configuration;
 using System.Data.Common;
 using System.Web.Configuration;
 using System.Data.SqlTypes;
+using System.Data;
 
 
 
@@ -138,6 +139,36 @@ namespace HaloMMSiteMVC.Models
 
         }
 
+        public void AddGameIDToDB(string PlayerName, int GameID, int TaskID, bool IsCustom, DateTime insertTime)
+        {
+            using (SqlConnection conn = new SqlConnection(cs))
+            using (SqlCommand command = new SqlCommand("", conn))
+            {
+                conn.Open();
+                command.Parameters.AddWithValue("@Name", "pholder");
+                command.Parameters.AddWithValue("@GameID", 123);
+                command.Parameters.AddWithValue("@TaskID", 123);
+                command.Parameters.AddWithValue("@Time", "time");
+                if (IsCustom)
+                    command.Parameters.AddWithValue("@IsCustom", 1);
+                else
+                    command.Parameters.AddWithValue("@IsCustom", 0);
+
+                command.CommandText = "INSERT INTO dbo.debugingAsync (Player, GameID, Iscustom, TaskID, insertTime)" +
+                                       "VALUES (@Name, @GameID, @IsCustom, @TaskID, @Time)";
+                command.Parameters["@Name"].Value = PlayerName;
+                command.Parameters["@GameID"].Value = GameID;
+                command.Parameters["@TaskID"].Value = TaskID;
+                command.Parameters["@Time"].Value = insertTime.ToLongTimeString();
+                command.ExecuteNonQuery();
+
+                conn.Dispose();
+
+
+            }
+        }
+
+
         //add details of matched games to table for quick access later.
         public void AddGameDetails(List<Game> GameList)
         {
@@ -172,6 +203,20 @@ namespace HaloMMSiteMVC.Models
 
             }
 
+
+
+        }
+
+
+        public void AddGameDetailsDataTable(DataTable dataTable)
+        {
+            using (var sqlBulk = new SqlBulkCopy(cs))
+            {
+
+                sqlBulk.DestinationTableName = "GameDetails";
+                sqlBulk.WriteToServer(dataTable);
+
+            }
 
 
         }
@@ -216,6 +261,19 @@ namespace HaloMMSiteMVC.Models
                 return pulledFromDB;
 
             }
+        }
+
+        public void InsertDataTable(DataTable dataTable)
+        {
+            using (var sqlBulk = new SqlBulkCopy(cs))
+            {
+
+                sqlBulk.DestinationTableName = "GameIDs";
+                sqlBulk.WriteToServer(dataTable);
+
+            }
+
+          
         }
     }
 }

@@ -12,7 +12,6 @@ body{
 	font-size: 1.2vw;
 	color: #fff;
 	width:100%;
-	overflow: scroll;
 	position: absolute;	
 	top: -20px;
 	left: -20px;
@@ -193,20 +192,28 @@ width: 20px;
 	font-size: smaller;
 }
 
+
 .p1Emb {
 	position: absolute;
-	top: 81.75%;
-	left: 17.25%;
+	top: 73%;
+	left: 22.05%;
 	background: linear-gradient(to left, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.5));
-	font-weight:300;
+	font-weight: 300;
+	width: 400px;
 }
 
+.gameCount {
+	position: absolute;
+	top: 73%;
+	left: 46.05%;
+	background: linear-gradient( rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.25), rgba(0, 0, 0, 0));
+}
 .p2Emb {
 	position: absolute;
-	top: 81.75%;
-	left: 68.225%;
+	top: 73%;
+	left: 57.05%;
 	text-align: right;
-	width: 250px;
+	width: 400px;
 	background-color: rgba(0, 0, 0, 0.5);
 	background: linear-gradient(to right, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.5));
 	font-weight: 300;

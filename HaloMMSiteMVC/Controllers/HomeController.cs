@@ -5,6 +5,7 @@ using System.Web;
 using System.Web.Mvc;
 using HaloMMSiteMVC.Models;
 using System.Threading.Tasks;
+using System.Data;
 
 namespace HaloMMSiteMVC.Controllers
 {
@@ -40,6 +41,10 @@ namespace HaloMMSiteMVC.Controllers
             List<int> gamesToFetch = new List<int>();
             List<Game> fullGamesFromDB = new List<Game>();
             List<Game> fullGamesToDB = new List<Game>();
+            DataTable insertTable = new DataTable();
+            DataTable detailInsertTable = new DataTable();
+
+
             
             Player playerOne = new Player((gt1.Trim()).ToUpper()); //trim any leading/trailing spaces since these would produce valid URLs
             Player playerTwo = new Player((gt2.Trim()).ToUpper());  //toUpper so string comparison below works
@@ -66,33 +71,47 @@ namespace HaloMMSiteMVC.Controllers
             }
 
 
+            //testing
 
+            //await playerOne.PopulateGameIDListAsync(playerOne.Name, false);
+
+            //testing
             //Grab GTs from textboxes
             //Check DB to see if players exist
-
-            if (db.IsInDBMM(playerOne.Name) && db.IsInDBCustom(playerOne.Name))
+            if(mmCheckBox && cusCheckBox)
             {
-                intGameIDs1 = (db.ImportGamesFromDB(playerOne.Name, intGameIDs1, mmCheckBox, cusCheckBox));
-                playerOne.GameIDs = intGameIDs1;
-
-            }
-            else if ((!(db.IsInDBMM(playerOne.Name)) && mmCheckBox) && !(cusCheckBox)) //if MM games aren't found in DB, MM box is checked and Custom Box isn't checked
-            { //get MM games only
-                playerOne.PopulateGameIDList(playerOne.Name, false);
-                db.AddPlayerToDB(playerOne.Name, playerOne.GameIDs, false); //runs "store MM games" proc
-
-            }
-            else if ((!(db.IsInDBCustom(playerOne.Name)) && cusCheckBox) && !(mmCheckBox)) //if custom games aren't found in DB, customs box is checked and MM box isn't
-            {
-                playerOne.PopulateGameIDList(playerOne.Name, true); //get customs
-                db.AddPlayerToDB(playerOne.Name, playerOne.GameIDs, true); //store customs
-
-            }
-            else //run bungie scraper to get games
-            {
-                playerOne.GameIDs = intGameIDs1;
-                if (mmCheckBox && cusCheckBox) //both true, wants both types of game
+                if (db.IsInDBMM(playerOne.Name) && db.IsInDBCustom(playerOne.Name)) //if both boxes checked and both types of games in DB, import to GameIDs
                 {
+                    intGameIDs1 = (db.ImportGamesFromDB(playerOne.Name, intGameIDs1, mmCheckBox, cusCheckBox));
+                    playerOne.GameIDs = intGameIDs1;
+
+                }
+                else if (db.IsInDBMM(playerOne.Name)) //if both types of games not in DB, check for one type and import
+                {
+                    playerOne.PopulateGameIDList(playerOne.Name, true);
+                    db.AddPlayerToDB(playerOne.Name, playerOne.GameIDs, true);
+
+                    playerOne.GameIDs.Clear();
+
+                    intGameIDs1 = (db.ImportGamesFromDB(playerOne.Name, intGameIDs1, mmCheckBox, cusCheckBox));
+                    playerOne.GameIDs = intGameIDs1;
+                    //run populate method for customs
+                    
+                }
+                else if (db.IsInDBCustom(playerOne.Name)) //check for the other type, import
+                {
+                    playerOne.PopulateGameIDList(playerOne.Name, false);
+                    db.AddPlayerToDB(playerOne.Name, playerOne.GameIDs, false);
+
+                    playerOne.GameIDs.Clear();
+
+                    intGameIDs1 = (db.ImportGamesFromDB(playerOne.Name, intGameIDs1, mmCheckBox, cusCheckBox));
+                    playerOne.GameIDs = intGameIDs1;
+                    //run populate method for MM
+                }
+                else
+                {
+                    //run populate method for both
                     playerOne.PopulateGameIDList(playerOne.Name, false);
                     db.AddPlayerToDB(playerOne.Name, playerOne.GameIDs, false); //runs "store MM games" proc
 
@@ -103,43 +122,41 @@ namespace HaloMMSiteMVC.Controllers
 
                     db.ImportGamesFromDB(playerOne.Name, playerOne.GameIDs, true, false); //get MM games and add them back to list
                 }
-                else if (mmCheckBox && !cusCheckBox)
-                {
-                    playerOne.PopulateGameIDList(playerOne.Name, false);
-                    db.AddPlayerToDB(playerOne.Name, playerOne.GameIDs, false); //runs "store MM games" proc
 
+                //player 2 stuff
+
+                if (db.IsInDBMM(playerTwo.Name) && db.IsInDBCustom(playerTwo.Name)) //if both boxes checked and both types of games in DB, import to GameIDs
+                {
+                    intGameIDs2 = (db.ImportGamesFromDB(playerTwo.Name, intGameIDs2, mmCheckBox, cusCheckBox));
+                    playerTwo.GameIDs = intGameIDs2;
+
+                }
+                else if (db.IsInDBMM(playerTwo.Name)) //if both types of games not in DB, check for one type and import
+                {
+                    //run populate method for customs
+                    playerTwo.PopulateGameIDList(playerTwo.Name, true);
+                    db.AddPlayerToDB(playerTwo.Name, playerTwo.GameIDs, true);
+                    playerTwo.GameIDs.Clear();
+
+                    intGameIDs2 = (db.ImportGamesFromDB(playerTwo.Name, intGameIDs2, mmCheckBox, cusCheckBox));
+                    playerTwo.GameIDs = intGameIDs2;
+                    
+                    
+                }
+                else if (db.IsInDBCustom(playerTwo.Name)) //check for the other type, import
+                {
+                    //run populate method for MM
+                    playerTwo.PopulateGameIDList(playerTwo.Name, false);
+                    db.AddPlayerToDB(playerTwo.Name, playerTwo.GameIDs, false);
+                    playerTwo.GameIDs.Clear();
+
+                    intGameIDs2 = (db.ImportGamesFromDB(playerTwo.Name, intGameIDs2, mmCheckBox, cusCheckBox));
+                    playerTwo.GameIDs = intGameIDs2;
+                   
                 }
                 else
                 {
-                    playerOne.PopulateGameIDList(playerOne.Name, true);
-                    db.AddPlayerToDB(playerOne.Name, playerOne.GameIDs, true); //runs "store custom games" proc
-                }
-            }
-           
-            //create player object, run the bungie scraper
-            if (db.IsInDBMM(playerTwo.Name) && db.IsInDBCustom(playerTwo.Name))
-            {
-                intGameIDs2 = (db.ImportGamesFromDB(playerTwo.Name, intGameIDs2, mmCheckBox, cusCheckBox));
-                playerTwo.GameIDs = intGameIDs2;
-
-            }
-            else if((!(db.IsInDBMM(playerTwo.Name)) && mmCheckBox) && !(cusCheckBox)) //if MM games aren't found in DB, MM box is checked and Custom Box isn't checked
-            { //get MM games only
-                playerTwo.PopulateGameIDList(playerTwo.Name, false);
-                db.AddPlayerToDB(playerTwo.Name, playerTwo.GameIDs, false); //runs "store MM games" proc
-
-            }
-            else if ((!(db.IsInDBCustom(playerTwo.Name)) && cusCheckBox) && !(mmCheckBox)) //if custom games aren't found in DB, customs box is checked and MM box isn't
-            {
-                playerTwo.PopulateGameIDList(playerTwo.Name, true); //get customs
-                db.AddPlayerToDB(playerTwo.Name, playerTwo.GameIDs, true); //store customs
-
-            }
-            else //run bungie scraper to get games
-            {
-                playerTwo.GameIDs = intGameIDs2;
-                if (mmCheckBox && cusCheckBox) //both true, wants both types of game
-                {
+                    //run populate method for both
                     playerTwo.PopulateGameIDList(playerTwo.Name, false);
                     db.AddPlayerToDB(playerTwo.Name, playerTwo.GameIDs, false); //runs "store MM games" proc
 
@@ -150,17 +167,85 @@ namespace HaloMMSiteMVC.Controllers
 
                     db.ImportGamesFromDB(playerTwo.Name, playerTwo.GameIDs, true, false); //get MM games and add them back to list
                 }
-                else if (mmCheckBox && !cusCheckBox)
-                {
-                    playerTwo.PopulateGameIDList(playerTwo.Name, false);
-                    db.AddPlayerToDB(playerTwo.Name, playerTwo.GameIDs, false); //runs "store MM games" proc
+            }
 
+            else if (mmCheckBox) //if both boxes aren't checked, see if MM is checked
+            {
+                if (db.IsInDBMM(playerOne.Name)) //if in DB, import
+                {
+                    intGameIDs1 = (db.ImportGamesFromDB(playerOne.Name, intGameIDs1, mmCheckBox, cusCheckBox));
+                    playerOne.GameIDs = intGameIDs1;
                 }
                 else
                 {
-                    playerOne.PopulateGameIDList(playerTwo.Name, true);
-                    db.AddPlayerToDB(playerTwo.Name, playerTwo.GameIDs, true); //runs "store custom games" proc
+                    //run populate method for MM
+                    //playerOne.PopulateGameIDList(playerOne.Name, false);
+                    insertTable = await playerOne.PopulateGameIDListAsync(playerOne.Name, false);
+                    db.InsertDataTable(insertTable);
+                    //should add onto the one insert table somehow, but for now:
+                    insertTable.Clear();
+                    insertTable = await playerOne.PopulateGameIDListAsync(playerOne.Name, true);
+                    db.InsertDataTable(insertTable);
+
+                    //db.AddPlayerToDB(playerOne.Name, playerOne.GameIDs, false); //runs "store MM games" proc
                 }
+
+                //player 2 stuff
+
+                if (db.IsInDBMM(playerTwo.Name)) //if in DB, import
+                {
+                    intGameIDs2 = (db.ImportGamesFromDB(playerTwo.Name, intGameIDs2, mmCheckBox, cusCheckBox));
+                    playerTwo.GameIDs = intGameIDs2;
+                }
+                else
+                {
+                    insertTable.Clear(); //remove playerOne's games if they exist
+                    //run populate method for MM
+                    //playerTwo.PopulateGameIDList(playerTwo.Name, false);
+                   insertTable = await playerTwo.PopulateGameIDListAsync(playerTwo.Name, false);
+                    //db.AddPlayerToDB(playerTwo.Name, playerTwo.GameIDs, false); //runs "store MM games" proc
+                   db.InsertDataTable(insertTable);
+
+                    insertTable.Clear();
+                    insertTable = await playerTwo.PopulateGameIDListAsync(playerTwo.Name, true);
+                    db.InsertDataTable(insertTable);
+                    //clean this shit up
+                }
+            }
+            else if (cusCheckBox) //if both boxes aren't checked AND MM isn't checked, see if custom is
+            {
+                if (db.IsInDBCustom(playerOne.Name)) //if in DB, import
+                {
+                    intGameIDs1 = (db.ImportGamesFromDB(playerOne.Name, intGameIDs1, mmCheckBox, cusCheckBox));
+                    playerOne.GameIDs = intGameIDs1;
+                }
+                else
+                {
+                    //run populate method for custom
+                    playerOne.PopulateGameIDList(playerOne.Name, true);
+                    db.AddPlayerToDB(playerOne.Name, playerOne.GameIDs, true); //runs "store MM games" proc
+                }
+
+                //player 2 stuff
+                if (db.IsInDBCustom(playerTwo.Name)) //if in DB, import
+                {
+                    intGameIDs2 = (db.ImportGamesFromDB(playerTwo.Name, intGameIDs2, mmCheckBox, cusCheckBox));
+                    playerTwo.GameIDs = intGameIDs2;
+                }
+                else
+                {
+                    //run populate method for custom
+                    playerTwo.PopulateGameIDList(playerTwo.Name, true);
+                    db.AddPlayerToDB(playerTwo.Name, playerTwo.GameIDs, true); //runs "store MM games" proc
+                }
+
+
+            }
+            else
+            {
+                ViewBag.Error = "Select Matchmaking games, Custom games or both to begin your search";
+                playerOne.Name = null;
+                return View(playerOne);
             }
 
 
@@ -168,24 +253,28 @@ namespace HaloMMSiteMVC.Controllers
             //Once both Player objects are populated, do list.intersect in controller to find matched games
 
             //run get game details
+
             matchedIDs = (playerOne.GameIDs.Intersect(playerTwo.GameIDs)).ToList(); //matched GameIDs
             //import from DB
             gamesFromDB = db.ImportGameDetails(playerOne, matchedIDs);
             //isolate matched IDs that weren't returned from DB
             gamesToFetch = matchedIDs.Except(gamesFromDB).ToList();
             //grab those from bungie
-            fullGamesFromDB = playerOne.GamesFromDB;
+            //fullGamesFromDB = playerOne.GamesFromDB;
             if (gamesToFetch.Count > 0) //if > 0 there are matched Games not in DB
             {
                 //these are the games present in playerOne's GameList before the bungie fetch
                                                       // i.e. games that don't need to be added to the DB
 
-                playerOne.GetMatchedGameDetails(gamesToFetch); //adds remaining games to playerOne's GameList
+                //detailInsertTable = await playerOne.GetMatchedGameDetails(gamesToFetch); //adds remaining games to playerOne's GameList
+                                                                                         //and returns DataTable for quick SQL insert
 
-                fullGamesToDB = playerOne.GameList.Except(fullGamesFromDB).ToList(); //isolates fetched games for addition to DB
+                //fullGamesToDB = playerOne.GameList.Except(fullGamesFromDB).ToList(); //isolates fetched games for addition to DB
 
                 //add those to DB
-                db.AddGameDetails(fullGamesToDB);
+                //db.AddGameDetails(fullGamesToDB);
+
+                db.AddGameDetailsDataTable(detailInsertTable);
             }
             //else: (all matched games were in DB -- they're already added to playerOne.GameList from ImportGameDetails
             
