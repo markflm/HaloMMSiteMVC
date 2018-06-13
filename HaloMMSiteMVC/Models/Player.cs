@@ -19,6 +19,7 @@ namespace HaloMMSiteMVC.Models
             GameIDs = new List<int>();
             GameList = new List<Game>();
             GamesFromDB = new List<Game>();
+            GameDetailsTable = new DataTable();
         }
 
 
@@ -40,6 +41,12 @@ namespace HaloMMSiteMVC.Models
         }
 
         public string EnemyName { get; set; } //to display playerTwo's GT on search results
+
+        public DataTable GameDetailsTable { get; set; }
+
+        public bool IsInDBMM { get; set; }
+
+        public bool IsInDBCustoms { get; set; }
 
         public bool CheckIfGTExists(string GT)
         {
@@ -148,15 +155,7 @@ namespace HaloMMSiteMVC.Models
             ServicePointManager.Expect100Continue = false;
             //WebClient bungie = new WebClient(); //accesses bungie.net
             HttpClient bungie = new HttpClient();
-            DataTable detailTable = new DataTable();
 
-            bungie.Timeout = new TimeSpan(0, 20, 0);
-
-            detailTable.Columns.Add("GameID");
-            detailTable.Columns.Add("Map");
-            detailTable.Columns.Add("Playlist");
-            detailTable.Columns.Add("GameType");
-            detailTable.Columns.Add("GameDate");
 
             int sigStartPos; //beginning of desired substring
             int sigEndPos; //end of desired substring
@@ -273,7 +272,7 @@ namespace HaloMMSiteMVC.Models
 
                 GameList.Add(new Game(gid, dateText, map, gameType, playlist));
 
-                detailTable.Rows.Add(gid, map, playlist, gameType, dateText); //add to data table for quicker storage in DB
+                //detailTable.Rows.Add(gid, map, playlist, gameType, dateText); //add to data table for quicker storage in DB
 
 
                 sigStartPos = 0;
@@ -281,7 +280,7 @@ namespace HaloMMSiteMVC.Models
                
             }
 
-            return detailTable;
+            return new DataTable();
 
         }
 
@@ -289,9 +288,11 @@ namespace HaloMMSiteMVC.Models
 
         public async Task<DataTable> PopulateGameIDListAsync(string GT, bool customsFlag)
         {
+            
             WebClient bungie = new WebClient();
             HttpClient IDDownloader = new HttpClient();
             DataTable dataTable = new DataTable();
+
 
             //model table after GameIDs table in SQL db
             dataTable.Columns.Add("RowID");
@@ -299,7 +300,16 @@ namespace HaloMMSiteMVC.Models
             dataTable.Columns.Add("GameID");
             dataTable.Columns.Add("IsCustom");
 
-          
+            DataTable detailTable = new DataTable(); //for storing game details while searching bungie page
+
+            detailTable.Columns.Add("GameID");
+            detailTable.Columns.Add("Map");
+            detailTable.Columns.Add("Playlist");
+            detailTable.Columns.Add("GameType");
+            detailTable.Columns.Add("GameDate");
+            detailTable.Columns.Add("Player");
+            
+
 
             string matchHistoryP2;
             string matchHistoryP1;
@@ -321,7 +331,9 @@ namespace HaloMMSiteMVC.Models
             int sigEndPlaylist;
             string taskResult;
             int gameID = 0;
+           
             string gametype, map, playlist, date;
+            DateTime dateConvert = new DateTime();
 
 
 
@@ -333,10 +345,13 @@ namespace HaloMMSiteMVC.Models
             //IDDownloader.DefaultRequestHeaders.TryAddWithoutValidation("Accept-Charset", "ISO-8859-1");
 
             if (customsFlag)
+            {
                 matchHistoryP2 = "&cus=1&ctl00_mainContent_bnetpgl_recentgamesChangePage="; //the URL for customs
+            }
             else
+            {
                 matchHistoryP2 = "&ctl00_mainContent_bnetpgl_recentgamesChangePage="; //URL for MM games
-
+            }
 
             matchHistoryP1 = "http://halo.bungie.net/stats/playerstatshalo3.aspx?player="; //first part of match history page string
                                                                                            //2nd part of match history page string. concatted to current page
@@ -408,29 +423,46 @@ namespace HaloMMSiteMVC.Models
                         int.TryParse(taskResult.Substring(sigStartGameID + "GameStatsHalo3.aspx?gameid=".Length, sigEndGameID - "GameStatsHalo3.aspx?gameid=".Length - sigStartGameID), out gameID);
                         GameIDs.Add(gameID);
                         
-                        //get gametype for this row
+                        //get gametype for this row --working
                         sigStartGameType = taskResult.IndexOf("\">", sigEndGameID);
-                        sigEndGameType = taskResult.IndexOf("</", sigEndGameID);
-                        gametype = taskResult.Substring(sigStartGameType + "\">".Length, sigEndGameType - "\">".Length - sigStartGameID);
+                        sigEndGameType = taskResult.IndexOf("</a", sigEndGameID);
+                        gametype = taskResult.Substring(sigStartGameType + "\">".Length, sigEndGameType - "\">".Length - sigStartGameType);
 
-                        //get date for this row
-                        sigStartDate = taskResult.IndexOf("</td><td>", sigEndGameType);
-                        sigEndDate = taskResult.IndexOf("M", sigStartDate);
-                        date = taskResult.Substring(sigStartDate + "</td><td>".Length, sigEndDate);
+                        //get date for this row -- working
+                        sigStartDate = taskResult.IndexOf("</td><td>\r\n                                ", sigEndGameType) + "</td><td>\r\n                                ".Length;
+                        sigEndDate = taskResult.IndexOf("M", sigStartDate) + 1;
+                        date = taskResult.Substring(sigStartDate, sigEndDate - sigStartDate);
 
-                        //get map for this row
+                        //get map for this row -- working
+                        sigStartMap = taskResult.IndexOf("</td><td>\r\n                                ", sigEndDate) + "</td><td>\r\n                                ".Length;
+                        sigEndMap = taskResult.IndexOf("\r\n", sigStartMap);
+                        map = taskResult.Substring(sigStartMap, sigEndMap - sigStartMap);
 
                         //get playlist for this row
+                        sigStartPlaylist = taskResult.IndexOf("</td><td>\r\n                                ", sigEndMap) + "</td><td>\r\n                                ".Length;
+                        sigEndPlaylist = taskResult.IndexOf("\r\n", sigStartPlaylist);
+                        playlist = taskResult.Substring(sigStartPlaylist, sigEndPlaylist - sigStartPlaylist);
 
 
 
+                        //detailTable.Columns.Add("GameID");
+                        //detailTable.Columns.Add("Map");
+                        //detailTable.Columns.Add("Playlist");
+                        //detailTable.Columns.Add("GameType");
+                        //detailTable.Columns.Add("GameDate");
 
+                        try
+                        {
+                            dateConvert = DateTime.Parse(date); //try to parse what we think is the date, if parse fails it's not a valid gameID
 
+                            detailTable.Rows.Add(gameID, map, playlist, gametype, dateConvert, GT);
 
-
-
-
-
+                        }
+                        catch
+                        {
+                            int ix = 0;
+                            //couldn't parse this date
+                        }
 
 
                         dataTable.Rows.Add(x, GT, gameID, customsFlag);
@@ -450,7 +482,7 @@ namespace HaloMMSiteMVC.Models
                
 
 
-                //taskComplete.Dispose(); //problem exists with or without disposing the task
+                
 
 
 
@@ -459,6 +491,10 @@ namespace HaloMMSiteMVC.Models
             }
 
             IDDownloader.Dispose();
+            if (GameDetailsTable.Rows.Count == 0) //if there aren't already games in this table from a previous instance of this method
+                GameDetailsTable = detailTable; //assign details table to player property since idk if you can return more than one thing per method
+            else
+                GameDetailsTable.Merge(detailTable); //if rowcount != 0, merge existing GameDetailsTable with one from this instance of the method
             return dataTable;
         }
 

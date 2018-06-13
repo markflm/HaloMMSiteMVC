@@ -13,11 +13,11 @@ namespace HaloMMSiteMVC.Controllers
     {
 
         //TODO: Handling if GT doesn't exist on bungie
-            //  Check what happens if button is clicked during a bungie scrape
-            //  Handling same GT twice
-            //  Mouse-hover-over-icon 
-            // Gamescrape progress bar
-            //Heinz Almighty's 2nd page of custom games is broken on bungie.net. no systematic work-around
+        //  Check what happens if button is clicked during a bungie scrape
+        //  Handling same GT twice
+        //  Mouse-hover-over-icon 
+        // Gamescrape progress bar
+        //Heinz Almighty's 2nd page of custom games is broken on bungie.net. no systematic work-around
         // GET: Player
         //calls when url is site/player/player
         /*a view is an ActionResult, but ViewResult is more specific*/
@@ -27,7 +27,7 @@ namespace HaloMMSiteMVC.Controllers
         {
 
             return View();
-            
+
             //another type of action result -- return Content("sup bich");
         }
 
@@ -41,11 +41,12 @@ namespace HaloMMSiteMVC.Controllers
             List<int> gamesToFetch = new List<int>();
             List<Game> fullGamesFromDB = new List<Game>();
             List<Game> fullGamesToDB = new List<Game>();
-            DataTable insertTable = new DataTable();
+            DataTable playerInsertTable = new DataTable();
             DataTable detailInsertTable = new DataTable();
+            DataTable detailRetrievalTable = new DataTable();
 
 
-            
+
             Player playerOne = new Player((gt1.Trim()).ToUpper()); //trim any leading/trailing spaces since these would produce valid URLs
             Player playerTwo = new Player((gt2.Trim()).ToUpper());  //toUpper so string comparison below works
 
@@ -55,7 +56,7 @@ namespace HaloMMSiteMVC.Controllers
                 ViewBag.Error = "Please enter two different Gamertags";
                 playerOne.Name = null;
                 return View(playerOne);
-                
+
             }
             else if (!(playerOne.CheckIfGTExists(playerOne.Name)))
             {
@@ -78,53 +79,65 @@ namespace HaloMMSiteMVC.Controllers
             //testing
             //Grab GTs from textboxes
             //Check DB to see if players exist
-            if(mmCheckBox && cusCheckBox)
+            if (mmCheckBox && cusCheckBox)
             {
                 if (db.IsInDBMM(playerOne.Name) && db.IsInDBCustom(playerOne.Name)) //if both boxes checked and both types of games in DB, import to GameIDs
                 {
                     intGameIDs1 = (db.ImportGamesFromDB(playerOne.Name, intGameIDs1, mmCheckBox, cusCheckBox));
                     playerOne.GameIDs = intGameIDs1;
+                    playerOne.IsInDBCustoms = true;
+                    playerOne.IsInDBMM = true; //for deciding which, if any, gameIDs need to be moved 
 
                 }
                 else if (db.IsInDBMM(playerOne.Name)) //if both types of games not in DB, check for one type and import
-                {
-                    playerOne.PopulateGameIDList(playerOne.Name, true);
-                    db.AddPlayerToDB(playerOne.Name, playerOne.GameIDs, true);
+                {   //has MM games in DB, but not customs
 
-                    playerOne.GameIDs.Clear();
+                    playerInsertTable = await playerOne.PopulateGameIDListAsync(playerOne.Name, true); //grab customs from bungie
 
+                    db.InsertPlayerDataTable(playerInsertTable); //store customs in GameID table
+
+                    db.AddGameDetailsDataTable(playerOne.GameDetailsTable); //inserts newly scraped custom games into GameDetailsTemp landing table
+
+                    playerOne.GameIDs.Clear(); //clear player's gameIDs so we don't have duplicates when we import games from DB
                     intGameIDs1 = (db.ImportGamesFromDB(playerOne.Name, intGameIDs1, mmCheckBox, cusCheckBox));
+
                     playerOne.GameIDs = intGameIDs1;
-                    //run populate method for customs
-                    
+
+
                 }
                 else if (db.IsInDBCustom(playerOne.Name)) //check for the other type, import
                 {
-                    playerOne.PopulateGameIDList(playerOne.Name, false);
-                    db.AddPlayerToDB(playerOne.Name, playerOne.GameIDs, false);
+                    //has custom games in DB, but not MM
 
-                    playerOne.GameIDs.Clear();
+                    playerInsertTable = await playerOne.PopulateGameIDListAsync(playerOne.Name, false); //grab MM games from bungie
 
+                    db.InsertPlayerDataTable(playerInsertTable); //store MM games in GameID table
+
+                    db.AddGameDetailsDataTable(playerOne.GameDetailsTable); //inserts newly scraped MM  games into GameDetailsTemp landing table
+
+                    playerOne.GameIDs.Clear(); //clear player's gameIDs so we don't have duplicates when we import games from DB
                     intGameIDs1 = (db.ImportGamesFromDB(playerOne.Name, intGameIDs1, mmCheckBox, cusCheckBox));
+
                     playerOne.GameIDs = intGameIDs1;
-                    //run populate method for MM
                 }
                 else
                 {
                     //run populate method for both
-                    playerOne.PopulateGameIDList(playerOne.Name, false);
-                    db.AddPlayerToDB(playerOne.Name, playerOne.GameIDs, false); //runs "store MM games" proc
+                    playerInsertTable = await playerOne.PopulateGameIDListAsync(playerOne.Name, false);
+                    playerInsertTable.Merge(await playerOne.PopulateGameIDListAsync(playerOne.Name, true)); //attempts to merge custom and mm datatable into one 
 
-                    playerOne.GameIDs.Clear(); //clear MM games from list
 
-                    playerOne.PopulateGameIDList(playerOne.Name, true); //get customs
-                    db.AddPlayerToDB(playerOne.Name, playerOne.GameIDs, true); //store customs
+                    db.InsertPlayerDataTable(playerInsertTable);
 
-                    db.ImportGamesFromDB(playerOne.Name, playerOne.GameIDs, true, false); //get MM games and add them back to list
+                    db.AddGameDetailsDataTable(playerOne.GameDetailsTable);
+
+                    //after this runs should have gameIDs and GameDetails in the player object, don't need to select anything from DB yet.
                 }
 
-                //player 2 stuff
+            }   //player 2 stuff
 
+            if (mmCheckBox && cusCheckBox)
+            {
                 if (db.IsInDBMM(playerTwo.Name) && db.IsInDBCustom(playerTwo.Name)) //if both boxes checked and both types of games in DB, import to GameIDs
                 {
                     intGameIDs2 = (db.ImportGamesFromDB(playerTwo.Name, intGameIDs2, mmCheckBox, cusCheckBox));
@@ -132,40 +145,48 @@ namespace HaloMMSiteMVC.Controllers
 
                 }
                 else if (db.IsInDBMM(playerTwo.Name)) //if both types of games not in DB, check for one type and import
-                {
-                    //run populate method for customs
-                    playerTwo.PopulateGameIDList(playerTwo.Name, true);
-                    db.AddPlayerToDB(playerTwo.Name, playerTwo.GameIDs, true);
-                    playerTwo.GameIDs.Clear();
+                {   //has MM games in DB, but not customs
 
+                    playerInsertTable = await playerTwo.PopulateGameIDListAsync(playerTwo.Name, true); //grab customs from bungie
+
+                    db.InsertPlayerDataTable(playerInsertTable); //store customs in GameID table
+
+                    db.AddGameDetailsDataTable(playerTwo.GameDetailsTable); //inserts newly scraped custom games into GameDetailsTemp landing table
+
+                    playerTwo.GameIDs.Clear(); //clear player's gameIDs so we don't have duplicates when we import games from DB
                     intGameIDs2 = (db.ImportGamesFromDB(playerTwo.Name, intGameIDs2, mmCheckBox, cusCheckBox));
+
                     playerTwo.GameIDs = intGameIDs2;
-                    
-                    
+
+
                 }
                 else if (db.IsInDBCustom(playerTwo.Name)) //check for the other type, import
                 {
-                    //run populate method for MM
-                    playerTwo.PopulateGameIDList(playerTwo.Name, false);
-                    db.AddPlayerToDB(playerTwo.Name, playerTwo.GameIDs, false);
-                    playerTwo.GameIDs.Clear();
+                    //has custom games in DB, but not MM
 
+                    playerInsertTable = await playerTwo.PopulateGameIDListAsync(playerTwo.Name, false); //grab MM games from bungie
+
+                    db.InsertPlayerDataTable(playerInsertTable); //store MM games in GameID table
+
+                    db.AddGameDetailsDataTable(playerTwo.GameDetailsTable); //inserts newly scraped MM  games into GameDetailsTemp landing table
+
+                    playerTwo.GameIDs.Clear(); //clear player's gameIDs so we don't have duplicates when we import games from DB
                     intGameIDs2 = (db.ImportGamesFromDB(playerTwo.Name, intGameIDs2, mmCheckBox, cusCheckBox));
+
                     playerTwo.GameIDs = intGameIDs2;
-                   
                 }
                 else
                 {
                     //run populate method for both
-                    playerTwo.PopulateGameIDList(playerTwo.Name, false);
-                    db.AddPlayerToDB(playerTwo.Name, playerTwo.GameIDs, false); //runs "store MM games" proc
+                    playerInsertTable = await playerTwo.PopulateGameIDListAsync(playerTwo.Name, false);
+                    playerInsertTable.Merge(await playerTwo.PopulateGameIDListAsync(playerTwo.Name, true)); //attempts to merge custom and mm datatable into one 
 
-                    playerTwo.GameIDs.Clear(); //clear MM games from list
 
-                    playerTwo.PopulateGameIDList(playerTwo.Name, true); //get customs
-                    db.AddPlayerToDB(playerTwo.Name, playerTwo.GameIDs, true); //store customs
+                    db.InsertPlayerDataTable(playerInsertTable);
 
-                    db.ImportGamesFromDB(playerTwo.Name, playerTwo.GameIDs, true, false); //get MM games and add them back to list
+                    db.AddGameDetailsDataTable(playerTwo.GameDetailsTable);
+
+                    //after this runs should have gameIDs and GameDetails in the player object, don't need to select anything from DB yet.
                 }
             }
 
@@ -179,15 +200,13 @@ namespace HaloMMSiteMVC.Controllers
                 else
                 {
                     //run populate method for MM
-                    //playerOne.PopulateGameIDList(playerOne.Name, false);
-                    insertTable = await playerOne.PopulateGameIDListAsync(playerOne.Name, false);
-                    db.InsertDataTable(insertTable);
-                    //should add onto the one insert table somehow, but for now:
-                    insertTable.Clear();
-                    insertTable = await playerOne.PopulateGameIDListAsync(playerOne.Name, true);
-                    db.InsertDataTable(insertTable);
 
-                    //db.AddPlayerToDB(playerOne.Name, playerOne.GameIDs, false); //runs "store MM games" proc
+                    playerInsertTable = await playerOne.PopulateGameIDListAsync(playerOne.Name, false);
+                    db.InsertPlayerDataTable(playerInsertTable);
+                    db.AddGameDetailsDataTable(playerOne.GameDetailsTable);
+
+
+
                 }
 
                 //player 2 stuff
@@ -199,17 +218,14 @@ namespace HaloMMSiteMVC.Controllers
                 }
                 else
                 {
-                    insertTable.Clear(); //remove playerOne's games if they exist
                     //run populate method for MM
-                    //playerTwo.PopulateGameIDList(playerTwo.Name, false);
-                   insertTable = await playerTwo.PopulateGameIDListAsync(playerTwo.Name, false);
-                    //db.AddPlayerToDB(playerTwo.Name, playerTwo.GameIDs, false); //runs "store MM games" proc
-                   db.InsertDataTable(insertTable);
 
-                    insertTable.Clear();
-                    insertTable = await playerTwo.PopulateGameIDListAsync(playerTwo.Name, true);
-                    db.InsertDataTable(insertTable);
-                    //clean this shit up
+                    playerInsertTable = await playerTwo.PopulateGameIDListAsync(playerTwo.Name, false);
+                    db.InsertPlayerDataTable(playerInsertTable);
+                    db.AddGameDetailsDataTable(playerTwo.GameDetailsTable);
+
+
+
                 }
             }
             else if (cusCheckBox) //if both boxes aren't checked AND MM isn't checked, see if custom is
@@ -222,8 +238,9 @@ namespace HaloMMSiteMVC.Controllers
                 else
                 {
                     //run populate method for custom
-                    playerOne.PopulateGameIDList(playerOne.Name, true);
-                    db.AddPlayerToDB(playerOne.Name, playerOne.GameIDs, true); //runs "store MM games" proc
+                    playerInsertTable = await playerOne.PopulateGameIDListAsync(playerOne.Name, true);
+                    db.InsertPlayerDataTable(playerInsertTable);
+                    db.AddGameDetailsDataTable(playerOne.GameDetailsTable);
                 }
 
                 //player 2 stuff
@@ -235,12 +252,14 @@ namespace HaloMMSiteMVC.Controllers
                 else
                 {
                     //run populate method for custom
-                    playerTwo.PopulateGameIDList(playerTwo.Name, true);
-                    db.AddPlayerToDB(playerTwo.Name, playerTwo.GameIDs, true); //runs "store MM games" proc
+                    playerInsertTable = await playerTwo.PopulateGameIDListAsync(playerTwo.Name, true);
+                    db.InsertPlayerDataTable(playerInsertTable);
+                    db.AddGameDetailsDataTable(playerTwo.GameDetailsTable);
                 }
 
 
             }
+
             else
             {
                 ViewBag.Error = "Select Matchmaking games, Custom games or both to begin your search";
@@ -251,58 +270,58 @@ namespace HaloMMSiteMVC.Controllers
 
 
             //Once both Player objects are populated, do list.intersect in controller to find matched games
-
-            //run get game details
-
             matchedIDs = (playerOne.GameIDs.Intersect(playerTwo.GameIDs)).ToList(); //matched GameIDs
-            //import from DB
-            gamesFromDB = db.ImportGameDetails(playerOne, matchedIDs);
-            //isolate matched IDs that weren't returned from DB
-            gamesToFetch = matchedIDs.Except(gamesFromDB).ToList();
-            //grab those from bungie
-            //fullGamesFromDB = playerOne.GamesFromDB;
-            if (gamesToFetch.Count > 0) //if > 0 there are matched Games not in DB
+            
+            
+            detailRetrievalTable = db.ImportGameDetails(matchedIDs); //import from DB
+            foreach (DataRow dr in detailRetrievalTable.Rows) 
             {
-                //these are the games present in playerOne's GameList before the bungie fetch
-                                                      // i.e. games that don't need to be added to the DB
-
-                //detailInsertTable = await playerOne.GetMatchedGameDetails(gamesToFetch); //adds remaining games to playerOne's GameList
-                                                                                         //and returns DataTable for quick SQL insert
-
-                //fullGamesToDB = playerOne.GameList.Except(fullGamesFromDB).ToList(); //isolates fetched games for addition to DB
-
-                //add those to DB
-                //db.AddGameDetails(fullGamesToDB);
-
-                db.AddGameDetailsDataTable(detailInsertTable);
+                //add games imported from permanent table to GameList
+                playerOne.GameList.Add(new Game(int.Parse(dr["GameID"].ToString()), dr["GameDate"].ToString(), dr["Map"].ToString(), dr["GameType"].ToString(), dr["Playlist"].ToString()));
+                gamesFromDB.Add(int.Parse(dr["GameID"].ToString())); //for the following .Except
             }
-            //else: (all matched games were in DB -- they're already added to playerOne.GameList from ImportGameDetails
-            
+
+            gamesToFetch = (matchedIDs.Except(gamesFromDB)).ToList(); //isolate matched IDs that weren't returned from DB
+
+
             
 
-            //await playerOne.GetMatchedGameDetailsAsync(matchedIDs);
+            if (gamesToFetch.Count > 0)
+            {
+                detailRetrievalTable = db.ImportGameDetailsTEMP(playerOne, gamesToFetch);
+
+                foreach (DataRow dr in detailRetrievalTable.Rows)
+                {
+                    //add games improted from temp table to GameList
+                    playerOne.GameList.Add(new Game(int.Parse(dr["GameID"].ToString()), dr["GameDate"].ToString(), dr["Map"].ToString(), dr["GameType"].ToString(), dr["Playlist"].ToString()));
+
+                }
+            }
+
+            
+
 
 
 
             playerOne.GameList.Sort((x, y) => DateTime.Compare(DateTime.Parse(x.Date), DateTime.Parse(y.Date))); //orders GameList by date of game ascending
             playerOne.GameList.Reverse(); //reverses the list (descending)
 
+            foreach (Game g in playerOne.GameList)
+            {
+                g.Date = g.Date.Substring(0, g.Date.IndexOf(" ")); //remove timestamp (hh:mm:ss) from game date, but keeps games in true chronological order
+
+            }
+
             ViewBag.Error = "";
             playerOne.EnemyName = playerTwo.Name;
             playerOne.GetPlayerEmblem(playerTwo.Name);
+
+            if (gamesToFetch.Count > 0) //if there were games not in permanent GameDetails table
+                db.RunGameDetailMigrateProc(playerOne, playerTwo); //moves games into permanent GameDetails page and deletes those games from GameDetailsTemp
+
             return View(playerOne);
-        }
 
-        public async Task BungieAccessAsync(List<int> matchedIDs)
-        {
-
-        }
-  
-
-        public ActionResult SearchInfo()
-        {
-
-            return View();
         }
     }
 }
+ 

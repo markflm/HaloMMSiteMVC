@@ -210,70 +210,195 @@ namespace HaloMMSiteMVC.Models
 
         public void AddGameDetailsDataTable(DataTable dataTable)
         {
-            using (var sqlBulk = new SqlBulkCopy(cs))
+            using (var conn = new SqlConnection(cs))
             {
+                conn.Open();
 
-                sqlBulk.DestinationTableName = "GameDetails";
-                sqlBulk.WriteToServer(dataTable);
+                var transaction = conn.BeginTransaction(); //make the insert a transaction, so all rows copy or none do
+                using (var sqlBulk = new SqlBulkCopy(conn, SqlBulkCopyOptions.KeepNulls, transaction))
+                {
+                    
 
+                    sqlBulk.DestinationTableName = "GameDetailsTemp";
+                    sqlBulk.WriteToServer(dataTable);
+
+                }
+                transaction.Commit();
+                conn.Dispose();
             }
 
 
         }
 
         //pull in matched game details from database
-        public List<int> ImportGameDetails(Player playerOne, List<int> MatchedIDs)
+        public DataTable ImportGameDetailsTEMP(Player playerOne, List<int> matchedIDs) //eventually need to upgrade to storing each game only once
+                                                                                       //and not requiring the player name to return records
         {
-            
-            List<int> pulledFromDB = new List<int>();
             using (SqlConnection conn = new SqlConnection(cs))
             using (SqlCommand command = new SqlCommand("", conn))
             {
-
-                command.CommandText = "SELECT * from GameDetails Where GameID = @GameID";
-
-                command.Parameters.AddWithValue("@GameID", 123);
-
-
                 conn.Open();
-                foreach (int gid in MatchedIDs)
+
+                var query = "SELECT * FROM GameDetailsTemp WHERE GameID IN ({0}) AND Player = @Player";
+                var gameIDParameterList = new List<string>();
+                var index = 0;
+                foreach (int id in matchedIDs)
                 {
-                    command.Parameters["@GameID"].Value = gid;
-
-
-                    using (DbDataReader reader = command.ExecuteReader())
-                    {
-                        while (reader.Read())
-                        {
-                           
-                            Game import = new Game(gid, reader["GameDate"].ToString(), reader["Map"].ToString(), reader["Playlist"].ToString(), reader["GameType"].ToString());
-
-
-                           playerOne.GameList.Add(import); //add fully detailed game object to GameList
-                           playerOne.GamesFromDB.Add(import); //workaround
-
-                           pulledFromDB.Add(gid); //add ID to list of successfully pulled gameIDs
-                        }
-                    }
+                    var paramName = "@idParam" + index;
+                    command.Parameters.AddWithValue(paramName, id);
+                    gameIDParameterList.Add(paramName);
+                    index++;
                 }
-                conn.Dispose();
 
-                return pulledFromDB;
+                command.CommandText = String.Format(query, string.Join(",", gameIDParameterList));
+                command.Parameters.AddWithValue("@Player", playerOne.Name);
+                using (SqlDataReader reader = command.ExecuteReader())
+                {
+                    var resultTable = new DataTable();
+                    resultTable.Load(reader);
+
+
+                    conn.Dispose();
+                    return resultTable;
+                }
 
             }
         }
 
-        public void InsertDataTable(DataTable dataTable)
-        {
-            using (var sqlBulk = new SqlBulkCopy(cs))
-            {
 
-                sqlBulk.DestinationTableName = "GameIDs";
-                sqlBulk.WriteToServer(dataTable);
+        public DataTable ImportGameDetails(List<int> matchedIDs)
+        {
+            List<int> overflowList = new List<int>();
+            int gameCount = 0;
+            DataTable resultTable = new DataTable();
+
+            if (matchedIDs.Count > 2099) //sql can only take 2100 parameters in a select like this, if there are more than 2099 matched games, need to break up list
+            {
+                gameCount = matchedIDs.Count;
+                while (matchedIDs.Count >= 2050)
+                {
+                    overflowList.Add(matchedIDs[2049]); //add gameID to overflow list
+
+                    matchedIDs.RemoveAt(2049); //remove it from original list
+                }
+            }
+               
+
+            using (SqlConnection conn = new SqlConnection(cs))
+            using (SqlCommand command = new SqlCommand("", conn))
+            {
+                conn.Open();
+
+                var query = "SELECT * FROM GameDetails WHERE GameID IN ({0})";
+                var gameIDParameterList = new List<string>();
+                var index = 0;
+                foreach (int id in matchedIDs)
+                {
+                    var paramName = "@idParam" + index;
+                    command.Parameters.AddWithValue(paramName, id);
+                    gameIDParameterList.Add(paramName);
+                    index++;
+                }
+
+                command.CommandText = String.Format(query, string.Join(",", gameIDParameterList));
+
+                using (SqlDataReader reader = command.ExecuteReader())
+                {
+                    
+                    resultTable.Load(reader);
+
+
+                  
+                   
+                }
+
+
+                if (overflowList.Count > 0)
+                {
+                    gameIDParameterList.Clear();
+                    index = 0;
+                    command.Parameters.Clear();
+                    command.CommandText = "";
+                    foreach (int id in overflowList)
+                    {
+                        var paramName = "@idParam" + index;
+                        command.Parameters.AddWithValue(paramName, id);
+                        gameIDParameterList.Add(paramName);
+                        index++;
+                    }
+
+                    command.CommandText = String.Format(query, string.Join(",", gameIDParameterList));
+
+                    using (SqlDataReader reader = command.ExecuteReader())
+                    {
+
+                        resultTable.Load(reader);
+
+
+
+
+                    }
+                }
+
+                
 
             }
 
+            return resultTable;
+           
+            
+        }
+
+        public void InsertPlayerDataTable(DataTable dataTable)
+        {
+            using (var conn= new SqlConnection(cs))
+            {
+                conn.Open();
+
+                var transaction = conn.BeginTransaction(); //make the insert a transaction, so all rows copy or none do
+                using (var sqlBulk = new SqlBulkCopy(conn, SqlBulkCopyOptions.KeepNulls, transaction)) //enables "check permanent table for gameIDs, then insert new ones and truncate temp table"
+                {
+                    
+                    sqlBulk.DestinationTableName = "GameIDs";
+                    sqlBulk.WriteToServer(dataTable);
+
+
+                }
+                transaction.Commit();
+                conn.Dispose();
+
+            }
+           
           
+        }
+
+
+        //inserts new games from GameDetailsTemp into GameDetails and deletes them from GameDetailsTemp
+        public void RunGameDetailMigrateProc(Player playerOne, Player playerTwo)
+        {
+            using (SqlConnection conn = new SqlConnection(cs))
+            {
+                using (SqlCommand cmd = new SqlCommand("uspMigrateGameDetails", conn))
+                {
+                    cmd.CommandType = CommandType.StoredProcedure;
+
+                    cmd.Parameters.AddWithValue("@Player1", playerOne.Name);
+                    cmd.Parameters.AddWithValue("@Player2", playerTwo.Name);
+
+                    conn.Open();
+                    cmd.ExecuteNonQuery();
+
+                }
+
+
+            }
+
+
+        }
+        public void SelectSuggestedPlayers(bool prosOnly)
+        {
+            //select 15 random names from GameIDs
+
         }
     }
 }

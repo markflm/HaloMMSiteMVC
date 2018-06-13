@@ -20,7 +20,7 @@ namespace HaloMMSiteMVC.Models
 
         }
         public int GameID { get;  }
-        public string Date { get;  }
+        public string Date { get; set; }
 
         public string Map { get;}
 
