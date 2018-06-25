@@ -331,7 +331,8 @@ namespace HaloMMSiteMVC.Models
             int sigEndPlaylist;
             string taskResult;
             int gameID = 0;
-           
+            int corruptPages = 0;
+            List<string> corruptedPages = new List<string>();
             string gametype, map, playlist, date;
             DateTime dateConvert = new DateTime();
 
@@ -407,10 +408,15 @@ namespace HaloMMSiteMVC.Models
                 sigStartGameID = 0;
                 sigEndGameID = 0;
 
-                if (taskResult.IndexOf("No games found for this player.") != -1  || 
+                if (taskResult.IndexOf("No games found for this player.") != -1 ||
                     taskResult.IndexOf("It seems that you have encountered a problem with our site.") != -1)
+                {
+                    corruptPages++;
+                    corruptedPages.Add(taskResult);
+
                     continue; //if index of above IS NOT negative one, then it's a corrupted page or a customs page that doesn't exist.
                               //skip this task and await the next one
+                }
 
 
                 for (int x = 0; x < 25; x++) //25 GameIDs per page

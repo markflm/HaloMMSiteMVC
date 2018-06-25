@@ -271,55 +271,66 @@ namespace HaloMMSiteMVC.Controllers
 
             //Once both Player objects are populated, do list.intersect in controller to find matched games
             matchedIDs = (playerOne.GameIDs.Intersect(playerTwo.GameIDs)).ToList(); //matched GameIDs
-            
-            
-            detailRetrievalTable = db.ImportGameDetails(matchedIDs); //import from DB
-            foreach (DataRow dr in detailRetrievalTable.Rows) 
+
+            if (matchedIDs.Count > 0)
             {
-                //add games imported from permanent table to GameList
-                playerOne.GameList.Add(new Game(int.Parse(dr["GameID"].ToString()), dr["GameDate"].ToString(), dr["Map"].ToString(), dr["GameType"].ToString(), dr["Playlist"].ToString()));
-                gamesFromDB.Add(int.Parse(dr["GameID"].ToString())); //for the following .Except
-            }
-
-            gamesToFetch = (matchedIDs.Except(gamesFromDB)).ToList(); //isolate matched IDs that weren't returned from DB
-
-
-            
-
-            if (gamesToFetch.Count > 0)
-            {
-                detailRetrievalTable = db.ImportGameDetailsTEMP(playerOne, gamesToFetch);
-
+                detailRetrievalTable = db.ImportGameDetails(matchedIDs); //import from DB
                 foreach (DataRow dr in detailRetrievalTable.Rows)
                 {
-                    //add games improted from temp table to GameList
+                    //add games imported from permanent table to GameList
                     playerOne.GameList.Add(new Game(int.Parse(dr["GameID"].ToString()), dr["GameDate"].ToString(), dr["Map"].ToString(), dr["GameType"].ToString(), dr["Playlist"].ToString()));
+                    gamesFromDB.Add(int.Parse(dr["GameID"].ToString())); //for the following .Except
+                }
+
+                gamesToFetch = (matchedIDs.Except(gamesFromDB)).ToList(); //isolate matched IDs that weren't returned from DB
+
+
+
+
+                if (gamesToFetch.Count > 0)
+                {
+                    detailRetrievalTable = db.ImportGameDetailsTEMP(playerOne, gamesToFetch);
+
+                    foreach (DataRow dr in detailRetrievalTable.Rows)
+                    {
+                        //add games improted from temp table to GameList
+                        playerOne.GameList.Add(new Game(int.Parse(dr["GameID"].ToString()), dr["GameDate"].ToString(), dr["Map"].ToString(), dr["GameType"].ToString(), dr["Playlist"].ToString()));
+
+                    }
+                }
+
+
+
+
+
+
+                playerOne.GameList.Sort((x, y) => DateTime.Compare(DateTime.Parse(x.Date), DateTime.Parse(y.Date))); //orders GameList by date of game ascending
+                playerOne.GameList.Reverse(); //reverses the list (descending)
+
+                foreach (Game g in playerOne.GameList)
+                {
+                    g.Date = g.Date.Substring(0, g.Date.IndexOf(" ")); //remove timestamp (hh:mm:ss) from game date, but keeps games in true chronological order
 
                 }
-            }
 
-            
+                ViewBag.Error = "";
+                playerOne.EnemyName = playerTwo.Name;
+                playerOne.GetPlayerEmblem(playerTwo.Name);
 
-
-
-
-            playerOne.GameList.Sort((x, y) => DateTime.Compare(DateTime.Parse(x.Date), DateTime.Parse(y.Date))); //orders GameList by date of game ascending
-            playerOne.GameList.Reverse(); //reverses the list (descending)
-
-            foreach (Game g in playerOne.GameList)
-            {
-                g.Date = g.Date.Substring(0, g.Date.IndexOf(" ")); //remove timestamp (hh:mm:ss) from game date, but keeps games in true chronological order
-
-            }
-
-            ViewBag.Error = "";
-            playerOne.EnemyName = playerTwo.Name;
-            playerOne.GetPlayerEmblem(playerTwo.Name);
-
-            if (gamesToFetch.Count > 0) //if there were games not in permanent GameDetails table
+                //if there were games not in permanent GameDetails table
                 db.RunGameDetailMigrateProc(playerOne, playerTwo); //moves games into permanent GameDetails page and deletes those games from GameDetailsTemp
+                return View(playerOne);
+            }
 
-            return View(playerOne);
+            else
+            {
+                db.RunGameDetailMigrateProc(playerOne, playerTwo); //moves games into permanent GameDetails page and deletes those games from GameDetailsTemp
+                ViewBag.Error = playerOne.Name + " and " + playerTwo.Name + " have no games together on Bungie.net.";
+                playerOne.Name = null;
+
+                return View(playerOne);
+            }
+           
 
         }
     }

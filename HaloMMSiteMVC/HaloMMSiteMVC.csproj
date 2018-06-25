@@ -202,8 +202,6 @@
     <Content Include="Views\Home\Player.cshtml" />
     <Content Include="Views\Home\SearchResults.cshtml" />
     <Content Include="Views\Home\Alias.cshtml" />
-    <Content Include="Views\Home\InfoPopup.cshtml" />
-    <Content Include="Views\Home\SearchInfo.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

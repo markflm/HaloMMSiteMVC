@@ -18,14 +18,18 @@
 @using (@Html.BeginForm("SearchResults", "Home", FormMethod.Post))
 {
     <div class="info-text">
-        <h4><u>Search Times</u></h4>
-        The first time searching a particular Gamertag can take up to 15 minutes. After the first search the Gamertag will be added to the database
-        and subsequent searches with be much faster (10-30 seconds).
+        <h5><u>Search Times</u></h5>
+        The first time searching a particular Gamertag can take up to ~5 minutes. After the first search the Gamertag will be added to the database
+        and subsequent searches with be much faster (under 10 seconds in most cases).
 
         <br />
-        <h4><u>Requirements</u></h4>
-        - You must enter the <b>current</b> Gamertag of the Xbox Live accounts you are trying to search.
-        - Search is not case sensitive.
+        <h5><u>Requirements</u></h5>
+        - You need to use the <b>current</b> Gamertag of the Xbox Live accounts you're trying to search.<br />
+        - Games played after 03/31/2012 aren't available. Bungie did not record Halo 3 games played after this date. <br />
+        - Search is not case sensitive. <br />
+        <br />
+
+        @*Already Pointchecked your friends? Try searching against these random players.*@
     </div>
 
     <div class="Icon">

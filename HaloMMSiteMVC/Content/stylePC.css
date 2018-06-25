@@ -86,7 +86,15 @@ width: 20px;
 }*/
 
 
+a:link {
+	color: cornflowerblue;
 
+}
+
+a:visited {
+	color: cornflowerblue;
+
+}
 
 
 .errortext {
@@ -156,8 +164,8 @@ width: 20px;
 .info-text {
 	display: inline-block;
 	position: absolute;
-	left: -1px;
-	top: -1px;
+	left: -5px;
+	top: -5px;
 	right: 0px;
 	bottom: 0px;
 	background-color: rgba(0, 0, 0, 0);
@@ -185,14 +193,14 @@ width: 20px;
 	color: black;
 	display: inline-block;
 	position: absolute;
-	left: 0px;
-	top: 0px;
+	left: -1.5px;
+	top: -1.5px;
 	right: 0px;
 	bottom: 0px;
 	background-color: rgba(255, 255, 255, .5);
-	height: 100%;
-	width: 100%;
-	border: 1px solid black;
+	height: 100.5%;
+	width: 101%;
+	border: 2px solid black;
 	white-space: normal;
 	overflow: hidden;
 	z-index: 100;
@@ -230,4 +238,18 @@ width: 20px;
 	background-color: rgba(0, 0, 0, 0.5);
 	background: linear-gradient(to right, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.5));
 	font-weight: 300;
+}
+
+.twitterLinks {
+	position: relative;
+	float: right;
+	bottom: 36.5px;
+	width: 450px;
+	color: white;
+	background: linear-gradient( rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.05), rgba(0, 0, 0, 0));
+	font-size:smaller;
+}
+
+.copyRight {
+	font-size: smaller;
 }

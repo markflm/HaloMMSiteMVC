@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>@ViewBag.Title - My ASP.NET Application</title>
+    <title>@ViewBag.Title</title>
     @Styles.Render("~/Content/css")
     @Scripts.Render("~/bundles/modernizr")
 
@@ -56,7 +56,13 @@
         @RenderBody()
         <hr />
         <footer>
-            <p>&copy; @DateTime.Now.Year - Pointcheck.net</p>
+            <div class="copyRight">
+                <p>&copy; @DateTime.Now.Year - Pointcheck.</p>
+            </div>
+
+            <div class="twitterLinks">
+                Created by <a href='https://twitter.com/KiFFLoM' target="_blank">@@Kifflom</a> and <a href='https://twitter.com/KeithBrosch' target="_blank">@@KeithBrosch</a>
+            </div>
         </footer>
     </div>
 
