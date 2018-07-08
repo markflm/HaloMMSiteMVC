@@ -43,7 +43,6 @@ C:\Users\markf\source\repos\HaloMMSiteMVC\HaloMMSiteMVC\bin\EntityFramework.dll
 C:\Users\markf\source\repos\HaloMMSiteMVC\HaloMMSiteMVC\bin\EntityFramework.SqlServer.dll
 C:\Users\markf\source\repos\HaloMMSiteMVC\HaloMMSiteMVC\bin\EntityFramework.xml
 C:\Users\markf\source\repos\HaloMMSiteMVC\HaloMMSiteMVC\bin\EntityFramework.SqlServer.xml
-C:\Users\markf\source\repos\HaloMMSiteMVC\HaloMMSiteMVC\obj\Debug\HaloMMSiteMVC.csprojResolveAssemblyReference.cache
 C:\Users\Sharon\Documents\GitHub\HaloMMSiteMVC\HaloMMSiteMVC\bin\ApplicationInsights.config
 C:\Users\Sharon\Documents\GitHub\HaloMMSiteMVC\HaloMMSiteMVC\bin\HaloMMSiteMVC.dll.config
 C:\Users\Sharon\Documents\GitHub\HaloMMSiteMVC\HaloMMSiteMVC\bin\HaloMMSiteMVC.dll
@@ -90,3 +89,5 @@ C:\Users\Sharon\Documents\GitHub\HaloMMSiteMVC\HaloMMSiteMVC\obj\Debug\HaloMMSit
 C:\Users\Sharon\Documents\GitHub\HaloMMSiteMVC\HaloMMSiteMVC\obj\Debug\HaloMMSiteMVC.csproj.CopyComplete
 C:\Users\Sharon\Documents\GitHub\HaloMMSiteMVC\HaloMMSiteMVC\obj\Debug\HaloMMSiteMVC.dll
 C:\Users\Sharon\Documents\GitHub\HaloMMSiteMVC\HaloMMSiteMVC\obj\Debug\HaloMMSiteMVC.pdb
+C:\Users\markf\source\repos\HaloMMSiteMVC\HaloMMSiteMVC\obj\Debug\HaloMMSiteMVC.csprojAssemblyReference.cache
+C:\Users\markf\source\repos\HaloMMSiteMVC\HaloMMSiteMVC\obj\Debug\HaloMMSiteMVC.csproj.CopyComplete

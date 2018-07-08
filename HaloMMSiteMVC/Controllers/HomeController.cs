@@ -274,30 +274,33 @@ namespace HaloMMSiteMVC.Controllers
 
             if (matchedIDs.Count > 0)
             {
+                //moves games into permanent GameDetails page and deletes those games from GameDetailsTemp
+                db.RunGameDetailMigrateProc(playerOne, playerTwo); //running proc first then selecting only from permanenet table might fix duplicates?
+
                 detailRetrievalTable = db.ImportGameDetails(matchedIDs); //import from DB
                 foreach (DataRow dr in detailRetrievalTable.Rows)
                 {
                     //add games imported from permanent table to GameList
                     playerOne.GameList.Add(new Game(int.Parse(dr["GameID"].ToString()), dr["GameDate"].ToString(), dr["Map"].ToString(), dr["GameType"].ToString(), dr["Playlist"].ToString()));
-                    gamesFromDB.Add(int.Parse(dr["GameID"].ToString())); //for the following .Except
+                    //gamesFromDB.Add(int.Parse(dr["GameID"].ToString())); //for the following .Except
                 }
 
-                gamesToFetch = (matchedIDs.Except(gamesFromDB)).ToList(); //isolate matched IDs that weren't returned from DB
+                //gamesToFetch = (matchedIDs.Except(gamesFromDB)).ToList(); //isolate matched IDs that weren't returned from DB
 
 
 
+                //think this is causing problems with duplicates when players who have more than 2.1k games together search for the first time.
+                //if (gamesToFetch.Count > 0)
+                //{
+                //    detailRetrievalTable = db.ImportGameDetailsTEMP(playerOne, gamesToFetch);
 
-                if (gamesToFetch.Count > 0)
-                {
-                    detailRetrievalTable = db.ImportGameDetailsTEMP(playerOne, gamesToFetch);
+                //    foreach (DataRow dr in detailRetrievalTable.Rows)
+                //    {
+                //        //add games improted from temp table to GameList
+                //        playerOne.GameList.Add(new Game(int.Parse(dr["GameID"].ToString()), dr["GameDate"].ToString(), dr["Map"].ToString(), dr["GameType"].ToString(), dr["Playlist"].ToString()));
 
-                    foreach (DataRow dr in detailRetrievalTable.Rows)
-                    {
-                        //add games improted from temp table to GameList
-                        playerOne.GameList.Add(new Game(int.Parse(dr["GameID"].ToString()), dr["GameDate"].ToString(), dr["Map"].ToString(), dr["GameType"].ToString(), dr["Playlist"].ToString()));
-
-                    }
-                }
+                //    }
+                //}
 
 
 
@@ -317,14 +320,13 @@ namespace HaloMMSiteMVC.Controllers
                 playerOne.EnemyName = playerTwo.Name;
                 playerOne.GetPlayerEmblem(playerTwo.Name);
 
-                //if there were games not in permanent GameDetails table
-                db.RunGameDetailMigrateProc(playerOne, playerTwo); //moves games into permanent GameDetails page and deletes those games from GameDetailsTemp
                 return View(playerOne);
             }
 
             else
             {
-                db.RunGameDetailMigrateProc(playerOne, playerTwo); //moves games into permanent GameDetails page and deletes those games from GameDetailsTemp
+                //moves games into permanent GameDetails page and deletes those games from GameDetailsTemp
+                db.RunGameDetailMigrateProc(playerOne, playerTwo);
                 ViewBag.Error = playerOne.Name + " and " + playerTwo.Name + " have no games together on Bungie.net.";
                 playerOne.Name = null;
 

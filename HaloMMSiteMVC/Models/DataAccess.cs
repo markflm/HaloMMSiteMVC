@@ -269,6 +269,8 @@ namespace HaloMMSiteMVC.Models
         public DataTable ImportGameDetails(List<int> matchedIDs)
         {
             List<int> overflowList = new List<int>();
+            List<int> secondOverflowList = new List<int>();
+            List<int> thirdOverflowList = new List<int>();
             int gameCount = 0;
             DataTable resultTable = new DataTable();
 
@@ -281,6 +283,28 @@ namespace HaloMMSiteMVC.Models
 
                     matchedIDs.RemoveAt(2049); //remove it from original list
                 }
+
+                if (overflowList.Count > 2099)  //if more than ~4200 matched games (only seen with this guiv shot and eli the ninja)
+                {
+                    while (overflowList.Count >= 2050)
+                    {
+                        secondOverflowList.Add(overflowList[2049]);
+
+                        overflowList.RemoveAt(2049);
+                    }
+
+                    if (secondOverflowList.Count > 2099) //actually, they've got over 6300 games
+                    {
+                        while (secondOverflowList.Count >= 2050)
+                        {
+                            thirdOverflowList.Add(secondOverflowList[2049]);
+
+                            secondOverflowList.RemoveAt(2049);
+                        }
+                    }
+
+                }
+
             }
                
 
@@ -289,7 +313,7 @@ namespace HaloMMSiteMVC.Models
             {
                 conn.Open();
 
-                var query = "SELECT * FROM GameDetails WHERE GameID IN ({0})";
+                var query = "SELECT DISTINCT * FROM GameDetails WHERE GameID IN ({0})";
                 var gameIDParameterList = new List<string>();
                 var index = 0;
                 foreach (int id in matchedIDs)
@@ -336,6 +360,61 @@ namespace HaloMMSiteMVC.Models
 
 
 
+
+                    }
+
+                    if (secondOverflowList.Count > 0)
+                    {
+                        gameIDParameterList.Clear();
+                        index = 0;
+                        command.Parameters.Clear();
+                        command.CommandText = "";
+                        foreach (int id in secondOverflowList)
+                        {
+                            var paramName = "@idParam" + index;
+                            command.Parameters.AddWithValue(paramName, id);
+                            gameIDParameterList.Add(paramName);
+                            index++;
+                        }
+
+                        command.CommandText = String.Format(query, string.Join(",", gameIDParameterList));
+
+                        using (SqlDataReader reader = command.ExecuteReader())
+                        {
+
+                            resultTable.Load(reader);
+
+
+
+
+                        }
+
+                        if (thirdOverflowList.Count > 0)
+                        {
+                            gameIDParameterList.Clear();
+                            index = 0;
+                            command.Parameters.Clear();
+                            command.CommandText = "";
+                            foreach (int id in thirdOverflowList)
+                            {
+                                var paramName = "@idParam" + index;
+                                command.Parameters.AddWithValue(paramName, id);
+                                gameIDParameterList.Add(paramName);
+                                index++;
+                            }
+
+                            command.CommandText = String.Format(query, string.Join(",", gameIDParameterList));
+
+                            using (SqlDataReader reader = command.ExecuteReader())
+                            {
+
+                                resultTable.Load(reader);
+
+
+
+
+                            }
+                        }
 
                     }
                 }
