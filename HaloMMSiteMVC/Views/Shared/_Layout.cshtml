@@ -12,46 +12,469 @@
     <script src="https://code.jquery.com/jquery-3.3.1.js"></script>
     <script type="text/javascript">
         $(document).ready(function () {
-            $('.Icon').hover(function () {
-                $('.info-text').toggleClass('active');
-                $('.Icon').toggleClass('xIcon');
-                $('.daForm').toggleClass('xForm');
-            })
+            // Function 1
+            $(".fa-times").click(function () { // When 'X' on Nav Bar is clicked
+                $(".sidebar_menu").addClass("hide_menu"); // Hide Nav Bar
+                $(".toggle_menu").addClass("opacity_one"); // Make Toggle Menu visible
+            });
+            // Function 2
+            $(".toggle_menu").click(function () { // When Toggle Menu is clicked
+                $(".sidebar_menu").removeClass("hide_menu"); // Show Nav Bar
+                $(".toggle_menu").removeClass("opacity_one"); // Hide Toggle Menu
+            });
+            // Function 3
+            $(".info").hover(function () { // When Info Icon is hovered
+                $(".h3Form").addClass("xForm"); // Hide Form
+                $(".infoText").removeClass("xForm"); // Show Info Text
+                $(".infoIcon").addClass("iconOpacity"); // Give Info Icon .5 opacity
+            });
+            // Function 4
+            $(".info").mouseleave(function () { // When Info Icon is unhovered
+                $(".h3Form").removeClass("xForm"); // Show Form
+                $(".infoText").addClass("xForm"); // Hide Info Text
+                $(".infoIcon").removeClass("iconOpacity"); // Restore Info Icon opacity
 
-        })
-    </script>
+            });
+            // Function 5
+            $(".navigation_item1").click(function () { // When Nav Item 1 (Halo 2) is selected
+                $(".navigation_item1").addClass("selectedNavItem"); // Make Nav Item 1 Text green
+                $(".navigation_item2").removeClass("selectedNavItem"); // Make Nav Item 2 Text white
+                $(".navigation_item3").removeClass("selectedNavItem"); // Make Nav Item 3 Text white
+                $(".navigation_item4").removeClass("selectedNavItem"); // Make Nav Item 4 Text white
 
-    <script type="text/javascript">
-        $(document).ready(function () {
-            $('.xIcon').click(function () {
-                $('.info-text').toggleClass('active');
-                $('.xIcon').toggleClass('Icon');
-                $('.xForm').toggleClass('daForm');
-            })
+                $(".wrapper").removeClass("wrapperh3"); // Remove H3 Wrapper
+                $(".wrapper").removeClass("wrapperhr"); // Remove HR Wrapper
+                $(".wrapper").removeClass("wrapperProGamertags"); // Remove Pro Player Gamertags Wrapper
+                $(".wrapper").addClass("wrapperh2"); // Add H2 Wrapper
 
-        })
+                $(".proGamertags").removeClass("proGamertagsActive"); // Hide Pro Player Gamertags Table
+                $(".h3Form").addClass("xForm"); // Hide Form
+                $(".infoIcon").addClass("xForm"); // Hide Info Icon
+                $("footer").addClass("blackFooter"); // Make Footer Text Black
+
+                $(".h2ComingSoon").addClass("comingSoonActive"); // Show H2 Content Text
+                $(".hrComingSoon").removeClass("comingSoonActive"); // Hide HR Content Text
+            });
+            // Function 6
+            $(".navigation_item2").click(function () { // When Nav Item 2 (Halo 3) is selected
+                $(".navigation_item1").removeClass("selectedNavItem"); // Make Nav Item 1 Text white
+                $(".navigation_item2").addClass("selectedNavItem"); // Make Nav Item 2 Text green
+                $(".navigation_item3").removeClass("selectedNavItem"); // Make Nav Item 3 Text white
+                $(".navigation_item4").removeClass("selectedNavItem"); // Make Nav Item 4 Text white
+
+                $(".wrapper").removeClass("wrapperh2"); // Remove H2 Wrapper
+                $(".wrapper").removeClass("wrapperhr"); // Remove HR Wrapper
+                $(".wrapper").removeClass("wrapperProGamertags"); // Remove Pro Player Gamertags Wrapper
+                $(".wrapper").addClass("wrapperh3"); // Add H3 Wrapper
+
+                $(".proGamertags").removeClass("proGamertagsActive"); // Hide Pro Player Gamertags Table
+                $(".h3Form").removeClass("xForm"); // Show Form
+                $(".infoIcon").removeClass("xForm"); // Show Info Icon
+                $("footer").removeClass("blackFooter"); // Remove Footer Text Black
+
+                $(".hrComingSoon").removeClass("comingSoonActive"); // Hide HR Content Text
+                $(".h2ComingSoon").removeClass("comingSoonActive"); // Hide H2 Content Text
+            });
+            // Function 7
+            $(".navigation_item3").click(function () { // When Nav Item 3 (Halo Reach) is selected
+                $(".navigation_item1").removeClass("selectedNavItem"); // Make Nav Item 1 Text white
+                $(".navigation_item2").removeClass("selectedNavItem"); // Make Nav Item 2 Text white
+                $(".navigation_item3").addClass("selectedNavItem"); // Make Nav Item 3 Text green
+                $(".navigation_item4").removeClass("selectedNavItem"); // Make Nav Item 4 Text white
+
+                $(".wrapper").removeClass("wrapperh2"); // Remove H2 Wrapper
+                $(".wrapper").removeClass("wrapperh3"); // Remove H3 Wrapper
+                $(".wrapper").removeClass("wrapperProGamertags"); // Remove Pro Player Gamertags Wrapper
+                $(".wrapper").addClass("wrapperhr"); // Add HR Wrapper
+
+                $(".proGamertags").removeClass("proGamertagsActive"); // Hide Pro Player Gamertags Table
+                $(".h3Form").addClass("xForm"); // Hide Form
+                $(".infoIcon").addClass("xForm"); // Hide Info Icon
+                $("footer").removeClass("blackFooter"); // Remove Footer Text Black
+
+                $(".hrComingSoon").addClass("comingSoonActive"); // Show HR Content Text
+                $(".h2ComingSoon").removeClass("comingSoonActive"); // Hide H2 Content Text
+            });
+            // Function 8
+            $(".navigation_item4").click(function () { // When Nav Item 4 (Pro Player Gamertags) is selected
+                $(".navigation_item1").removeClass("selectedNavItem"); // Make Nav Item 1 Text white
+                $(".navigation_item2").removeClass("selectedNavItem"); // Make Nav Item 2 Text white
+                $(".navigation_item3").removeClass("selectedNavItem"); // Make Nav Item 3 Text white
+                $(".navigation_item4").addClass("selectedNavItem"); // Make Nav Item 4 Text green
+
+                $(".wrapper").removeClass("wrapperh2"); // Remove H2 Wrapper
+                $(".wrapper").removeClass("wrapperh3"); // Remove H3 Wrapper
+                $(".wrapper").removeClass("wrapperhr"); // Remove HR Wrapper
+                $(".wrapper").addClass("wrapperProGamertags"); // Add Pro Player Gamertags Wrapper
+
+                $(".proGamertags").addClass("proGamertagsActive"); // Show Pro Player Gamertags Table
+                $(".h3Form").addClass("xForm"); // Hide Form
+                $(".infoIcon").addClass("xForm"); // Hide Info Icon
+                $("footer").addClass("blackFooter"); // Make Footer Text Black
+
+                $(".hrComingSoon").removeClass("comingSoonActive"); // Hide HR Content Text
+                $(".h2ComingSoon").removeClass("comingSoonActive"); // Hide H2 Content Text
+
+            });
+            // Function 9
+            $(".searchButton").click(function () { // When Search Button is clicked
+                $(".sidebar_menu").toggleClass("hide_menu"); // Hide Nav Bar
+                $(".toggle_menu").toggleClass("opacity_one"); // Show Toggle Menu
+            });
+
+        });
+
     </script>
 
 </head>
 <body>
-    
-     @*<div class="navbar navbar-inverse navbar-fixed-top">
-        <div class="container">
-            <div class="navbar-header">
-                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </button>
-                @Html.ActionLink("Application name", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
-            </div>
-            <div class="navbar-collapse collapse">
-                <ul class="nav navbar-nav">
-                    <li>Html.ActionLink("Contact", "Contact", "Home")</li>
-                </ul>
-            </div>
+    <!-- Start Wrapper (H3 by default)-->
+    <div class="wrapper wrapperh3">
+        <!-- Start Nav -->
+        <i class="fa fa-bars toggle_menu"></i>
+        <div class="sidebar_menu">
+            <i class="fa fa-times"></i>
+            <center>
+                <h1 class="boxed_item">Pointcheck<span class="logo_bold">gg</span></h1>
+            </center>
+            <ul class="navigation_selection">
+                <li class="navigation_item1">Search Halo 2</li>
+                <li class="navigation_item2 selectedNavItem">Search Halo 3</li>
+                <li class="navigation_item3">Search Halo Reach</li>
+                <li class="navigation_item4">Pro Player Gamertags</li>
+            </ul>
+            <center>
+                <a href="mailto:pointcheckgg@gmail.com">
+                    <h1 class="boxed_item boxed_item_smaller">
+                        <i class="fa fa-envelope "></i>
+                        Contact Us
+                    </h1>
+                </a>
+            </center>
         </div>
-    </div>*@
+        <!-- End Nav -->
+        <!-- Start H2 Content -->
+        <div class="h2ComingSoon">
+            Halo 2 Compatibility Coming Soon!
+        </div>
+        <!-- End H2 Content -->
+        <!-- Start HR Content -->
+        <div class="hrComingSoon">
+            Halo Reach Compatibility Coming Soon!
+        </div>
+        <!-- End HR Content -->
+        <!-- Start Pro Gamertags Content -->
+        <div class="proGamertags">
+            <!-- Start Fixed Table -->
+            <div id="fixedTable">
+                <table class="hor-minimalist">
+                    <tr>
+                        <th>Pro Player</th>
+                        <th id="gt1">Gamertag 1</th>
+                        <th id="gt2">Gamertag 2</th>
+                        <th id="gt3">Gamertag 3</th>
+                    </tr>
+                </table>
+            </div>
+            <!-- End Fixed Table -->
+            <!-- Start Regular Table -->
+            <div id="regTable">
+                <table class="hor-minimalist">
+                    <tr>
+                        <td>a Pure Gangster</td>
+                        <td>A PURE GANGSTER</td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>Ace</td>
+                        <td>LX ACE XL</td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>Aries</td>
+                        <td>ARIES CARIES</td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>Arkanum</td>
+                        <td>ARKANUM</td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>Chig</td>
+                        <td>CHIGSKIS</td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>Clutch</td>
+                        <td>CLUTCHOV</td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>Defy</td>
+                        <td>JAYDEFYTRONICA</td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>Destin</td>
+                        <td>DE5TIN</td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>Eli</td>
+                        <td>ELI THEMF NINJA</td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>Elumnite</td>
+                        <td>ELUMNITE</td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>Enable</td>
+                        <td>ENABULL</td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>FearItSelf</td>
+                        <td>FEAR FIS</td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>Flamesword</td>
+                        <td>FLAMESWORDDDDDD</td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>Formal</td>
+                        <td>FORMAIL</td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>Frosty</td>
+                        <td>FROSTYS LOVE</td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>Gandhi</td>
+                        <td>LGZ GANDHI</td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>Ghostayame</td>
+                        <td>GHOSTAYAME</td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>Gilkey</td>
+                        <td>GILKEY DA GREAT</td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>Goofy</td>
+                        <td>G00FYY</td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>Gregor</td>
+                        <td>DH GREGOR</td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>Arkanum</td>
+                        <td>ARKANUM</td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>Heinz</td>
+                        <td>HEINZ ALMIGHTY</td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>Hokum</td>
+                        <td>HKM OU</td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>Hysteria</td>
+                        <td>SLAYERSHYSTERIA</td>
+                        <td>TRYHARD LEGIT</td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>IceVayne</td>
+                        <td>ICEVAYYYYYYYYNE</td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>Karma</td>
+                        <td>KARUMA NO SEKAI</td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>Legend</td>
+                        <td>LEGSND</td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>Legit</td>
+                        <td>TULEGITIMATE</td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>Lethul</td>
+                        <td>LXTHUL</td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>Lowkin</td>
+                        <td>LOWKIN NIKWOL</td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>Lunchbox</td>
+                        <td>ILUNCHBOXXXXXX</td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>Maniac</td>
+                        <td>BELIEVEINMANIAC</td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>Naded</td>
+                        <td>SV NADED</td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>Neightbor</td>
+                        <td>N 2THE EIGHBOR</td>
+                        <td>TD TEAMKILLER</td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>Ninja</td>
+                        <td>T R ILI C K Y</td>
+                        <td>NINJA SO FLY</td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>Ogre 2</td>
+                        <td>FB OG2</td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>Pistola</td>
+                        <td>IGOTURPISTOLA</td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>Roy</td>
+                        <td>I ROYBORG</td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>Shockwave</td>
+                        <td>THE SHOCKWAV3</td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>SK</td>
+                        <td>TD SK</td>
+                        <td>SK CBN</td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>Snipedown</td>
+                        <td>EW SNIP3DOWN</td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>Strongside</td>
+                        <td>ONESTRONGSIDE</td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>Tizoxic</td>
+                        <td>TIZOXIC 02</td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>Tsquared</td>
+                        <td>AIR SQUARED</td>
+                        <td>T2 IS RIPPIN</td>
+                        <td>SUPER SQUARED</td>
+                    </tr>
+                    <tr>
+                        <td>Victory X</td>
+                        <td>SICKTORY X</td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>Walshy</td>
+                        <td>DJIZBOSS</td>
+                        <td>MERCENARYTRUTH</td>
+                        <td></td>
+                    </tr>
+                </table>
+            </div>
+            <!-- End Regular Table -->
+        </div>
+        <!-- End Pro Gamertags Content -->
+        
+        <!-- Start Footer -->
+        <footer>
+            <hr>
+            <div class="copyRight">
+                &copy; 2018 - pointcheck.gg
+            </div>
+            <div class="twitterLinks">
+                Created by @@<a href='https://twitter.com/KiFFLoM' target="_blank">Kifflom</a> and @@<a href='https://twitter.com/KeithBrosch' target="_blank">KeithBrosch</a>
+            </div>
+        </footer>
+        <!-- End Footer -->
+    </div>
+    <!-- End Wrapper -->
     <div class="container body-content">
         @RenderBody()
         <hr />
@@ -69,6 +492,6 @@
     @Scripts.Render("~/bundles/jquery")
     @Scripts.Render("~/bundles/bootstrap")
     @RenderSection("scripts", required: false)
-    
+
 </body>
 </html>

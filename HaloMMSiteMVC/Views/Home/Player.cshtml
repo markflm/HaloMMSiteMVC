@@ -10,45 +10,38 @@
 @using (@Html.BeginForm("SearchResults", "Home", FormMethod.Post))
 {
 
-    <div class="info-text">
-        <h3><u>Search Times</u></h3>
-        The first time searching a particular Gamertag can take up to ~3 minutes. After the first search the Gamertag will be added to the database
-        and subsequent searches with be much faster (less than 10 seconds in most cases).
-
-        <br />
-        <h3><u>Requirements</u></h3>
-        - You need to use the <b>current</b> Gamertag of the Xbox Live accounts you're trying to search.<br />
-        - Games played after 03/31/2012 aren't available. Bungie did not record Halo 3 games played after this date. <br />
-        - Search is not case sensitive. <br />
-        <br />
+    <!-- Start Info Text -->
+    <div class="infoText xForm">
+        <p id="text">
+            <h1><u>Search Times</u></h1><br>
+            The first time searching a particular Gamertag can take up to ~3 minutes. After the first search the Gamertag will be added
+            to the database and subsequent searches will be much faster (less that 10 seconds in most cases).
+            <br><br>
+            <h1><u>Requirements</u></h1><br>
+            - You need to use the <b>current</b> Gamertag of the  Xbox Live accounts you're trying to search.<br>
+            - Games played after 03/31/2012 aren't available. Bungie did not record Halo 3 games played after this date.<br>
+            - Search is not case sensitive.
+        </p>
     </div>
-
-
-    <div class="Icon">
-        <img src="~/Content/information.png" width="20" height="20" />
-    </div>
-
-    <div class="daForm">
-        <form action="SearchResults" method="post">
-
-            Gamertag 1<br>
-
-            <input type="text" name="gt1"><br><br>
-
-            Gamertag 2<br>
-
-            <input type="text" name="gt2"><br><br>
-
-            <label>Matchmaking</label>
-
-            @Html.CheckBox("mmCheckBox") <br />
-
-            <label>Custom Games</label>
-
-            @Html.CheckBox("cusCheckBox") <br />
-
-            <input type="submit" value="Search">
+    <!-- End Info Text -->
+    <!-- Start H3 Gamertags Form -->
+    <div class="gtForm" align="center">
+        <form class="h3Form">
+            Gamertag 1:<br>
+            <input type="text" name="gamertag1"><br>
+            Gamertag 2:<br>
+            <input type="text" name="gamertag2"><br><br>
+            Matchmaking
+            <input type="checkbox" name="mmCheck" value="mm" checked="checked"><br>
+            Custom Games
+            <input type="checkbox" name="customsCheck" value="custom" checked="checked"><br>
+            <input class="searchButton" type="submit" value="Search">
         </form>
-
     </div>
+    <!-- End H3 Gamertags Form -->
+    <!-- Start Info Icon -->
+    <div class="infoIcon">
+        <img class="info" src="../Content/information.png" alt="info">
+    </div>
+    <!-- End Info Icon -->
 }
