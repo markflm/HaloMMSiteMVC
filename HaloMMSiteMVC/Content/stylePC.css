@@ -196,7 +196,8 @@
 .gtForm {
     z-index: 300;
     text-align: center;
-    transition: all 1.5s ease-in-out;
+    left: 40%;
+    position: relative;
 }
 /* Halo 3 Form */
 .h3Form {
@@ -365,10 +366,12 @@ a {
 
 /* Info Icon Div */
 .infoIcon {
-    top: 300px;
+    top: 70%;
     margin: 0 auto;
     width: 100px;
     transition: all .5s ease-in-out;
+    left: 94vh;
+    position: fixed;
 }
 
 /* Info Icon Img */

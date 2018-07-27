@@ -133,7 +133,6 @@ C:\Users\keith\Documents\GitHub\HaloMMSiteMVC\HaloMMSiteMVC\bin\Microsoft.AI.Dep
 C:\Users\keith\Documents\GitHub\HaloMMSiteMVC\HaloMMSiteMVC\bin\Microsoft.AI.ServerTelemetryChannel.xml
 C:\Users\keith\Documents\GitHub\HaloMMSiteMVC\HaloMMSiteMVC\bin\Microsoft.AI.WindowsServer.xml
 C:\Users\keith\Documents\GitHub\HaloMMSiteMVC\HaloMMSiteMVC\bin\Microsoft.AI.Web.xml
-C:\Users\keith\Documents\GitHub\HaloMMSiteMVC\HaloMMSiteMVC\obj\Debug\HaloMMSiteMVC.csprojAssemblyReference.cache
 C:\Users\keith\Documents\GitHub\HaloMMSiteMVC\HaloMMSiteMVC\obj\Debug\HaloMMSiteMVC.csproj.CoreCompileInputs.cache
 C:\Users\keith\Documents\GitHub\HaloMMSiteMVC\HaloMMSiteMVC\obj\Debug\HaloMMSiteMVC.csproj.CopyComplete
 C:\Users\keith\Documents\GitHub\HaloMMSiteMVC\HaloMMSiteMVC\obj\Debug\HaloMMSiteMVC.dll
