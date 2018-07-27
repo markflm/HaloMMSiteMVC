@@ -358,17 +358,19 @@
     <div class="gtForm h3Form" align="center">
         @using (@Html.BeginForm("SearchResults", "Home", FormMethod.Post))
         {
-            <form class="h3Form">
-                Gamertag 1:<br>
-                <input type="text" name="gamertag1"><br>
-                Gamertag 2:<br>
-                <input type="text" name="gamertag2"><br><br>
-                Matchmaking
-                <input type="checkbox" name="mmCheck" value="mm" checked="checked"><br>
-                Custom Games
-                <input type="checkbox" name="customsCheck" value="custom" checked="checked"><br>
-                <input class="searchButton" type="submit" value="Search">
-            </form>
+        <form class="h3Form">
+            Gamertag 1:<br>
+            <input type="text" name="gt1"><br>
+            Gamertag 2:<br>
+            <input type="text" name="gt2"><br><br>
+            Matchmaking
+            @Html.CheckBox("mmCheckBox")
+            <br />
+            Custom Games
+            @Html.CheckBox("cusCheckBox")
+            <br />
+            <input class="searchButton" type="submit" value="Search">
+        </form>
         }
     </div>
     <!-- End H3 Gamertags Form -->
