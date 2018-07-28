@@ -53,73 +53,78 @@
      <!-- End Info Icon -->
      */
 
+ /*
     <div class="wrapper wrapperh3">
         <a href="http://pointcheck.gg"><i class="fa fa-home toggle_menu opacity_one"></i></a>
     </div>
+    */
 }
 
 @if (Model.Name != null)
 {
-    <div class="p1Emb">
+    <div class="wrapper wrapperh3">
+        <a href="http://pointcheck.gg"><i class="fa fa-home toggle_menu opacity_one"></i></a>
+        <div class="p1Emb">
 
-        <img src="@p1Emb" width="50" height="50" />
-        @Model.Name
-    </div>
-    <div class="gameCount">
-        @Model.GameList.Count games played
-    </div>
-    <div class="p2Emb">
-        @Model.EnemyName
-        <img src="@p2Emb" width="50" height="50" />
+            <img src="@p1Emb" width="50" height="50" />
+            @Model.Name
+        </div>
+        <div class="gameCount">
+            @Model.GameList.Count games played
+        </div>
+        <div class="p2Emb">
+            @Model.EnemyName
+            <img src="@p2Emb" width="50" height="50" />
 
-    </div>
-    <div class="resultsTable">
-        <table>
-
-
-
-            <tr>
+        </div>
+        <div class="resultsTable">
+            <table>
 
 
-                <th>
-                    Date
-                </th>
-                <th>
-                    Link
-                </th>
-                <th>
-                    Map
-                </th>
-                <th>
-                    Gametype
-                </th>
-                <th>
-                    Playlist
-                </th>
-            </tr>
 
-
-            @foreach (var item in Model.GameList)
-            {
-                string gID = item.GameID.ToString();
                 <tr>
-                    <td>
-                        @Html.DisplayFor(Model => item.Date)
-                    </td>
-                    <td>
-                        <a href='https://halo.bungie.net/Stats/GameStatsHalo3.aspx?gameid=@gID' target="_blank">Link</a>
-                    </td>
-                    <td>
-                        @Html.DisplayFor(Model => item.Map)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(Model => item.Gametype)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(Model => item.Playlist)
-                    </td>
+
+
+                    <th>
+                        Date
+                    </th>
+                    <th>
+                        Link
+                    </th>
+                    <th>
+                        Map
+                    </th>
+                    <th>
+                        Gametype
+                    </th>
+                    <th>
+                        Playlist
+                    </th>
                 </tr>
-            }
-        </table>
+
+
+                @foreach (var item in Model.GameList)
+                {
+                    string gID = item.GameID.ToString();
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(Model => item.Date)
+                        </td>
+                        <td>
+                            <a href='https://halo.bungie.net/Stats/GameStatsHalo3.aspx?gameid=@gID' target="_blank">Link</a>
+                        </td>
+                        <td>
+                            @Html.DisplayFor(Model => item.Map)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(Model => item.Gametype)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(Model => item.Playlist)
+                        </td>
+                    </tr>
+                }
+            </table>
+        </div>
     </div>
-}
+        }
