@@ -137,3 +137,4 @@ C:\Users\keith\Documents\GitHub\HaloMMSiteMVC\HaloMMSiteMVC\obj\Debug\HaloMMSite
 C:\Users\keith\Documents\GitHub\HaloMMSiteMVC\HaloMMSiteMVC\obj\Debug\HaloMMSiteMVC.csproj.CopyComplete
 C:\Users\keith\Documents\GitHub\HaloMMSiteMVC\HaloMMSiteMVC\obj\Debug\HaloMMSiteMVC.dll
 C:\Users\keith\Documents\GitHub\HaloMMSiteMVC\HaloMMSiteMVC\obj\Debug\HaloMMSiteMVC.pdb
+C:\Users\keith\Documents\GitHub\HaloMMSiteMVC\HaloMMSiteMVC\obj\Debug\HaloMMSiteMVC.csprojAssemblyReference.cache
