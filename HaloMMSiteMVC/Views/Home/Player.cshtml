@@ -356,7 +356,7 @@
     <!-- End Info Text -->
     <!-- Start H3 Gamertags Form -->
     <div class="gtForm h3Form" align="center">
-        @using (@Html.BeginForm("SearchResults", "Home", FormMethod.Post))
+        @using (@Html.BeginForm("SearchResults", "Home", FormMethod.Post, new { target = "_blank" }))
         {
         <form class="h3Form">
             Gamertag 1:<br>
