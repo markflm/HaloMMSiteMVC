@@ -241,6 +241,21 @@ footer {
     text-align: center;
     transition: all 1s ease-in-out;
 }
+@media screen and (max-width: 1650px) {
+    #leftsidebar {
+        color: white;
+        margin: 0 auto;
+        margin-top: 8%;
+        width: 100vh;
+        position: relative;
+        text-align: center;
+        transition: all 1s ease-in-out;
+    }
+
+    #main {
+        margin-left: 216px;
+    }
+}
 /* Anchor Tag (for Twitter Links in footer) */
 a {
     text-decoration: none;
