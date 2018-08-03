@@ -415,7 +415,7 @@ u {
 /* Results Formatting */
 .p1Emb {
 	position: absolute;
-    left: 35%;
+    left: 32%;
     top: 21.5%;
 	background: linear-gradient(to left, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.5));
 	font-weight: 300;
@@ -427,7 +427,7 @@ u {
 .gameCount {
     position: absolute;
     top: 22.25%;
-    left: 50%;
+    left: 47%;
     background: linear-gradient( rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.25), rgba(0, 0, 0, 0));
     width: 150px;
     color: white;
@@ -436,7 +436,7 @@ u {
 .p2Emb {
     position: absolute;
     top: 21.5%;
-    left: 60%;
+    left: 57%;
     text-align: right;
     width: 200px;
     background-color: rgba(0, 0, 0, 0.5);
