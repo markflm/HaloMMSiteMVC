@@ -381,7 +381,7 @@ a {
     width: 100px;
     transition: all .5s ease-in-out;
     text-align: center;
-    left: 47.5%;
+    left: 49%;
     position: absolute;
     right: 47.5%;
 }
@@ -448,7 +448,7 @@ u {
 .resultsTable {
     position: fixed;
     text-align: center;
-    left: 25.5%;
+    left: 22%;
     top: 30%;
     background: rgba(0,0,0, 0.675);
     padding: 50px 0px 50px 0px;
@@ -467,4 +467,3 @@ u {
         width: 175px;
         text-align: center;
     }
-
