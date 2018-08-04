@@ -355,40 +355,41 @@
     </div>
     <!-- End Info Text -->
     <!-- Start H3 Gamertags Form -->
-    <div class="gtForm h3Form" align="center">
-        @using (@Html.BeginForm("SearchResults", "Home", FormMethod.Post, new { target = "_blank" }))
-        {
-        <form class="h3Form">
-            Gamertag 1:<br>
-            <input type="text" name="gt1"><br>
-            Gamertag 2:<br>
-            <input type="text" name="gt2"><br><br>
-            Matchmaking
-            @Html.CheckBox("mmCheckBox", true)
-            <br />
-            Custom Games
-            @Html.CheckBox("cusCheckBox", true)
-            <br />
-            <input class="searchButton" type="submit" value="Search">
-        </form>
-        }
-    </div>
-    <!-- End H3 Gamertags Form -->
-    <!-- Start Info Icon -->
-    <div class="infoIcon">
-        <img class="info" src="../Content/information.png" alt="info">
-    </div>
-    <!-- End Info Icon -->
-    <!-- Start Footer -->
-    <footer>
-        <hr>
-        <div class="copyRight">
-            &copy; 2018 - pointcheck.gg
+    <div class="gtForm">
+        <div class="h3Form">
+            </center> @using (@Html.BeginForm("SearchResults", "Home", FormMethod.Post, new { target = "_blank" }))
+            {<form class="h3Form">
+                    Gamertag 1:<br>
+                    <input type="text" name="gt1"><br>
+                    Gamertag 2:<br>
+                    <input type="text" name="gt2"><br><br>
+                    Matchmaking
+                    @Html.CheckBox("mmCheckBox", true)
+                    <br />
+                    Custom Games
+                    @Html.CheckBox("cusCheckBox", true)
+                    <br />
+                    <input class="searchButton" type="submit" value="Search">
+                </form>
+            }
+            </div>
         </div>
-        <div class="twitterLinks">
-            Created by @@<a href='https://twitter.com/KiFFLoM' target="_blank">Kifflom</a> and @@<a href='https://twitter.com/KeithBrosch' target="_blank">KeithBrosch</a>
+        <!-- End H3 Gamertags Form -->
+        <!-- Start Info Icon -->
+        <div class="infoIcon">
+            <img class="info" src="../Content/information.png" alt="info">
         </div>
-    </footer>
-    <!-- End Footer -->
-</div>
+        <!-- End Info Icon -->
+        <!-- Start Footer -->
+        <footer>
+            <hr>
+            <div class="copyRight">
+                &copy; 2018 - pointcheck.gg
+            </div>
+            <div class="twitterLinks">
+                Created by @@<a href='https://twitter.com/KiFFLoM' target="_blank">Kifflom</a> and @@<a href='https://twitter.com/KeithBrosch' target="_blank">KeithBrosch</a>
+            </div>
+        </footer>
+        <!-- End Footer -->
+    </div>
     <!-- End Wrapper -->
