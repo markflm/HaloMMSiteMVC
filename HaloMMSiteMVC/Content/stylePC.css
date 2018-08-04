@@ -9,6 +9,7 @@
 body{
     height: 1080px;
     width: 100%;
+    overflow: hidden;
 }
 /* Deafult Wrapper. Stays on at all times */
 .wrapper {
@@ -235,7 +236,7 @@ body{
 footer {
     color: white;
     margin: 0 auto;
-    top: 20vh;
+    margin-top: 10vh;
     width: 100vh;
     position: relative;
     text-align: center;
