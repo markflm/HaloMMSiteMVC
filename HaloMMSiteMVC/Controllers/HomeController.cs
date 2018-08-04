@@ -31,6 +31,11 @@ namespace HaloMMSiteMVC.Controllers
             //another type of action result -- return Content("sup bich");
         }
 
+        //for editting the search results css
+        public ActionResult SearchResultsCSSFix()
+        {
+            return View();
+        }
 
         public async Task<ActionResult> SearchResults(string gt1, string gt2, bool mmCheckBox, bool cusCheckBox)
         {

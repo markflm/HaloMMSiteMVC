@@ -25,7 +25,8 @@ namespace HaloMMSiteMVC
 
             bundles.Add(new StyleBundle("~/Content/css").Include(
                       "~/Content/bootstrap.css",
-                      "~/Content/stylePC.css"));
+                      "~/Content/stylePC.css",
+                      "~/Content/font-awesome.min.css"));
         }
     }
 }

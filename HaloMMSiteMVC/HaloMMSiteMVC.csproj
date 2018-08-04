@@ -164,10 +164,14 @@
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
     <Content Include="Content\favicon-16x16.png" />
+    <Content Include="Content\font-awesome.min.css" />
     <Content Include="Content\information.png" />
+    <Content Include="Content\lockout.jpg" />
     <Content Include="Content\narrows.jpg" />
     <Content Include="Content\stylePC.css" />
+    <Content Include="Content\zealot.jpg" />
     <Content Include="favicon.ico" />
+    <Content Include="fonts\font-awesome.min.css" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
@@ -187,6 +191,8 @@
     <Content Include="Scripts\modernizr-2.6.2.js" />
     <Content Include="Scripts\respond.js" />
     <Content Include="Scripts\respond.min.js" />
+    <Content Include="Views\Home\font-awesome.min.css" />
+    <Content Include="Views\Shared\font-awesome.min.css" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>
@@ -203,6 +209,7 @@
     <Content Include="Views\Home\Player.cshtml" />
     <Content Include="Views\Home\SearchResults.cshtml" />
     <Content Include="Views\Home\Alias.cshtml" />
+    <Content Include="Views\Home\SearchResultsCSSFix.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

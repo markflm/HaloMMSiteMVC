@@ -7,48 +7,388 @@
 
 }
 
-@using (@Html.BeginForm("SearchResults", "Home", FormMethod.Post))
-{
-
-    <div class="info-text">
-        <h3><u>Search Times</u></h3>
-        The first time searching a particular Gamertag can take up to ~3 minutes. After the first search the Gamertag will be added to the database
-        and subsequent searches with be much faster (less than 10 seconds in most cases).
-
-        <br />
-        <h3><u>Requirements</u></h3>
-        - You need to use the <b>current</b> Gamertag of the Xbox Live accounts you're trying to search.<br />
-        - Games played after 03/31/2012 aren't available. Bungie did not record Halo 3 games played after this date. <br />
-        - Search is not case sensitive. <br />
-        <br />
+<!-- Start Wrapper (H3 by default)-->
+<div class="wrapper wrapperh3">
+    <!-- Start Nav -->
+    <i class="fa fa-bars toggle_menu"></i>
+    <div class="sidebar_menu">
+        <i class="fa fa-times"></i>
+        <center>
+            <h1 class="boxed_item">Pointcheck<span class="logo_bold">gg</span></h1>
+        </center>
+        <ul class="navigation_selection">
+            <li class="navigation_item1">Search Halo 2</li>
+            <li class="navigation_item2 selectedNavItem">Search Halo 3</li>
+            <li class="navigation_item3">Search Halo Reach</li>
+            <li class="navigation_item4">Pro Player Gamertags</li>
+        </ul>
+        <center>
+            <a href="mailto:pointcheckgg@gmail.com">
+                <h1 class="boxed_item boxed_item_smaller">
+                    <i class="fa fa-envelope "></i>
+                    Contact Us
+                </h1>
+            </a>
+        </center>
     </div>
-
-
-    <div class="Icon">
-        <img src="~/Content/information.png" width="20" height="20" />
+    <!-- End Nav -->
+    <!-- Start H2 Content -->
+    <div class="h2ComingSoon">
+        Halo 2 Compatibility Coming Soon!
     </div>
-
-    <div class="daForm">
-        <form action="SearchResults" method="post">
-
-            Gamertag 1<br>
-
-            <input type="text" name="gt1"><br><br>
-
-            Gamertag 2<br>
-
+    <!-- End H2 Content -->
+    <!-- Start HR Content -->
+    <div class="hrComingSoon">
+        Halo Reach Compatibility Coming Soon!
+    </div>
+    <!-- End HR Content -->
+    <!-- Start Pro Gamertags Content -->
+    <div class="proGamertags">
+        <!-- Start Fixed Table -->
+        <div id="fixedTable">
+            <table class="hor-minimalist">
+                <tr>
+                    <th>Pro Player</th>
+                    <th id="gt1">Gamertag 1</th>
+                    <th id="gt2">Gamertag 2</th>
+                    <th id="gt3">Gamertag 3</th>
+                </tr>
+            </table>
+        </div>
+        <!-- End Fixed Table -->
+        <!-- Start Regular Table -->
+        <div id="regTable">
+            <table class="hor-minimalist">
+                <tr>
+                    <td>a Pure Gangster</td>
+                    <td>A PURE GANGSTER</td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>Ace</td>
+                    <td>LX ACE XL</td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>Aries</td>
+                    <td>ARIES CARIES</td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>Arkanum</td>
+                    <td>ARKANUM</td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>Chig</td>
+                    <td>CHIGSKIS</td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>Clutch</td>
+                    <td>CLUTCHOV</td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>Defy</td>
+                    <td>JAYDEFYTRONICA</td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>Destin</td>
+                    <td>DE5TIN</td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>Eli</td>
+                    <td>ELI THEMF NINJA</td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>Elumnite</td>
+                    <td>ELUMNITE</td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>Enable</td>
+                    <td>ENABULL</td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>FearItSelf</td>
+                    <td>FEAR FIS</td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>Flamesword</td>
+                    <td>FLAMESWORDDDDDD</td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>Formal</td>
+                    <td>FORMAIL</td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>Frosty</td>
+                    <td>FROSTYS LOVE</td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>Gandhi</td>
+                    <td>LGZ GANDHI</td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>Ghostayame</td>
+                    <td>GHOSTAYAME</td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>Gilkey</td>
+                    <td>GILKEY DA GREAT</td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>Goofy</td>
+                    <td>G00FYY</td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>Gregor</td>
+                    <td>DH GREGOR</td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>Arkanum</td>
+                    <td>ARKANUM</td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>Heinz</td>
+                    <td>HEINZ ALMIGHTY</td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>Hokum</td>
+                    <td>HKM OU</td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>Hysteria</td>
+                    <td>SLAYERSHYSTERIA</td>
+                    <td>TRYHARD LEGIT</td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>IceVayne</td>
+                    <td>ICEVAYYYYYYYYNE</td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>Karma</td>
+                    <td>KARUMA NO SEKAI</td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>Legend</td>
+                    <td>LEGSND</td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>Legit</td>
+                    <td>TULEGITIMATE</td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>Lethul</td>
+                    <td>LXTHUL</td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>Lowkin</td>
+                    <td>LOWKIN NIKWOL</td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>Lunchbox</td>
+                    <td>ILUNCHBOXXXXXX</td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>Maniac</td>
+                    <td>BELIEVEINMANIAC</td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>Naded</td>
+                    <td>SV NADED</td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>Neightbor</td>
+                    <td>N 2THE EIGHBOR</td>
+                    <td>TD TEAMKILLER</td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>Ninja</td>
+                    <td>T R ILI C K Y</td>
+                    <td>NINJA SO FLY</td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>Ogre 2</td>
+                    <td>FB OG2</td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>Pistola</td>
+                    <td>IGOTURPISTOLA</td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>Roy</td>
+                    <td>I ROYBORG</td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>Shockwave</td>
+                    <td>THE SHOCKWAV3</td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>SK</td>
+                    <td>TD SK</td>
+                    <td>SK CBN</td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>Snipedown</td>
+                    <td>EW SNIP3DOWN</td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>Strongside</td>
+                    <td>ONESTRONGSIDE</td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>Tizoxic</td>
+                    <td>TIZOXIC 02</td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>Tsquared</td>
+                    <td>AIR SQUARED</td>
+                    <td>T2 IS RIPPIN</td>
+                    <td>SUPER SQUARED</td>
+                </tr>
+                <tr>
+                    <td>Victory X</td>
+                    <td>SICKTORY X</td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>Walshy</td>
+                    <td>DJIZBOSS</td>
+                    <td>MERCENARYTRUTH</td>
+                    <td></td>
+                </tr>
+            </table>
+        </div>
+        <!-- End Regular Table -->
+    </div>
+    <!-- End Pro Gamertags Content -->
+    <!-- Start Info Text -->
+    <div class="infoText xForm">
+        <p id="text">
+            <h1><u>Search Times</u></h1><br>
+            The first time searching a particular Gamertag can take up to ~3 minutes. After the first search the Gamertag will be added
+            to the database and subsequent searches will be much faster (less that 10 seconds in most cases).
+            <br><br>
+            <h1><u>Requirements</u></h1><br>
+            - You need to use the <b>current</b> Gamertag of the  Xbox Live accounts you're trying to search.<br>
+            - Games played after 03/31/2012 aren't available. Bungie did not record Halo 3 games played after this date.<br>
+            - Search is not case sensitive.
+        </p>
+    </div>
+    <!-- End Info Text -->
+    <!-- Start H3 Gamertags Form -->
+    <div class="gtForm h3Form" align="center">
+        @using (@Html.BeginForm("SearchResults", "Home", FormMethod.Post, new { target = "_blank" }))
+        {
+        <form class="h3Form">
+            Gamertag 1:<br>
+            <input type="text" name="gt1"><br>
+            Gamertag 2:<br>
             <input type="text" name="gt2"><br><br>
-
-            <label>Matchmaking</label>
-
-            @Html.CheckBox("mmCheckBox") <br />
-
-            <label>Custom Games</label>
-
-            @Html.CheckBox("cusCheckBox") <br />
-
-            <input type="submit" value="Search">
+            Matchmaking
+            @Html.CheckBox("mmCheckBox", true)
+            <br />
+            Custom Games
+            @Html.CheckBox("cusCheckBox", true)
+            <br />
+            <input class="searchButton" type="submit" value="Search">
         </form>
-
+        }
     </div>
-}
+    <!-- End H3 Gamertags Form -->
+    <!-- Start Info Icon -->
+    <div class="infoIcon">
+        <img class="info" src="../Content/information.png" alt="info">
+    </div>
+    <!-- End Info Icon -->
+    <!-- Start Footer -->
+    <footer>
+        <hr>
+        <div class="copyRight">
+            &copy; 2018 - pointcheck.gg
+        </div>
+        <div class="twitterLinks">
+            Created by @@<a href='https://twitter.com/KiFFLoM' target="_blank">Kifflom</a> and @@<a href='https://twitter.com/KeithBrosch' target="_blank">KeithBrosch</a>
+        </div>
+    </footer>
+    <!-- End Footer -->
+</div>
+    <!-- End Wrapper -->

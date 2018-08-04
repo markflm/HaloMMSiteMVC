@@ -1,255 +1,470 @@
-
-*{
-	margin: 0;
-	padding: 0;
+* {
+    margin: 0;
+    padding: 0;
+    text-decoration: none;
+    list-style: none;
+    font-family: 'Open Sans';
 }
-
 
 body{
-	margin: 0;
-	padding: 0;
-	font-family: 'Raleway', sans-serif;
-	font-size: 1.2vw;
-	color: #fff;
-	width:100%;
-	position: absolute;	
-	top: -20px;
-	left: -20px;
-	right: -40px;
-	bottom: -40px;
-	background-size: auto;
-	background-position: center;
-	background-attachment: fixed;
-	background-repeat: no-repeat;   
-	background-image: url(narrows.jpg);
-	/*z-index::; 0; */
+    height: 1080px;
+    width: 100%;
+    overflow: hidden;
+}
+/* Deafult Wrapper. Stays on at all times */
+.wrapper {
+    height: 100vh;
+    z-index: 200;
+    transition: all 1s ease-in-out;
+    width: 100%;
+}
+/* Circumstantial Wrapper Formatting */
+.wrapperh2 {
+    background: url("lockout.jpg") no-repeat center center fixed;
+    background-size: cover;
+    transition: all 1s ease-in-out;
+    height: 100%;
+    width: 100%;
 }
 
-form {
-	background-color: rgba(0, 0, 0, 0.5);
-	width: 10%;
-	padding: 50px;
-	position: relative;
-	margin-top: 17.5%;
-	margin-left: 35%;
-	margin-bottom: 20%;
-	text-align: center;
-	display: table;
-	border: 1px solid white;
-	overflow: scroll;
-	position: relative;
+.wrapperh3 {
+    background: url("narrows.jpg") no-repeat center center fixed;
+    background-size: cover;
+    transition: all 1s ease-in-out;
+    height: 100%;
+    width: 100%;
 }
 
-.daForm {
-	opacity: 1;
-	z-index: 1;
+.wrapperhr {
+    background: url("zealot.jpg") no-repeat center center fixed;
+    background-size: cover;
+    transition: all 1s ease-in-out;
+    height: 100%;
+    width: 100%;
 }
 
+.wrapperProGamertags {
+    background-color: white;
+    transition: all 1s ease-in-out;
+}
+/* Toggle Menu (Green Box that opens Nav Bar) */
+.toggle_menu {
+    position: fixed;
+    padding: 15px 20px 15px 15px;
+    margin-top: 70px;
+    color: white;
+    cursor: pointer;
+    background-color: #16b086;
+    z-index: 100;
+    font-size: 2em;
+    opacity: 0;
+}
+/* Nav Bar */
+.sidebar_menu {
+    z-index: 2;
+    position: fixed;
+    width: 250px;
+    margin-left: 0;
+    overflow: hidden;
+    height: 100vh;
+    max-height: 100vh;
+    background-color: rgba(17,17,17,0.9);
+    opacity: 0.9;
+    transition: all 0.3s ease-in-out;
+}
+/* X icon on Nav Bar */
+.fa-times {
+    right: 10px;
+    top: 10px;
+    opacity: 0.7;
+    cursor: pointer;
+    position: absolute;
+    color: white;
+    transition: all 0.3s ease-in-out;
+}
+
+    .fa-times:hover {
+        opacity: 1;
+    }
+/* Nav Bar Text Styling */
+.boxed_item {
+    font-family: 'Open Sans';
+    font-weight: 200;
+    padding: 10px 20px;
+    display: inline-block;
+    border: solid 2px white;
+    box-sizing: border-box;
+    font-size: 22px;
+    color: white;
+    text-align: center;
+    margin-top: 70px;
+}
+
+.logo_bold {
+    font-weight: 800;
+}
+
+.logo_title {
+    color: white;
+    font-family: 'Open Sans';
+    font-weight: 200;
+    font-size: 12px;
+    text-align: center;
+    padding: 5px 0;
+}
+
+.navigation_selection {
+    margin: 20px 0;
+    display: block;
+    width: 200px;
+    margin-left: 25px;
+}
+
+.navigation_item1 {
+    font-weight: 200;
+    font-family: 'Open Sans';
+    padding: 12px 0;
+    box-sizing: border-box;
+    font-size: 14px;
+    color: #D8D8D8;
+    border-bottom: solid 1px #D8D8D8;
+    transition: all 0.3s ease-in-out;
+    cursor: pointer;
+}
+
+.navigation_item2 {
+    font-weight: 200;
+    font-family: 'Open Sans';
+    padding: 12px 0;
+    box-sizing: border-box;
+    font-size: 14px;
+    color: #D8D8D8;
+    border-bottom: solid 1px #D8D8D8;
+    transition: all 0.3s ease-in-out;
+    cursor: pointer;
+}
+
+.navigation_item3 {
+    font-weight: 200;
+    font-family: 'Open Sans';
+    padding: 12px 0;
+    box-sizing: border-box;
+    font-size: 14px;
+    color: #D8D8D8;
+    border-bottom: solid 1px #D8D8D8;
+    transition: all 0.3s ease-in-out;
+    cursor: pointer;
+}
+
+.navigation_item4 {
+    font-weight: 200;
+    font-family: 'Open Sans';
+    padding: 12px 0;
+    box-sizing: border-box;
+    font-size: 14px;
+    color: #D8D8D8;
+    border-bottom: solid 1px #D8D8D8;
+    transition: all 0.3s ease-in-out;
+    cursor: pointer;
+}
+
+.navigation_item5 {
+    font-weight: 200;
+    font-family: 'Open Sans';
+    padding: 12px 0;
+    box-sizing: border-box;
+    font-size: 14px;
+    color: #D8D8D8;
+    border-bottom: solid 1px #D8D8D8;
+    transition: all 0.3s ease-in-out;
+    cursor: pointer;
+}
+
+.boxed_item_smaller {
+    font-size: 12px;
+    color: #D8D8D8;
+    width: 200px;
+    transition: all 0.3s ease-in-out;
+    cursor: pointer;
+    border-width: 1px;
+    margin: 0 0 20px 0;
+}
+
+    .boxed_item_smaller:hover {
+        background-color: white;
+        color: #111;
+        transition: all 0.3s ease-in-out;
+    }
+/* Hides Nav Bar off screen */
+.hide_menu {
+    margin-left: -250px;
+}
+/* Makes Toggle Menu visible */
+.opacity_one {
+    z-index: 1;
+    opacity: 1;
+    transition: all 0.3s ease-in-out;
+}
+/* Main Form Div */
+.gtForm {
+    z-index: 300;
+    text-align: center;
+    left: 40%;
+    position: relative;
+}
+/* Halo 3 Form */
+.h3Form {
+    font-size: 24px;
+    color: white;
+    padding: 50px;
+    margin-top: 30vh;
+    display: inline-block;
+    border: 2px solid white;
+    border-radius: 4px;
+    background-color: rgba(17,17,17,0.7);
+    transition: all 2s ease-in-out;
+}
+/* Makes current Nav item text green */
+.selectedNavItem {
+    color: #16b086;
+}
+/* Copyright Logo */
+.copyRight {
+    font-size: smaller;
+}
+/* Footer */
+footer {
+    color: white;
+    margin: 0 auto;
+    margin-top: 10vh;
+    width: 100vh;
+    position: relative;
+    text-align: center;
+    transition: all 1s ease-in-out;
+}
+/* Anchor Tag (for Twitter Links in footer) */
+a {
+    text-decoration: none;
+}
+
+    a:link, a:visited {
+        color: #16b086;
+    }
+
+    a:hover {
+        text-decoration: underline;
+        text-decoration-color: white;
+    }
+/* Hides H3 Form */
 .xForm {
-	opacity: 0;
-	z-index: -1;
+    opacity: 0;
+    z-index: -1;
+    transition: all 1s ease-in-out;
+}
+/* H2 Content Text (start invisible) */
+.h2ComingSoon {
+    color: white;
+    font-size: 4em;
+    z-index: -1;
+    opacity: 0;
+    position: absolute;
+    top: 50%;
+    left: 28%;
+    transition: all 1.5s ease-in-out;
+}
+/* HR Content Text (start invisible) */
+.hrComingSoon {
+    color: white;
+    font-size: 4em;
+    z-index: -1;
+    opacity: 0;
+    position: absolute;
+    top: 50%;
+    left: 23%;
+    transition: all 1.5s ease-in-out;
+}
+/* Makes H2/HR Text visible */
+.comingSoonActive {
+    opacity: 1;
+    z-index: 1;
+    transition: all 1.5s ease-in-out;
+}
+/* Pro Gamertags Div */
+.proGamertags {
+    font-size: 1.5em;
+    z-index: -1;
+    opacity: 0;
+    position: absolute;
+    left: 25%;
+    transition: all 1s ease-in-out;
+}
+/* Makes Pro Gamertags Div Visible */
+.proGamertagsActive {
+    z-index: 1;
+    opacity: 1;
+    transition: all 1s ease-in-out;
+}
+/* Pro Gamertags Table styling */
+.hor-minimalist {
+    font-size: .6em;
+    margin: 45px;
+    width: 1000px;
+    border-collapse: collapse;
+    text-align: left;
 }
 
+    .hor-minimalist th {
+        font-size: 18px;
+        font-weight: normal;
+        color: black;
+        padding: 10px 17px;
+        border-bottom: 2px solid #16b086;
+    }
 
-/* .move needs the scripts in the pointcheck folder to work*/
-/*.move{
-	margin: auto;
-	position: fixed;
-	background: url("../images/narrowsPC.jpg");
-	background-repeat: no-repeat;
-	width: 110%;
-	height: 110%;
-}*/
+    .hor-minimalist td {
+        color: black;
+        padding: 6px 8px;
+    }
 
-table {
-	table-layout: fixed;
-	background-color: rgba(0, 0, 0, 0.5);
-	padding: 200px;
-	width: 100%;
-	position: relative;
-	text-align: left;
-	display: table;
-	border: 1px solid white;
-	white-space: nowrap;
+    .hor-minimalist tbody tr:hover td {
+        color: #16b086;
+    }
+/* Changes Footer text to black */
+.blackFooter {
+    color: black;
+    transition: all 1s ease-in-out;
+}
+/* Pro Gamertags Table Scrollbar formatting */
+/* width */
+::-webkit-scrollbar {
+    width: 10px;
 }
 
-th, td {
-	padding: 15px;
-	white-space: nowrap;
+/* Track */
+::-webkit-scrollbar-track {
+    background: #f1f1f1;
 }
 
-
-/*.info{
-height: 20px;
-width: 20px;
--webkit-filter: invert(100%);
-}*/
-
-
-a:link {
-	color: cornflowerblue;
-
+/* Handle */
+::-webkit-scrollbar-thumb {
+    background: #888;
 }
 
-a:visited {
-	color: cornflowerblue;
-
+    /* Handle on hover */
+    ::-webkit-scrollbar-thumb:hover {
+        background: #555;
+    }
+/* Regular Table */
+#regTable {
+    height: 700px;
+    overflow: auto;
 }
 
+/* Fixed Table Formatting */
+#gt1 {
+    padding-left: 0;
+}
 
-.errortext {
-	display: block;
-	background-color: rgba(0, 0, 0, 0.5);
-	background-position: center;
-	border: 2px solid #fff;
-	padding: 5px;
-	text-align: center;
+#gt2 {
+    text-align: left;
+    margin-left: 0;
+    padding-left: 0;
+}
+
+#gt3 {
+    text-align: left;
+    margin-left: 0;
+    padding-left: 0;
+}
+
+/* Info Icon Div */
+.infoIcon {
+    width: 100px;
+    transition: all .5s ease-in-out;
+    text-align: center;
+    left: 49%;
+    position: absolute;
+    right: 47.5%;
+}
+}
+
+/* Info Icon Img */
+.info {
+    display: block;
+    margin: 0 auto;
+}
+/* Info Text */
+.infoText {
+    width: 50%;
+    color: white;
+    position: fixed;
+    top: 40%;
+    left: 25%;
+    transition: all 1s ease-in-out;
+}
+
+u {
+    text-decoration: underline;
+}
+
+/* Give Info Icon Shadow */
+.iconOpacity {
+    opacity: .6;
+    transition: all .5s ease-in-out;
+}
+
+/* Results Formatting */
+.p1Emb {
 	position: absolute;
-	color: #fff;
-	margin-left: 16.75%;
-	margin-top: 5%;
-	font-style:oblique;
-	width:550px;
-	height:85px;
-}
-
-
-.aboutForm{
-
-   position: relative;
-   width: 900px;
-   height: 80px;
-   left: 100px;
-   top: -20px;
-   text-align: left;
-
-}
-.Icon {
-	position: absolute;
-	height: 25px;
-	width: 25px;
-	bottom: 101%;
-	left: 45.5%;
-	display: block;
-	-webkit-filter: invert(100%);
-	cursor: pointer;
-	transition: .3s ease-in-out;
-	color: red;
-}
-
-.xIcon {
-	position: absolute;
-	height: 25px;
-	width: 25px;
-	bottom: 101%;
-	left: 45.5%;
-	display: block;
-	cursor: pointer;
-	transition: .3s ease-in-out;
-	-webkit-filter: invert(0%);
-}
-
-.infoIconClicked {
-	position: absolute;
-	height: 25px;
-	width: 25px;
-	bottom: 99%;
-	left: 47.5%;
-	display: block;
-	cursor: pointer;
-	transition: .3s ease-in-out;
-}
-
-
-.info-text {
-	display: inline-block;
-	position: absolute;
-	left: -5px;
-	top: -5px;
-	right: 0px;
-	bottom: 0px;
-	background-color: rgba(0, 0, 0, 0);
-	height: 100%;
-	width: 100%;
-	border-top: 1px solid #fff;
-	border-left: 1px solid white;
-	border-right: 1px solid white;
-	margin: 1px;
-	white-space: normal;
-	overflow: hidden;
-	z-index: -1;
-	opacity: 0;
-	transition: .3s ease-in-out;
-	text-align: left;
-	font-size: 65%;
-	font-weight: 400;
-	font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-	padding-left: 1%;
-	padding-right: 1%;
-	padding-bottom: 10px;
-}
-
-.active {
-	color: black;
-	display: inline-block;
-	position: absolute;
-	left: -1.5px;
-	top: -1.5px;
-	right: 0px;
-	bottom: 0px;
-	background-color: rgba(255, 255, 255, .5);
-	height: 100.5%;
-	width: 101%;
-	border: 2px solid black;
-	white-space: normal;
-	overflow: hidden;
-	z-index: 100;
-	opacity: 1;
-	transition: .3s ease-in-out;
-	text-align: left;
-	font-size: 65%;
-	font-weight: 400;
-	font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-	padding-left: 1%;
-	padding-right: 1%;
-	padding-bottom: 10px;
-}
-	.p1Emb {
-	position: absolute;
-	top: 73%;
-	left: 22.05%;
+    left: 32%;
+    top: 21.5%;
 	background: linear-gradient(to left, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.5));
 	font-weight: 300;
-	width: 400px;
+	width: 200px;
+    color: white;
+
 }
 
 .gameCount {
-	position: absolute;
-	top: 73%;
-	left: 46.05%;
-	background: linear-gradient( rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.25), rgba(0, 0, 0, 0));
+    position: absolute;
+    top: 22.25%;
+    left: 47%;
+    background: linear-gradient( rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.25), rgba(0, 0, 0, 0));
+    width: 150px;
+    color: white;
+    text-align: center;
 }
 .p2Emb {
-	position: absolute;
-	top: 73%;
-	left: 57.05%;
-	text-align: right;
-	width: 400px;
-	background-color: rgba(0, 0, 0, 0.5);
-	background: linear-gradient(to right, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.5));
-	font-weight: 300;
+    position: absolute;
+    top: 21.5%;
+    left: 57%;
+    text-align: right;
+    width: 200px;
+    background-color: rgba(0, 0, 0, 0.5);
+    background: linear-gradient(to right, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.5));
+    font-weight: 300;
+    color: white;
 }
 
-.twitterLinks {
-	position: relative;
-	float: right;
-	bottom: 36.5px;
-	width: 450px;
-	color: white;
-	background: linear-gradient( rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.05), rgba(0, 0, 0, 0));
-	font-size:smaller;
+.resultsTable {
+    position: fixed;
+    text-align: center;
+    left: 21%;
+    top: 30%;
+    background: rgba(0,0,0, 0.675);
+    padding: 50px 0px 50px 0px;
+    color: white;
+    padding: 35px;
+    border: solid 1px white;
+    font-size: 1.5em;
+    height: 500px;
+    overflow: auto;
 }
 
-.copyRight {
-	font-size: smaller;
-}
+    .resultsTable td {
+        width: 150px;
+    }
+    .resultsTable th{
+        width: 175px;
+        text-align: center;
+    }

@@ -1,126 +1,134 @@
 ﻿@model HaloMMSiteMVC.Models.Player
 @{
-    ViewBag.Title = "Search Results";
+    ViewBag.Title = @Model.Name + " vs. " + Model.EnemyName;
     Layout = "~/Views/Shared/_Layout.cshtml";
     string p1Emb = "http://halo.bungie.net/" + Model.EmblemURL;
     string p2Emb = "http://halo.bungie.net/" + Model.EnemyEmblemURL;
 }
 
 
-
-@*if there's no error text in the ViewBag, don't display error box*@
-@if (ViewBag.Error != "")
-{
-    <div class="errortext">@ViewBag.Error</div>
-    <br />
-}
-
-@using (@Html.BeginForm("SearchResults", "Home", FormMethod.Post))
-{
-    <div class="info-text">
-        <h5><u>Search Times</u></h5>
-        The first time searching a particular Gamertag can take up to ~5 minutes. After the first search the Gamertag will be added to the database
-        and subsequent searches with be much faster (under 10 seconds in most cases).
-
+<div class="wrapper wrapperh3">
+    <a href="http://halommsitemvc-test.us-east-2.elasticbeanstalk.com/"><i class="fa fa-home toggle_menu opacity_one"></i></a>
+    @*if there's no error text in the ViewBag, don't display error box*@
+    @if (ViewBag.Error != "")
+    {
+        <div class="errortext" style="text-align:  center; color: white; font-size: 2em;">@ViewBag.Error</div>
         <br />
-        <h5><u>Requirements</u></h5>
-        - You need to use the <b>current</b> Gamertag of the Xbox Live accounts you're trying to search.<br />
-        - Games played after 03/31/2012 aren't available. Bungie did not record Halo 3 games played after this date. <br />
-        - Search is not case sensitive. <br />
-        <br />
+    }
 
-        @*Already Pointchecked your friends? Try searching against these random players.*@
-    </div>
+    @*@using (@Html.BeginForm("SearchResults", "Home", FormMethod.Post))
+        {
+            /* <!-- Start Info Text -->
+             <div class="infoText xForm">
+                 <p id="text">
+                     <h1><u>Search Times</u></h1><br>
+                     The first time searching a particular Gamertag can take up to ~3 minutes. After the first search the Gamertag will be added
+                     to the database and subsequent searches will be much faster (less that 10 seconds in most cases).
+                     <br><br>
+                     <h1><u>Requirements</u></h1><br>
+                     - You need to use the <b>current</b> Gamertag of the  Xbox Live accounts you're trying to search.<br>
+                     - Games played after 03/31/2012 aren't available. Bungie did not record Halo 3 games played after this date.<br>
+                     - Search is not case sensitive.
+                 </p>
+             </div>
+             <!-- End Info Text -->
+             <!-- Start H3 Gamertags Form -->
+             <div class="gtForm" align="center">
+                 <form class="h3Form">
+                     Gamertag 1:<br>
+                     <input type="text" name="gamertag1"><br>
+                     Gamertag 2:<br>
+                     <input type="text" name="gamertag2"><br><br>
+                     Matchmaking
+                     <input type="checkbox" name="mmCheckBox" value="mm" checked="checked"><br>
+                     Custom Games
+                     <input type="checkbox" name="cusCheckBox" value="custom" checked="checked"><br>
+                     <input class="searchButton" type="submit" value="Search">
+                 </form>
+             </div>
+             <!-- End H3 Gamertags Form -->
+             <!-- Start Info Icon -->
+             <div class="infoIcon">
+                 <img class="info" src="information.png" alt="info">
+             </div>
+             <!-- End Info Icon -->
+             */
 
-    <div class="Icon">
-        <img src="~/Content/information.png" width="20" height="20" />
-    </div>
-    <div class="daForm">
-        <form action="SearchResults" method="post">
+         /*
+            <div class="wrapper wrapperh3">
+                <a href="http://pointcheck.gg"><i class="fa fa-home toggle_menu opacity_one"></i></a>
+            </div>
+            */
+        }*@
 
-            Gamertag 1<br>
-
-            <input type="text" name="gt1"><br><br>
-
-            Gamertag 2<br>
-
-            <input type="text" name="gt2"><br><br>
-
-            <label>Matchmaking</label>
-
-            @Html.CheckBox("mmCheckBox") <br />
-
-            <label>Custom Games</label>
-
-            @Html.CheckBox("cusCheckBox") <br />
-
-            <input type="submit" value="Search">
-        </form>
-    </div>
-}
-
-@if (Model.Name != null)
-{
-    <div class="p1Emb">
-
-        <img src="@p1Emb" width="50" height="50" />
-        @Model.Name
-    </div>
-    <div class="gameCount">
-        @Model.GameList.Count games played
-    </div>
-    <div class="p2Emb">
-        @Model.EnemyName
-        <img src="@p2Emb" width="50" height="50" />
-
-    </div>
-    <div class="resultsTable">
-        <table>
+    @if (Model.Name != null)
+    {
 
 
+        <div class="p1Emb">
 
-            <tr>
+            <img src="@p1Emb" width="50" height="50" />
+            @Model.Name
+        </div>
+        <div class="gameCount">
+            @Model.GameList.Count game(s) played
+        </div>
+        <div class="p2Emb">
+            @Model.EnemyName
+            <img src="@p2Emb" width="50" height="50" />
 
-
-                <th>
-                    Date
-                </th>
-                <th>
-                    Link
-                </th>
-                <th>
-                    Map
-                </th>
-                <th>
-                    Gametype
-                </th>
-                <th>
-                    Playlist
-                </th>
-            </tr>
+        </div>
+        <div class="resultsTable">
+            <table>
 
 
-            @foreach (var item in Model.GameList)
-            {
-                string gID = item.GameID.ToString();
-                <tr>
-                    <td>
-                        @Html.DisplayFor(Model => item.Date)
-                    </td>
-                    <td>
-                        <a href='https://halo.bungie.net/Stats/GameStatsHalo3.aspx?gameid=@gID' target="_blank">Link</a>
-                    </td>
-                    <td>
-                        @Html.DisplayFor(Model => item.Map)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(Model => item.Gametype)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(Model => item.Playlist)
-                    </td>
-                </tr>
-            }
-        </table>
-    </div>
-}
+ 
+                    <tr>
+
+
+                        <th>
+                            Date
+                        </th>
+                        <th>
+                            Link
+                        </th>
+                        <th>
+                            Map
+                        </th>
+                        <th>
+                            Gametype
+                        </th>
+                        <th>
+                            Playlist
+                        </th>
+                    </tr>
+
+
+                @foreach (var item in Model.GameList)
+                {
+                    string gID = item.GameID.ToString();
+                  
+                        <tr>
+                            <td>
+                                @Html.DisplayFor(Model => item.Date)
+                            </td>
+                            <td>
+                                <a href='https://halo.bungie.net/Stats/GameStatsHalo3.aspx?gameid=@gID' target="_blank">Link</a>
+                            </td>
+                            <td>
+                                @Html.DisplayFor(Model => item.Map)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(Model => item.Gametype)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(Model => item.Playlist)
+                            </td>
+                        </tr>
+                     
+                        }
+                </table>
+        </div>
+
+    }
+</div>
