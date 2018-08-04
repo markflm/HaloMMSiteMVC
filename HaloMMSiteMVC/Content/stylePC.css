@@ -7,12 +7,12 @@
 }
 
 body{
-    height: 100vh;
+    height: 1080px;
     width: 100%;
 }
 /* Deafult Wrapper. Stays on at all times */
 .wrapper {
-    height: 100%;
+    height: 100vh;
     z-index: 200;
     transition: all 1s ease-in-out;
     width: 100%;
@@ -235,26 +235,11 @@ body{
 footer {
     color: white;
     margin: 0 auto;
-    margin-top: 11.35%;
+    top: 20vh;
     width: 100vh;
     position: relative;
     text-align: center;
     transition: all 1s ease-in-out;
-}
-@media screen and (max-width: 1650px) {
-    #leftsidebar {
-        color: white;
-        margin: 0 auto;
-        margin-top: 8%;
-        width: 100vh;
-        position: relative;
-        text-align: center;
-        transition: all 1s ease-in-out;
-    }
-
-    #main {
-        margin-left: 216px;
-    }
 }
 /* Anchor Tag (for Twitter Links in footer) */
 a {
