@@ -208,12 +208,13 @@ body{
 /* Main Form Div */
 .gtForm {
     z-index: 300;
-    text-align: center;
-    left: 40%;
     position: relative;
+    width: 100%;
+    text-align: center;
 }
 /* Halo 3 Form */
 .h3Form {
+    text-align:center;
     font-size: 24px;
     color: white;
     padding: 50px;
@@ -379,19 +380,15 @@ a {
 
 /* Info Icon Div */
 .infoIcon {
-    width: 100px;
+    width: 100%;
     transition: all .5s ease-in-out;
-    text-align: center;
-    left: 49%;
     position: absolute;
-    right: 47.5%;
-}
+    text-align: center;
 }
 
 /* Info Icon Img */
 .info {
-    display: block;
-    margin: 0 auto;
+    display: inline-block;
 }
 /* Info Text */
 .infoText {
