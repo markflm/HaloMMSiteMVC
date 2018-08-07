@@ -55,13 +55,13 @@ body{
     color: white;
     cursor: pointer;
     background-color: #16b086;
-    z-index: 100;
+    z-index: 500;
     font-size: 2em;
     opacity: 0;
 }
 /* Nav Bar */
 .sidebar_menu {
-    z-index: 2;
+    z-index: 502;
     position: fixed;
     width: 250px;
     margin-left: 0;
@@ -81,11 +81,14 @@ body{
     position: absolute;
     color: white;
     transition: all 0.3s ease-in-out;
+    z-index: 10;
 }
 
     .fa-times:hover {
         opacity: 1;
     }
+
+
 /* Nav Bar Text Styling */
 .boxed_item {
     font-family: 'Open Sans';
@@ -201,19 +204,20 @@ body{
 }
 /* Makes Toggle Menu visible */
 .opacity_one {
-    z-index: 1;
-    opacity: 1;
+    z-index: 301;
+    opacity: 301;
     transition: all 0.3s ease-in-out;
 }
 /* Main Form Div */
 .gtForm {
     z-index: 300;
-    text-align: center;
-    left: 40%;
     position: relative;
+    width: 100%;
+    text-align: center;
 }
 /* Halo 3 Form */
 .h3Form {
+    text-align:center;
     font-size: 24px;
     color: white;
     padding: 50px;
@@ -300,7 +304,7 @@ a {
 }
 /* Makes Pro Gamertags Div Visible */
 .proGamertagsActive {
-    z-index: 1;
+    z-index: 301;
     opacity: 1;
     transition: all 1s ease-in-out;
 }
@@ -379,19 +383,15 @@ a {
 
 /* Info Icon Div */
 .infoIcon {
-    width: 100px;
+    width: 100%;
     transition: all .5s ease-in-out;
-    text-align: center;
-    left: 49%;
     position: absolute;
-    right: 47.5%;
-}
+    text-align: center;
 }
 
 /* Info Icon Img */
 .info {
-    display: block;
-    margin: 0 auto;
+    display: inline-block;
 }
 /* Info Text */
 .infoText {
@@ -415,20 +415,19 @@ u {
 
 /* Results Formatting */
 .p1Emb {
-	position: absolute;
-    left: 32%;
-    top: 21.5%;
-	background: linear-gradient(to left, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.5));
-	font-weight: 300;
-	width: 200px;
+    position: absolute;
+    left: 50vh;
+    top: 22.5vh;
+    background: linear-gradient(to left, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.5));
+    font-weight: 300;
+    width: 200px;
     color: white;
-
 }
 
 .gameCount {
     position: absolute;
-    top: 22.25%;
-    left: 47%;
+    top: 25.5vh;
+    left: 85vh;
     background: linear-gradient( rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.25), rgba(0, 0, 0, 0));
     width: 150px;
     color: white;
@@ -436,8 +435,8 @@ u {
 }
 .p2Emb {
     position: absolute;
-    top: 21.5%;
-    left: 57%;
+    top: 22.5vh;
+    left: 115vh;
     text-align: right;
     width: 200px;
     background-color: rgba(0, 0, 0, 0.5);
