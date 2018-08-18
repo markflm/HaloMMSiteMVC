@@ -1,7 +1,7 @@
 ﻿<!DOCTYPE html>
 <html>
 <head>
-    <link rel="icon" href="@Url.Content("~/content/favicon-16x16.png")"/>
+    <link rel="icon" href="@Url.Content("~/content/favicon-16x16.png")" />
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@ViewBag.Title</title>
@@ -18,6 +18,20 @@
     <script src="js/menu.js"></script>
     <title>Pointcheck</title>
 
+
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-123740633-1 …"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
+
+        gtag('config', 'UA-123740633-1');
+    </script>
+
+    <meta name="google-site-verification" content="pz_hJ17AAffdFQV31ntoxggxzOfOvF7-0VrYO-zD7ko" />
+
+    <!-- End Google Analytics -->
 
     <script type="text/javascript">
         $(document).ready(function () {
@@ -59,7 +73,7 @@
                 $(".proGamertags").removeClass("proGamertagsActive"); // Hide Pro Player Gamertags Table
                 $(".h3Form").addClass("xForm"); // Hide Form
                 $(".infoIcon").addClass("xForm"); // Hide Info Icon
-                $("footer").removeClass("xForm")// Show Footer            
+                $("footer").removeClass("xForm")// Show Footer
                 $("footer").addClass("blackFooter"); // Make Footer Text Black
 
                 $(".h2ComingSoon").addClass("comingSoonActive"); // Show H2 Content Text
